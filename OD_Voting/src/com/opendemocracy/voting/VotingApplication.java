@@ -57,10 +57,9 @@ ClickListener, ValueChangeListener, ItemClickListener{
 		layout.addComponent(createToolbar());
 		layout.addComponent(horizontalSplit);
 		layout.setExpandRatio(horizontalSplit, 1);
-		
-		horizontalSplit.setSplitPosition(200, SplitPanel.UNITS_PIXELS);
-		
+				
 		getMainWindow().setContent(layout);
+		horizontalSplit.setFirstComponent(null);
 		
 		/*
 		 * 
@@ -123,7 +122,8 @@ ClickListener, ValueChangeListener, ItemClickListener{
 		
 	}
 	private void addProposition(){
-		
+		showListView();
+		propositionForm.addProposition();
 	}
 	private void addRepresentation(){
 		
@@ -134,13 +134,14 @@ ClickListener, ValueChangeListener, ItemClickListener{
 	private void addVote(){
 	
 	}
-	
+	private void showListView() {
+		setMainComponent(getListView());
+	}
 	public PropositionContainer getDataSource() {
 		return propositionData;
 	}
 
 	public void itemClick(ItemClickEvent event) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -156,8 +157,10 @@ ClickListener, ValueChangeListener, ItemClickListener{
 	}
 
 	public void buttonClick(ClickEvent event) {
-		// TODO Auto-generated method stub
-		
+		final Button source = event.getButton();
+		if (source == newProposition) {
+			addProposition();
+		}
 	}
 
 }

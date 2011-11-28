@@ -16,6 +16,12 @@
 			<param-name>application</param-name>
 			<param-value>com.opendemocracy.voting.VotingApplication</param-value>
 		</init-param>
+		<init-param>
+			<description>
+			Application widgetset</description>
+			<param-name>widgetset</param-name>
+			<param-value>com.opendemocracy.voting.widgetset.Od_votingWidgetset</param-value>
+		</init-param>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Voting</servlet-name>

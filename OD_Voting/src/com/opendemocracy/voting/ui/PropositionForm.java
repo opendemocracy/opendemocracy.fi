@@ -16,6 +16,7 @@ import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -27,6 +28,7 @@ public class PropositionForm extends Form implements ClickListener {
 	private Button cancel = new Button("Cancel", (ClickListener) this);
 	private Button edit = new Button("Edit", (ClickListener) this);
 	private final ComboBox targetGroups = new ComboBox("Target group");
+	private final RichTextArea description = new RichTextArea();
 
 	private VotingApplication app;
 	private boolean newPropositionMode = false;
@@ -57,6 +59,7 @@ public class PropositionForm extends Form implements ClickListener {
 		targetGroups.setNullSelectionAllowed(false);
 		/* Add an empty group used for selecting no group */
 		targetGroups.addItem("");
+		
 
 		/* Populate combobox from datasource */
 		PropositionContainer ds = app.getDataSource();
@@ -64,6 +67,12 @@ public class PropositionForm extends Form implements ClickListener {
 			String city = (it.next()).getTargetUsers();
 			targetGroups.addItem(city);
 		}
+		
+
+		/* Description area */
+		description.setCaption("Description");
+		description.setValue(ds.getItem("description"));
+		
 
 		/*
 		 * Field factory for overriding how the component for city selection is
@@ -88,7 +97,9 @@ public class PropositionForm extends Form implements ClickListener {
 					tf.setNullRepresentation("");
 					tf.setRequired(true);
 				} else if (propertyId.equals("owner")) {
-					field.setRequired(true);
+					field.setReadOnly(true);
+				} else if (propertyId.equals("description")) {
+					return description;
 				}
 
 				field.setWidth("200px");

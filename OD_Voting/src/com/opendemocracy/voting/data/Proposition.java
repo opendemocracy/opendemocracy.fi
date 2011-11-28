@@ -2,122 +2,92 @@ package com.opendemocracy.voting.data;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 
 public class Proposition implements Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6573890059881593472L;
 	private long id;
 	private User owner;
 	private String targetUsers;
 	private Collection<Category> targetCategories;
-	/**
-	 * @return
-	 * @see java.util.Collection#size()
-	 */
-	public int size() {
-		return targetCategories.size();
-	}
-
-	/**
-	 * @param o
-	 * @return
-	 * @see java.util.Collection#add(java.lang.Object)
-	 */
-	public boolean add(Category o) {
-		return targetCategories.add(o);
-	}
-
-	/**
-	 * @param o
-	 * @return
-	 * @see java.util.Collection#remove(java.lang.Object)
-	 */
-	public boolean remove(Object o) {
-		return targetCategories.remove(o);
-	}
-
-	/**
-	 * @param c
-	 * @return
-	 * @see java.util.Collection#addAll(java.util.Collection)
-	 */
-	public boolean addAll(Collection<? extends Category> c) {
-		return targetCategories.addAll(c);
-	}
-
-	/**
-	 * @param c
-	 * @return
-	 * @see java.util.Collection#removeAll(java.util.Collection)
-	 */
-	public boolean removeAll(Collection<?> c) {
-		return targetCategories.removeAll(c);
-	}
-
+	private Collection<Option> options;
+	private String description;
+	
+	
 	public Proposition(){
 		
 	}
 
-	/**
-	 * @param id
-	 * @param owner
-	 * @param targetUsers
-	 */
-	public Proposition(long id, User owner, String targetUsers) {
+	public Proposition(long id, User owner, String targetUsers, Collection<Category> targetCategories, Collection<Option> options, String description) {
 		super();
 		this.id = id;
 		this.owner = owner;
 		this.targetUsers = targetUsers;
+		this.targetCategories = targetCategories;
+		this.options = options;
+		this.description = description;
 	}
 	
-	/**
-	 * @return the id
-	 */
 	public long getId() {
 		return id;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
 	public void setId(long id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return the owner
-	 */
 	public User getOwner() {
 		return owner;
 	}
 
-	/**
-	 * @param owner the owner to set
-	 */
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
+	public String getDescription() {
+		return description;
+	}
 
-	/**
-	 * @return the targetUsers
-	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public String getTargetUsers() {
 		return targetUsers;
 	}
 
-	/**
-	 * @param targetUsers the targetUsers to set
-	 */
 	public void setTargetUsers(String targetUsers) {
 		this.targetUsers = targetUsers;
 	}
+	
+	public Collection<Option> getOptions() {
+		return Collections.unmodifiableCollection(options);
+	}
 
-	/**
-	 * @return the targetCategories
-	 */
-	public Category[] getTargetCategories() {
-		return (Category[])targetCategories.toArray();
+	public Collection<Category> getTargetCategories() {
+		return Collections.unmodifiableCollection(targetCategories);
+	}
+	
+	public int nOptions() {
+		return options.size();
+	}
+	
+	public int nCategories() {
+		return targetCategories.size();
+	}
+	
+	public boolean addOption(Option o) {
+		return options.add(o);
+	}
+	
+	public boolean addCategory(Category o) {
+		return targetCategories.add(o);
+	}
+
+	public boolean removeOption(Option o) {
+		return options.remove(o);
+	}
+
+	public boolean removeCategory(Category o) {
+		return targetCategories.remove(o);
 	}
 }
