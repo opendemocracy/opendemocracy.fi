@@ -8,7 +8,7 @@ import com.vaadin.ui.Table;
 public class PropositionList extends Table {
 	public PropositionList(VotingApplication app) {
 		setSizeFull();
-		setContainerDataSource(app.getDataSource());
+		setContainerDataSource(app.getPropositionData());
 
 		setVisibleColumns(PropositionContainer.NATURAL_COL_ORDER);
 		setColumnHeaders(PropositionContainer.COL_HEADERS_ENGLISH);

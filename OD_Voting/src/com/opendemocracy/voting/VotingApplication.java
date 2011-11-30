@@ -24,7 +24,11 @@ ClickListener, ValueChangeListener, ItemClickListener{
 
 	
 	//Toolbar components
-	private Button newProposition = new Button("Add proposition");
+	private Button btnProposition = new Button("Propositions");
+	private Button btnExperts = new Button("Experts");
+	private Button btnCategories = new Button("Categories");
+	private Button btnGroups = new Button("Groups");
+	private Button btnProfile = new Button("My profile");
 	
 	//Data sources
 	private CategoryContainer categoryData;
@@ -35,80 +39,100 @@ ClickListener, ValueChangeListener, ItemClickListener{
 	private UserContainer userData;
 	private VoteContainer voteData;
 	
-
+	//Proposition components
 	private PropositionList propositionList = null;
 	private PropositionForm propositionForm = null;
-	private ListView listView = null;
-	private HorizontalSplitPanel horizontalSplit = new HorizontalSplitPanel();
+	private PropositionMainView propositionMainView = null;
+	
+	
+	private PropositionListView PropositionListView = null;
+	
+	private VerticalLayout layout = null;
+	
 	@Override
 	public void init() {
 		buildMainLayout();
-		setMainComponent(getListView());
 	}
 	
 	private void buildMainLayout() {
 		setMainWindow(new Window("OpenDemocracy Propositions"));
+		setTheme("opendemocracy");
 		
-		setTheme("contacts");
-		
-		VerticalLayout layout = new VerticalLayout();
+		//Main VerticalLayout t(toolbar | content)
+		layout = new VerticalLayout();
 		layout.setSizeFull();
-
 		layout.addComponent(createToolbar());
-		layout.addComponent(horizontalSplit);
-		layout.setExpandRatio(horizontalSplit, 1);
-				
+		layout.addComponent(getPropositionMainView());
+		layout.setExpandRatio(propositionMainView, 1.0f);
 		getMainWindow().setContent(layout);
-		horizontalSplit.setFirstComponent(null);
-		
-		/*
-		 * 
-		VerticalLayout layout = new VerticalLayout();
-		layout.setSizeFull();
-
-		layout.addComponent(createToolbar());
-		layout.addComponent(horizontalSplit);
-		layout.setExpandRatio(horizontalSplit, 1);
-
-		horizontalSplit.setSplitPosition(200, SplitPanel.UNITS_PIXELS);
-		horizontalSplit.setFirstComponent(tree);
-
-		getMainWindow().setContent(layout);
-		 * */
 	}
 	
-	private ListView getListView() {
-		if (listView == null) {
+
+	//Proposition main view (tabbed)
+	private PropositionMainView getPropositionMainView() {
+		if (propositionMainView == null) {
+			propositionMainView = new PropositionMainView(this);
+		}
+		return propositionMainView;
+	}	
+
+	//public?!
+	public PropositionList getPropositionList() {
+		if (propositionList == null) {
+			propositionList = new PropositionList(this);
+		}
+		return propositionList;
+	}	
+	
+	//Deprecated
+	private PropositionListView getPropositionListView() {
+		if (PropositionListView == null) {
 			propositionList = new PropositionList(this);
 			propositionForm = new PropositionForm(this);
-			listView = new ListView(propositionList, propositionForm);
+			PropositionListView = new PropositionListView(propositionList, propositionForm);
 		}
-		return listView;
+		return PropositionListView;
 	}
+	
 	private void setMainComponent(Component c) {
-		horizontalSplit.setFirstComponent(c);
+		layout.addComponent(c, 1);
 	}
 	
 	private HorizontalLayout createToolbar() {
 		HorizontalLayout lo = new HorizontalLayout();
-		lo.addComponent(newProposition);
+		lo.addComponent(btnProposition);
+		lo.addComponent(btnExperts);
+		lo.addComponent(btnCategories);
+		lo.addComponent(btnGroups);
+		lo.addComponent(btnProfile);
+		
+		btnProposition.setIcon(new ThemeResource("icons/32/propositions.png"));
+		btnExperts.setIcon(new ThemeResource("icons/32/experts.png"));
+		btnCategories.setIcon(new ThemeResource("icons/32/folder.png"));
+		btnGroups.setIcon(new ThemeResource("icons/32/users.png"));
+		btnProfile.setIcon(new ThemeResource("icons/32/user.png"));
+		
+		btnProposition.addListener((ClickListener) this);
+		
 
-		newProposition.addListener((ClickListener) this);
-
-		newProposition.setIcon(new ThemeResource("icons/32/document-add.png"));
-
+		btnExperts.addListener(new Button.ClickListener() {
+	                public void buttonClick(ClickEvent event) {
+	            	    getMainWindow().addWindow(new ModalWindow("TEST"));
+	                }
+	    });
+		
+		
+		
 		lo.setMargin(true);
 		lo.setSpacing(true);
-
 		lo.setStyleName("toolbar");
-
 		lo.setWidth("100%");
 
 		Embedded em = new Embedded("", new ThemeResource("images/logo.png"));
 		lo.addComponent(em);
 		lo.setComponentAlignment(em, Alignment.MIDDLE_RIGHT);
 		lo.setExpandRatio(em, 1);
-
+		
 		return lo;
 	}
 	
@@ -135,9 +159,9 @@ ClickListener, ValueChangeListener, ItemClickListener{
 	
 	}
 	private void showListView() {
-		setMainComponent(getListView());
+		setMainComponent(getPropositionListView());
 	}
-	public PropositionContainer getDataSource() {
+	public PropositionContainer getPropositionData() {
 		return propositionData;
 	}
 
@@ -158,7 +182,7 @@ ClickListener, ValueChangeListener, ItemClickListener{
 
 	public void buttonClick(ClickEvent event) {
 		final Button source = event.getButton();
-		if (source == newProposition) {
+		if (source == btnProposition) {
 			addProposition();
 		}
 	}

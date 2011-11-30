@@ -62,7 +62,7 @@ public class PropositionForm extends Form implements ClickListener {
 		
 
 		/* Populate combobox from datasource */
-		PropositionContainer ds = app.getDataSource();
+		PropositionContainer ds = app.getPropositionData();
 		for (Iterator<Proposition> it = ds.getItemIds().iterator(); it.hasNext();) {
 			String city = (it.next()).getTargetUsers();
 			targetGroups.addItem(city);
@@ -120,7 +120,7 @@ public class PropositionForm extends Form implements ClickListener {
 			commit();
 			if (newPropositionMode) {
 				/* We need to add the new person to the container */
-				Item addedItem = app.getDataSource().addItem(newProposition);
+				Item addedItem = app.getPropositionData().addItem(newProposition);
 				/*
 				 * We must update the form to use the Item from our datasource
 				 * as we are now in edit mode (no longer in add mode)

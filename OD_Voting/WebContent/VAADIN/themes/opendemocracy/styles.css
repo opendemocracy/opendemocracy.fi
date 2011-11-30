@@ -1,14 +1,22 @@
+ @import url(../reindeer/styles.css);
+/* Using the old default theme (runo) as the basis for now */
+
 /* Add some padding to the tree */
 .v-tree {
       padding-top: 8px;
       padding-left: 4px;
 }
-
+.toolbar .v-button,
+.toolbar .v-button-wrap {
+	border-width: 0;
+	background: none;
+	
+}
 .toolbar .v-button {
       display: block;
-      width: 65px;
+      width: auto;
       height: 55px;
-      background: transparent;
+      background: none;
       border: none;
       text-align: center;
 }
@@ -22,11 +30,12 @@
 
 .toolbar .v-button span {
       font-size: x-small;
-      text-shadow: #fafafa 1px 1px 0;
+      text-shadow: #222 1px 1px 0;
+      color: #bbb;
 }
 
 .v-app {
-      background: #d0e2ec;
+      background: #fff;
       font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
       color: #222;
 }
