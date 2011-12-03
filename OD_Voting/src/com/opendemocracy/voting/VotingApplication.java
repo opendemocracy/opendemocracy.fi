@@ -20,6 +20,7 @@ import com.vaadin.ui.Window;
 public class VotingApplication extends Application implements ClickListener,
 		ValueChangeListener, ItemClickListener {
 	private static final long serialVersionUID = -687661872076562571L;
+	private ViewManager viewManager;
 
 	// Data sources
 	private RepresentationContainer representationData = RepresentationContainer
@@ -33,8 +34,6 @@ public class VotingApplication extends Application implements ClickListener,
 	private PropositionContainer propositionData = PropositionContainer
 			.createWithTestData();
 
-	private ViewManager viewManager;
-
 	@Override
 	public void init() {
 		buildMainLayout();
@@ -44,8 +43,6 @@ public class VotingApplication extends Application implements ClickListener,
 		setMainWindow(new Window("OpenDemocracy Propositions"));
 		setTheme("opendemocracy");
 		viewManager = new ViewManager(this);
-
-		// Main VerticalLayout t(toolbar | content)
 		getMainWindow().setContent(getViewManager().getLayout());
 	}
 
@@ -86,6 +83,30 @@ public class VotingApplication extends Application implements ClickListener,
 
 	private void addVote() {
 
+	}
+
+	public CategoryContainer getCategoryData() {
+		return categoryData;
+	}
+
+	public RepresentationContainer getRepresentationData() {
+		return representationData;
+	}
+
+	public ExpertContainer getExpertData() {
+		return expertData;
+	}
+
+	public OptionContainer getOptionData() {
+		return optionData;
+	}
+
+	public UserContainer getUserData() {
+		return userData;
+	}
+
+	public VoteContainer getVoteData() {
+		return voteData;
 	}
 
 	public PropositionContainer getPropositionData() {
