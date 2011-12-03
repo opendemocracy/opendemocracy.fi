@@ -10,6 +10,8 @@ import com.opendemocracy.voting.data.PropositionContainer;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
@@ -18,8 +20,6 @@ import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 
 @SuppressWarnings("serial")
 public class PropositionForm extends Form implements ClickListener {
@@ -59,20 +59,18 @@ public class PropositionForm extends Form implements ClickListener {
 		targetGroups.setNullSelectionAllowed(false);
 		/* Add an empty group used for selecting no group */
 		targetGroups.addItem("");
-		
 
 		/* Populate combobox from datasource */
 		PropositionContainer ds = app.getPropositionData();
-		for (Iterator<Proposition> it = ds.getItemIds().iterator(); it.hasNext();) {
+		for (Iterator<Proposition> it = ds.getItemIds().iterator(); it
+				.hasNext();) {
 			String city = (it.next()).getTargetUsers();
 			targetGroups.addItem(city);
 		}
-		
 
 		/* Description area */
 		description.setCaption("Description");
 		description.setValue(ds.getItem("description"));
-		
 
 		/*
 		 * Field factory for overriding how the component for city selection is
@@ -120,7 +118,8 @@ public class PropositionForm extends Form implements ClickListener {
 			commit();
 			if (newPropositionMode) {
 				/* We need to add the new person to the container */
-				Item addedItem = app.getPropositionData().addItem(newProposition);
+				Item addedItem = app.getPropositionData().addItem(
+						newProposition);
 				/*
 				 * We must update the form to use the Item from our datasource
 				 * as we are now in edit mode (no longer in add mode)
@@ -146,7 +145,7 @@ public class PropositionForm extends Form implements ClickListener {
 
 	@Override
 	public void setItemDataSource(Item newDataSource) {
-			newPropositionMode = false;
+		newPropositionMode = false;
 		if (newDataSource != null) {
 			List<Object> orderedProperties = Arrays
 					.asList(PropositionContainer.NATURAL_COL_ORDER);
@@ -173,7 +172,7 @@ public class PropositionForm extends Form implements ClickListener {
 		// Create a temporary item for the form
 		newProposition = new Proposition();
 		setItemDataSource(new BeanItem(newProposition));
-                newPropositionMode = true;
+		newPropositionMode = true;
 		setReadOnly(false);
 	}
 

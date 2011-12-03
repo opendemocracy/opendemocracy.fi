@@ -3,7 +3,7 @@ package com.opendemocracy.voting.data;
 import java.io.Serializable;
 import java.util.Locale;
 
-public class Option implements Serializable{
+public class Option implements Serializable {
 	/**
 	 * 
 	 */
@@ -12,10 +12,11 @@ public class Option implements Serializable{
 	private String description;
 	private Locale language;
 	private Proposition proposition;
-	
-	public Option(){
-		
+
+	public Option() {
+
 	}
+
 	/**
 	 * @param id
 	 * @param description
@@ -27,54 +28,65 @@ public class Option implements Serializable{
 		this.description = description;
 		this.language = language;
 	}
+
 	/**
 	 * @return the id
 	 */
 	public long getId() {
 		return id;
 	}
+
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(long id) {
 		this.id = id;
 	}
+
 	/**
 	 * @return the description
 	 */
 	public String getDescription() {
 		return description;
 	}
+
 	/**
-	 * @param description the description to set
+	 * @param description
+	 *            the description to set
 	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	/**
 	 * @return the language
 	 */
 	public Locale getLanguage() {
 		return language;
 	}
+
 	/**
-	 * @param language the language to set
+	 * @param language
+	 *            the language to set
 	 */
 	public void setLanguage(Locale language) {
 		this.language = language;
 	}
+
 	/**
 	 * @return the proposition
 	 */
 	public Proposition getProposition() {
 		return proposition;
 	}
+
 	/**
-	 * @param proposition the proposition to set
+	 * @param proposition
+	 *            the proposition to set
 	 */
 	public void setProposition(Proposition proposition) {
 		this.proposition = proposition;
 	}
 
-	
 }

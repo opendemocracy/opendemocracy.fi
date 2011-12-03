@@ -8,12 +8,8 @@ import com.opendemocracy.voting.ui.PropositionMainView;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.terminal.Sizeable;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.SplitPanel;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalSplitPanel;
 
 public class ViewManager {
@@ -42,12 +38,12 @@ public class ViewManager {
 	public void showListView() {
 		app.setMainComponent(getPropositionMainView());
 	}
+
 	public void showExperts() {
 		app.setMainComponent(new Label("Experts"));
 	}
-	
+
 	public void buttonClick(ClickEvent event) {
-		final Button source = event.getButton();
 		mainView.buttonClick(event);
 	}
 
@@ -96,11 +92,14 @@ public class ViewManager {
 			layout = new VerticalSplitPanel();
 			layout.setLocked(true);
 			layout.setFirstComponent(getMainView().createToolbar());
-			layout.setSplitPosition((int)Math.ceil(layout.getFirstComponent().getHeight()), layout.getFirstComponent().getHeightUnits());
+			layout.setSplitPosition(
+					(int) Math.ceil(layout.getFirstComponent().getHeight()),
+					layout.getFirstComponent().getHeightUnits());
 			layout.setSecondComponent(getPropositionMainView());
-			//layout.setExpandRatio(propositionMainView, 1.0f);
+			// layout.setExpandRatio(propositionMainView, 1.0f);
 		}
-		layout.setSplitPosition((int)Math.ceil(layout.getFirstComponent().getHeight()), layout.getFirstComponent().getHeightUnits());
+		layout.setSplitPosition((int) Math.ceil(layout.getFirstComponent()
+				.getHeight()), layout.getFirstComponent().getHeightUnits());
 		return layout;
 	}
 

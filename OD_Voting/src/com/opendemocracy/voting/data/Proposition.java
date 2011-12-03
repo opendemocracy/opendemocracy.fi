@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 
-public class Proposition implements Serializable{
+public class Proposition implements Serializable {
 	private static final long serialVersionUID = -6573890059881593472L;
 	private long id;
 	private User owner;
@@ -12,13 +12,14 @@ public class Proposition implements Serializable{
 	private Collection<Category> targetCategories;
 	private Collection<Option> options;
 	private String description;
-	
-	
-	public Proposition(){
-		
+
+	public Proposition() {
+
 	}
 
-	public Proposition(long id, User owner, String targetUsers, Collection<Category> targetCategories, Collection<Option> options, String description) {
+	public Proposition(long id, User owner, String targetUsers,
+			Collection<Category> targetCategories, Collection<Option> options,
+			String description) {
 		super();
 		this.id = id;
 		this.owner = owner;
@@ -27,7 +28,7 @@ public class Proposition implements Serializable{
 		this.options = options;
 		this.description = description;
 	}
-	
+
 	public long getId() {
 		return id;
 	}
@@ -43,6 +44,7 @@ public class Proposition implements Serializable{
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -58,7 +60,7 @@ public class Proposition implements Serializable{
 	public void setTargetUsers(String targetUsers) {
 		this.targetUsers = targetUsers;
 	}
-	
+
 	public Collection<Option> getOptions() {
 		return Collections.unmodifiableCollection(options);
 	}
@@ -66,19 +68,19 @@ public class Proposition implements Serializable{
 	public Collection<Category> getTargetCategories() {
 		return Collections.unmodifiableCollection(targetCategories);
 	}
-	
+
 	public int nOptions() {
 		return options.size();
 	}
-	
+
 	public int nCategories() {
 		return targetCategories.size();
 	}
-	
+
 	public boolean addOption(Option o) {
 		return options.add(o);
 	}
-	
+
 	public boolean addCategory(Category o) {
 		return targetCategories.add(o);
 	}

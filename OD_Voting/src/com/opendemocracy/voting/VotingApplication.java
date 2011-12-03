@@ -8,12 +8,10 @@ import com.opendemocracy.voting.data.RepresentationContainer;
 import com.opendemocracy.voting.data.UserContainer;
 import com.opendemocracy.voting.data.VoteContainer;
 import com.vaadin.Application;
-import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -24,13 +22,16 @@ public class VotingApplication extends Application implements ClickListener,
 	private static final long serialVersionUID = -687661872076562571L;
 
 	// Data sources
-	private RepresentationContainer representationData = RepresentationContainer.createWithTestData();
-	private CategoryContainer categoryData = CategoryContainer.createWithTestData();
+	private RepresentationContainer representationData = RepresentationContainer
+			.createWithTestData();
+	private CategoryContainer categoryData = CategoryContainer
+			.createWithTestData();
 	private ExpertContainer expertData = ExpertContainer.createWithTestData();
 	private OptionContainer optionData = OptionContainer.createWithTestData();
 	private UserContainer userData = UserContainer.createWithTestData();
 	private VoteContainer voteData = VoteContainer.createWithTestData();
-	private PropositionContainer propositionData = PropositionContainer.createWithTestData();
+	private PropositionContainer propositionData = PropositionContainer
+			.createWithTestData();
 
 	private ViewManager viewManager;
 
@@ -72,17 +73,17 @@ public class VotingApplication extends Application implements ClickListener,
 	}
 
 	public void addProposition() {
-		
+
 	}
 
 	private void addRepresentation() {
 
 	}
 
-	private void addUser(){
-	
+	private void addUser() {
+
 	}
-	 
+
 	private void addVote() {
 
 	}

@@ -7,10 +7,10 @@ import com.vaadin.terminal.Sizeable;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Embedded;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Embedded;
+import com.vaadin.ui.HorizontalLayout;
 
 public class MainView {
 	// Toolbar components
@@ -35,13 +35,14 @@ public class MainView {
 		buttons.add(btnExperts);
 		buttons.add(btnGroups);
 		buttons.add(btnProfile);
-		
+
 		for (Button b : buttons) {
 			lo.addComponent(b);
-			b.addListener((ClickListener)app);
+			b.addListener((ClickListener) app);
 		}
 
-		ThemeResource iconPropositions = new ThemeResource("icons/32/propositions.png");
+		ThemeResource iconPropositions = new ThemeResource(
+				"icons/32/propositions.png");
 		btnProposition.setIcon(iconPropositions);
 		btnExperts.setIcon(new ThemeResource("icons/32/experts.png"));
 		btnCategories.setIcon(new ThemeResource("icons/32/folder.png"));
@@ -56,7 +57,7 @@ public class MainView {
 
 		Embedded em = new Embedded("", new ThemeResource("images/logo.png"));
 		lo.addComponent(em);
-		
+
 		lo.setComponentAlignment(em, Alignment.MIDDLE_RIGHT);
 		lo.setExpandRatio(em, 1);
 
@@ -67,10 +68,13 @@ public class MainView {
 		final Button source = event.getButton();
 		if (source == btnProposition) {
 			app.getViewManager().showListView();
-		}else if (source == btnExperts){
+		} else if (source == btnExperts) {
 			app.getViewManager().showExperts();
-		}else{
-			app.getMainWindow().addWindow(new ModalWindow("Not implemented yet",source.getCaption()));			
+		} else {
+			app.getMainWindow()
+					.addWindow(
+							new ModalWindow("Not implemented yet", source
+									.getCaption()));
 		}
 	}
 
