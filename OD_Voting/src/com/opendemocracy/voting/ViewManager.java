@@ -36,11 +36,11 @@ public class ViewManager {
 	}
 
 	public void showListView() {
-		app.setMainComponent(getPropositionMainView());
+		getLayout().setSecondComponent(getPropositionMainView());
 	}
 
 	public void showExperts() {
-		app.setMainComponent(new Label("Experts"));
+		getLayout().setSecondComponent(new Label("Experts"));
 	}
 
 	public void buttonClick(ClickEvent event) {
