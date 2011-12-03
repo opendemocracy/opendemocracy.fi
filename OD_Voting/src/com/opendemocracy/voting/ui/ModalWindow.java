@@ -12,7 +12,7 @@ import com.vaadin.ui.Window;
 @SuppressWarnings("serial")
 public class ModalWindow extends Window {
 
-	    public ModalWindow(String title) {
+	    public ModalWindow(String title, String label) {
 	        super(title);
 	        this.setModal(true);
 
@@ -20,7 +20,7 @@ public class ModalWindow extends Window {
 	        layout.setMargin(true);
 	        layout.setSpacing(true);
 
-	        Label message = new Label("Modal test");
+	        Label message = new Label(label);
 	        this.addComponent(message);
 
 	        Button close = new Button("Close", new Button.ClickListener() {
