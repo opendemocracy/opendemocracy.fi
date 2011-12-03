@@ -24,14 +24,13 @@ public class VotingApplication extends Application implements ClickListener,
 	private static final long serialVersionUID = -687661872076562571L;
 
 	// Data sources
-	private RepresentationContainer representationData;
-	private CategoryContainer categoryData;
-	private ExpertContainer expertData;
-	private OptionContainer optionData;
-	private UserContainer userData;
-	private VoteContainer voteData;
-	private PropositionContainer propositionData = PropositionContainer
-			.createWithTestData();
+	private RepresentationContainer representationData = RepresentationContainer.createWithTestData();
+	private CategoryContainer categoryData = CategoryContainer.createWithTestData();
+	private ExpertContainer expertData = ExpertContainer.createWithTestData();
+	private OptionContainer optionData = OptionContainer.createWithTestData();
+	private UserContainer userData = UserContainer.createWithTestData();
+	private VoteContainer voteData = VoteContainer.createWithTestData();
+	private PropositionContainer propositionData = PropositionContainer.createWithTestData();
 
 	private ViewManager viewManager;
 
@@ -73,8 +72,7 @@ public class VotingApplication extends Application implements ClickListener,
 	}
 
 	public void addProposition() {
-		getViewManager().showListView();
-		//getViewManager().getPropositionForm().addProposition();
+		
 	}
 
 	private void addRepresentation() {
