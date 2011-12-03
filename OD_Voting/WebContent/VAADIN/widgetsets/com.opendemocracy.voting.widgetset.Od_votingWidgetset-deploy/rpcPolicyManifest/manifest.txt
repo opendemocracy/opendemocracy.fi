@@ -1,2 +1,0 @@
-# Module com.opendemocracy.voting.widgetset.Od_votingWidgetset
-# RPC service class, partial path of RPC policy file
