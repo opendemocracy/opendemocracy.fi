@@ -13,7 +13,8 @@ import com.vaadin.ui.VerticalLayout;
 public class PropositionMainView extends VerticalLayout implements
 		TabSheet.SelectedTabChangeListener {
 
-	private TabSheet t;
+	private TabSheet propositionMenu;
+	private TabSheet viewTabs;
 	private VotingApplication app;
 	private PropositionForm form;
 	private VerticalLayout list;
@@ -34,16 +35,21 @@ public class PropositionMainView extends VerticalLayout implements
 		add = new VerticalLayout();
 		add.setMargin(true);
 
-		form = new PropositionForm(app);
+		form = app.getViewManager().getPropositionForm();
 		add.addComponent(form);
 		form.addProposition();
 		add.setSizeFull();
 
-		// View proposition
+		// Propositions tab
 		view = new VerticalLayout();
 		view.setMargin(true);
 		view.addComponent(new Label("View proposition"));
 		view.setSizeFull();
+		propositionMenu = new TabSheet();
+		viewTabs = new TabSheet();
+		viewTabs.addTab(list, "List propositions", new ThemeResource(
+				"icons/16/propositions.png"));
+		viewTabs.setSizeFull();
 		
 		// Help
 		help = new VerticalLayout();
@@ -51,16 +57,20 @@ public class PropositionMainView extends VerticalLayout implements
 		help.addComponent(new Label("Help"));
 		help.setSizeFull();
 
-		t = new TabSheet();
-		t.setSizeFull();
-		t.addTab(list, "List propositions", new ThemeResource(
+		
+		
+		
+		propositionMenu.setSizeFull();
+		propositionMenu.addTab(viewTabs, "Propositions", new ThemeResource(
 				"icons/16/propositions.png"));
-		t.addTab(add, "Add proposition", new ThemeResource(
+		propositionMenu.addTab(add, "Add proposition", new ThemeResource(
 				"icons/16/document-add.png"));
-		t.addTab(view, "View", new ThemeResource("icons/16/help.png"));
-		t.addTab(help, "Help", new ThemeResource("icons/16/help.png"));
-		t.addListener(this);
-		addComponent(t);
+		propositionMenu.addTab(viewTabs, "View", new ThemeResource("icons/16/help.png"));
+		propositionMenu.addTab(help, "Help", new ThemeResource("icons/16/help.png"));
+		propositionMenu.addListener(this);
+		addComponent(propositionMenu);
+		
+		propositionMenu.addTab(viewTabs);
 	}
 
 	public void selectedTabChange(SelectedTabChangeEvent event) {
@@ -75,7 +85,7 @@ public class PropositionMainView extends VerticalLayout implements
 	 * @return the list
 	 */
 	public VerticalLayout showPropositionList() {
-		t.setSelectedTab(list);
+		propositionMenu.setSelectedTab(list);
 		return list;
 	}
 
@@ -83,7 +93,7 @@ public class PropositionMainView extends VerticalLayout implements
 	 * @return the add
 	 */
 	public VerticalLayout showAddProposition() {
-		t.setSelectedTab(add);
+		propositionMenu.setSelectedTab(add);
 		return add;
 	}
 
@@ -91,7 +101,7 @@ public class PropositionMainView extends VerticalLayout implements
 	 * @return the view
 	 */
 	public VerticalLayout showProposition() {
-		t.setSelectedTab(view);
+		propositionMenu.setSelectedTab(view);
 		return view;
 	}
 
@@ -99,7 +109,7 @@ public class PropositionMainView extends VerticalLayout implements
 	 * @return the help
 	 */
 	public VerticalLayout showHelp() {
-		t.setSelectedTab(help);
+		propositionMenu.setSelectedTab(help);
 		return help;
 	}
 }

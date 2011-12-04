@@ -27,20 +27,21 @@ public class ViewManager {
 		Property property = event.getProperty();
 		if (property == propositionList) {
 			Item item = propositionList.getItem(propositionList.getValue());
-			showPropositionTab();
+			showPropositionTab(item);
 			if (item != getPropositionForm().getItemDataSource()) {
 				getPropositionForm().setItemDataSource(item);
 			}
 		}
 	}
 
-	public void showPropositionTab() {
+	public void showPropositionTab(Item item) {
 		getLayout().setSecondComponent(getPropositionMainView());
 		getPropositionMainView().showAddProposition();
 	}
 
 	public void showListView() {
 		getLayout().setSecondComponent(getPropositionMainView());
+		getPropositionMainView().showPropositionList();
 	}
 
 	public void showExperts() {
@@ -51,7 +52,7 @@ public class ViewManager {
 		mainView.buttonClick(event);
 	}
 
-	private PropositionForm getPropositionForm() {
+	public PropositionForm getPropositionForm() {
 		if (propositionForm == null) {
 			propositionForm = new PropositionForm(app);
 		}
@@ -84,14 +85,11 @@ public class ViewManager {
 			layout = new VerticalSplitPanel();
 			layout.setLocked(true);
 			layout.setFirstComponent(getMainView().createToolbar());
+			layout.setSecondComponent(getPropositionMainView());
 			layout.setSplitPosition(
 					(int) Math.ceil(layout.getFirstComponent().getHeight()),
 					layout.getFirstComponent().getHeightUnits());
-			layout.setSecondComponent(getPropositionMainView());
-			// layout.setExpandRatio(propositionMainView, 1.0f);
 		}
-		layout.setSplitPosition((int) Math.ceil(layout.getFirstComponent()
-				.getHeight()), layout.getFirstComponent().getHeightUnits());
 		return layout;
 	}
 
