@@ -19,7 +19,6 @@ import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.RichTextArea;
-import com.vaadin.ui.TextField;
 
 @SuppressWarnings("serial")
 public class PropositionForm extends Form implements ClickListener {
@@ -80,25 +79,20 @@ public class PropositionForm extends Form implements ClickListener {
 			@Override
 			public Field createField(Item item, Object propertyId,
 					Component uiContext) {
+				if (propertyId.equals("owner") || propertyId.equals("id")) {
+					return null;
+				}
+					
 				if (propertyId.equals("targetUsers")) {
 					targetGroups.setWidth("200px");
 					return targetGroups;
 				}
-
-				Field field = super.createField(item, propertyId, uiContext);
-				if (propertyId.equals("id")) {
-					TextField tf = (TextField) field;
-					/*
-					 * We do not want to display "null" to the user when the
-					 * field is empty
-					 */
-					tf.setNullRepresentation("");
-					tf.setRequired(true);
-				} else if (propertyId.equals("owner")) {
-					field.setReadOnly(true);
-				} else if (propertyId.equals("description")) {
+				
+				if (propertyId.equals("description")) {
 					return description;
 				}
+
+				Field field = super.createField(item, propertyId, uiContext);
 
 				field.setWidth("200px");
 				return field;
