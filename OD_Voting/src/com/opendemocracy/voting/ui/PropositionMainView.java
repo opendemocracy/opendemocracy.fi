@@ -2,6 +2,7 @@ package com.opendemocracy.voting.ui;
 
 import com.opendemocracy.voting.VotingApplication;
 import com.vaadin.terminal.ThemeResource;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
@@ -15,40 +16,50 @@ public class PropositionMainView extends VerticalLayout implements
 	private TabSheet t;
 	private VotingApplication app;
 	private PropositionForm form;
+	private VerticalLayout list;
+	private VerticalLayout add;
+	private VerticalLayout view;
+	private VerticalLayout help;
 
 	public PropositionMainView(VotingApplication app) {
 		this.app = app;
 		this.setSizeFull();
 		// List propositions
-		VerticalLayout l1 = new VerticalLayout();
-		l1.setMargin(false);
-		l1.addComponent(app.getViewManager().getPropositionList());
-		l1.setSizeFull();
+		list = new VerticalLayout();
+		list.setMargin(false);
+		list.addComponent(app.getViewManager().getPropositionList());
+		list.setSizeFull();
 
 		// Add proposition
-		VerticalLayout l2 = new VerticalLayout();
-		l2.setMargin(true);
+		add = new VerticalLayout();
+		add.setMargin(true);
 
 		form = new PropositionForm(app);
-		l2.addComponent(form);
+		add.addComponent(form);
 		form.addProposition();
-		l2.setSizeFull();
+		add.setSizeFull();
 
+		// View proposition
+		view = new VerticalLayout();
+		view.setMargin(true);
+		view.addComponent(new Label("View proposition"));
+		view.setSizeFull();
+		
 		// Help
-		VerticalLayout l3 = new VerticalLayout();
-		l3.setMargin(true);
-		l3.addComponent(new Label("Help"));
-		l3.setSizeFull();
+		help = new VerticalLayout();
+		help.setMargin(true);
+		help.addComponent(new Label("Help"));
+		help.setSizeFull();
 
 		t = new TabSheet();
 		t.setSizeFull();
-		t.addTab(l1, "List propositions", new ThemeResource(
+		t.addTab(list, "List propositions", new ThemeResource(
 				"icons/16/propositions.png"));
-		t.addTab(l2, "Add proposition", new ThemeResource(
+		t.addTab(add, "Add proposition", new ThemeResource(
 				"icons/16/document-add.png"));
-		t.addTab(l3, "Help", new ThemeResource("icons/16/help.png"));
+		t.addTab(view, "View", new ThemeResource("icons/16/help.png"));
+		t.addTab(help, "Help", new ThemeResource("icons/16/help.png"));
 		t.addListener(this);
-
 		addComponent(t);
 	}
 
@@ -58,5 +69,37 @@ public class PropositionMainView extends VerticalLayout implements
 		if (tab != null) {
 			getWindow().showNotification("Selected tab: " + tab.getCaption());
 		}
+	}
+
+	/**
+	 * @return the list
+	 */
+	public VerticalLayout showPropositionList() {
+		t.setSelectedTab(list);
+		return list;
+	}
+
+	/**
+	 * @return the add
+	 */
+	public VerticalLayout showAddProposition() {
+		t.setSelectedTab(add);
+		return add;
+	}
+
+	/**
+	 * @return the view
+	 */
+	public VerticalLayout showProposition() {
+		t.setSelectedTab(view);
+		return view;
+	}
+
+	/**
+	 * @return the help
+	 */
+	public VerticalLayout showHelp() {
+		t.setSelectedTab(help);
+		return help;
 	}
 }

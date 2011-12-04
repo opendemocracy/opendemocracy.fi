@@ -27,14 +27,16 @@ public class ViewManager {
 		Property property = event.getProperty();
 		if (property == propositionList) {
 			Item item = propositionList.getItem(propositionList.getValue());
-			if (item != propositionForm.getItemDataSource()) {
-				propositionForm.setItemDataSource(item);
+			showPropositionTab();
+			if (item != getPropositionForm().getItemDataSource()) {
+				getPropositionForm().setItemDataSource(item);
 			}
 		}
 	}
 
-	public void showPropositionForm() {
-		getLayout().setSecondComponent(getPropositionForm());
+	public void showPropositionTab() {
+		getLayout().setSecondComponent(getPropositionMainView());
+		getPropositionMainView().showAddProposition();
 	}
 
 	public void showListView() {

@@ -63,8 +63,8 @@ public class PropositionForm extends Form implements ClickListener {
 		PropositionContainer ds = app.getPropositionData();
 		for (Iterator<Proposition> it = ds.getItemIds().iterator(); it
 				.hasNext();) {
-			String city = (it.next()).getTargetUsers();
-			targetGroups.addItem(city);
+			String group = (it.next()).getTargetUsers();
+			targetGroups.addItem(group);
 		}
 
 		/* Description area */
