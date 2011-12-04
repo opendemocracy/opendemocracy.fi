@@ -3,7 +3,6 @@ package com.opendemocracy.voting;
 import com.opendemocracy.voting.ui.MainView;
 import com.opendemocracy.voting.ui.PropositionForm;
 import com.opendemocracy.voting.ui.PropositionList;
-import com.opendemocracy.voting.ui.PropositionListView;
 import com.opendemocracy.voting.ui.PropositionMainView;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
@@ -16,7 +15,6 @@ public class ViewManager {
 	private PropositionList propositionList;
 	private PropositionForm propositionForm;
 	private PropositionMainView propositionMainView;
-	private PropositionListView PropositionListView;
 	private VerticalSplitPanel layout;
 	private VotingApplication app;
 	private MainView mainView;
@@ -35,6 +33,10 @@ public class ViewManager {
 		}
 	}
 
+	public void showPropositionForm() {
+		getLayout().setSecondComponent(getPropositionForm());
+	}
+
 	public void showListView() {
 		getLayout().setSecondComponent(getPropositionMainView());
 	}
@@ -47,14 +49,20 @@ public class ViewManager {
 		mainView.buttonClick(event);
 	}
 
-	public PropositionForm getPropositionForm() {
+	private PropositionForm getPropositionForm() {
 		if (propositionForm == null) {
 			propositionForm = new PropositionForm(app);
 		}
 		return propositionForm;
 	}
 
-	// Proposition main view (tabbed)
+	public PropositionList getPropositionList() {
+		if (propositionList == null) {
+			propositionList = new PropositionList(app);
+		}
+		return propositionList;
+	}
+	
 	private PropositionMainView getPropositionMainView() {
 		if (propositionMainView == null) {
 			propositionMainView = new PropositionMainView(app);
@@ -62,29 +70,11 @@ public class ViewManager {
 		return propositionMainView;
 	}
 
-	// public?!
-	public PropositionList getPropositionList() {
-		if (propositionList == null) {
-			propositionList = new PropositionList(app);
-		}
-		return propositionList;
-	}
-
-	// public?!
-	public MainView getMainView() {
+	private MainView getMainView() {
 		if (mainView == null) {
 			mainView = new MainView(app);
 		}
 		return mainView;
-	}
-
-	// Deprecated
-	public PropositionListView getPropositionListView() {
-		if (PropositionListView == null) {
-			PropositionListView = new PropositionListView(getPropositionList(),
-					getPropositionForm());
-		}
-		return PropositionListView;
 	}
 
 	public VerticalSplitPanel getLayout() {

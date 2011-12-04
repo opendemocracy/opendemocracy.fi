@@ -14,6 +14,7 @@ public class PropositionMainView extends VerticalLayout implements
 
 	private TabSheet t;
 	private VotingApplication app;
+	private PropositionForm form;
 
 	public PropositionMainView(VotingApplication app) {
 		this.app = app;
@@ -27,13 +28,16 @@ public class PropositionMainView extends VerticalLayout implements
 		// Add proposition
 		VerticalLayout l2 = new VerticalLayout();
 		l2.setMargin(true);
-		l2.addComponent(new Label("Add proposition."));
+
+		form = new PropositionForm(app);
+		l2.addComponent(form);
+		form.addProposition();
 		l2.setSizeFull();
 
 		// Help
 		VerticalLayout l3 = new VerticalLayout();
 		l3.setMargin(true);
-		l3.addComponent(new Label("WTF?"));
+		l3.addComponent(new Label("Help"));
 		l3.setSizeFull();
 
 		t = new TabSheet();
