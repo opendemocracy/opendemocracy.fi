@@ -71,4 +71,8 @@ public class User implements Serializable {
 		this.proof = proof;
 	}
 
+	@Override
+	public String toString() {
+		return "User #" + id;
+	}
 }
