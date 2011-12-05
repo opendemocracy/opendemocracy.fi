@@ -8,10 +8,11 @@ public class Proposition implements Serializable {
 	private static final long serialVersionUID = -6573890059881593472L;
 	private long id;
 	private User owner;
+	private String title;
+	private String description;
+	private Collection<Option> options;
 	private String targetUsers;
 	private Collection<Category> targetCategories;
-	private Collection<Option> options;
-	private String description;
 
 	public Proposition() {
 
@@ -52,7 +53,15 @@ public class Proposition implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public String getTitle() {
+		return title;
+	}
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
 	public String getTargetUsers() {
 		return targetUsers;
 	}
