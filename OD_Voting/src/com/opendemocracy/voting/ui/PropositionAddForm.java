@@ -1,5 +1,7 @@
 package com.opendemocracy.voting.ui;
 
+import java.util.Collection;
+
 import com.opendemocracy.voting.VotingApplication;
 import com.opendemocracy.voting.data.Option;
 import com.opendemocracy.voting.data.Proposition;
@@ -20,7 +22,6 @@ import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.data.Property.ValueChangeListener;
 
 /*Add proposition form, will replace PropositionForm when finished*/
 public class PropositionAddForm extends Form implements
@@ -33,18 +34,25 @@ Property.ValueChangeListener, ClickListener{
 	private Proposition newProposition = new Proposition();
 	
 	private final RichTextArea description = new RichTextArea();
-
+	private Collection<Option> options;
+	
 	private final TextField newOption = new TextField();
 	private final TextField pTitle = new TextField();
 	private final Button addOption = new Button("Add", (ClickListener) this);
-	private ListSelect selectOption = new ListSelect();
+	private ListSelect selectOption = new ListSelect("", options);
 	private final TextArea optionDescription = new TextArea();
 	
 	PropositionAddForm(VotingApplication app){
+		selectOption.addListener((ValueChangeListener)this);
+		
 		setWriteThrough(false);
 		getLayout().addComponent(new Label("Add proposition"));
 		
 		pTitle.setInputPrompt("Title");
+		description.setNullSettingAllowed(false);
+		pTitle.setNullSettingAllowed(false);
+		pTitle.setCaption("Title");
+		
 		// Default form overrides
 		setFormFieldFactory(new DefaultFieldFactory() {
 			private static final long serialVersionUID = 1L;
@@ -76,6 +84,7 @@ Property.ValueChangeListener, ClickListener{
 		});
 		setItemDataSource(new BeanItem<Proposition>(newProposition));
 
+		
 		//Add optionwindow to form
 		getLayout().addComponent(new Label("Manage options"));
 		getLayout().addComponent(createOptionsEditor());
@@ -86,13 +95,13 @@ Property.ValueChangeListener, ClickListener{
 		HorizontalLayout optionsWindow = new HorizontalLayout();
 		VerticalLayout optionSelector = new VerticalLayout();
 		
-		
 		newOption.setInputPrompt("New option");
 		selectOption.setRows(11);
 		selectOption.setColumns(15);
 		selectOption.setNullSelectionAllowed(false);
-		selectOption.addListener((ValueChangeListener)this);
 		optionDescription.setInputPrompt("Description");
+		optionDescription.setRows(12);
+		optionDescription.setColumns(40);
 		
 		//new option + add button
 		HorizontalLayout addOptionLayout = new HorizontalLayout();

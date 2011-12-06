@@ -101,7 +101,7 @@ public class Option implements Serializable {
 
 	@Override
 	public String toString() {
-		return description;
+		return title;
 	}
 
 }
