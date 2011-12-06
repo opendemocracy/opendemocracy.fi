@@ -87,6 +87,7 @@ public class Proposition implements Serializable {
 	}
 
 	public boolean addOption(Option o) {
+		//TODO: If not in collection?
 		return options.add(o);
 	}
 

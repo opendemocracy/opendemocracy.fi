@@ -9,6 +9,7 @@ public class Option implements Serializable {
 	 */
 	private static final long serialVersionUID = -6153580024525090167L;
 	private long id;
+	private String title;
 	private String description;
 	private Locale language;
 	private Proposition proposition;
@@ -22,11 +23,20 @@ public class Option implements Serializable {
 	 * @param description
 	 * @param language
 	 */
-	public Option(long id, String description, Locale language) {
+	public Option(long id, String title, String description, Locale language) {
 		super();
 		this.id = id;
+		this.title = title;
 		this.description = description;
 		this.language = language;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	/**
@@ -87,6 +97,11 @@ public class Option implements Serializable {
 	 */
 	public void setProposition(Proposition proposition) {
 		this.proposition = proposition;
+	}
+
+	@Override
+	public String toString() {
+		return description;
 	}
 
 }
