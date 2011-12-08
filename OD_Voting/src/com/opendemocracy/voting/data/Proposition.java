@@ -20,7 +20,7 @@ public class Proposition implements Serializable {
 
 	public Proposition(long id, User owner, String targetUsers,
 			Collection<Category> targetCategories, Collection<Option> options,
-			String description) {
+			String title, String description) {
 		super();
 		this.id = id;
 		this.owner = owner;
@@ -28,6 +28,7 @@ public class Proposition implements Serializable {
 		this.targetCategories = targetCategories;
 		this.options = options;
 		this.description = description;
+		this.title = title;
 	}
 
 	public long getId() {
@@ -71,7 +72,9 @@ public class Proposition implements Serializable {
 	}
 
 	public Collection<Option> getOptions() {
-		return Collections.unmodifiableCollection(options);
+		//return Collections.unmodifiableCollection(options);
+		//Testing
+		return options;
 	}
 
 	public Collection<Category> getTargetCategories() {

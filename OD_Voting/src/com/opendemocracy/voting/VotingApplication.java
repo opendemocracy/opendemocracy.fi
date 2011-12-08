@@ -3,6 +3,7 @@ package com.opendemocracy.voting;
 import com.opendemocracy.voting.data.CategoryContainer;
 import com.opendemocracy.voting.data.ExpertContainer;
 import com.opendemocracy.voting.data.OptionContainer;
+import com.opendemocracy.voting.data.Proposition;
 import com.opendemocracy.voting.data.PropositionContainer;
 import com.opendemocracy.voting.data.RepresentationContainer;
 import com.opendemocracy.voting.data.UserContainer;
@@ -69,8 +70,8 @@ public class VotingApplication extends Application implements ClickListener,
 
 	}
 
-	public void addProposition() {
-
+	public void addProposition(Proposition p) {
+		propositionData.addItem(p);
 	}
 
 	private void addRepresentation() {

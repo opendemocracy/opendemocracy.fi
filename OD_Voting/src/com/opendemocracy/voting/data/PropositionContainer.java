@@ -37,7 +37,7 @@ public class PropositionContainer extends BeanItemContainer<Proposition>
 			for (int i = 0; i < 100; i++) {
 				Proposition p = new Proposition(i, new User(i, null, null),
 						"User #" + i, new ArrayList<Category>(),
-						new ArrayList<Option>(), "Description #" + i);
+						new ArrayList<Option>(), "Title #" + i, "Description #" + i);
 				c.addItem(p);
 			}
 		} catch (InstantiationException e) {

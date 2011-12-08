@@ -1,10 +1,12 @@
 package com.opendemocracy.voting.ui;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import com.opendemocracy.voting.VotingApplication;
+import com.opendemocracy.voting.data.Option;
 import com.opendemocracy.voting.data.Proposition;
 import com.opendemocracy.voting.data.PropositionContainer;
 import com.vaadin.data.Item;
@@ -18,6 +20,7 @@ import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.RichTextArea;
 
 @SuppressWarnings("serial")
@@ -27,7 +30,7 @@ public class PropositionForm extends Form implements ClickListener {
 	private Button cancel = new Button("Cancel", (ClickListener) this);
 	private Button edit = new Button("Edit", (ClickListener) this);
 	private final ComboBox targetGroups = new ComboBox("Target group");
-	private final ComboBox options = new ComboBox("Options");
+	private ListSelect options = new ListSelect("Options");
 	private final RichTextArea description = new RichTextArea();
 
 	private VotingApplication app;
@@ -67,7 +70,7 @@ public class PropositionForm extends Form implements ClickListener {
 			String group = (it.next()).getTargetUsers();
 			targetGroups.addItem(group);
 		}
-
+		
 		/* Description area */
 		description.setCaption("Description");
 		description.setValue(ds.getItem("description"));
@@ -77,6 +80,7 @@ public class PropositionForm extends Form implements ClickListener {
 		 * created
 		 */
 		setFormFieldFactory(new DefaultFieldFactory() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public Field createField(Item item, Object propertyId,
 					Component uiContext) {
@@ -87,6 +91,11 @@ public class PropositionForm extends Form implements ClickListener {
 				if (propertyId.equals("targetUsers")) {
 					targetGroups.setWidth("200px");
 					return targetGroups;
+				}
+				
+				if (propertyId.equals("options")){
+					options = new ListSelect("Options",(Collection<Option>) item);
+					return options;
 				}
 				
 				if (propertyId.equals("description")) {
