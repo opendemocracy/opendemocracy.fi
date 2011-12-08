@@ -119,7 +119,7 @@ public class VotingApplication extends Application implements ClickListener,
 	}
 
 	public void valueChange(ValueChangeEvent event) {
-		getViewManager().valueChange(event);
+		//getViewManager().valueChange(event);
 	}
 
 	public void buttonClick(ClickEvent event) {

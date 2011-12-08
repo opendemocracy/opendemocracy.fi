@@ -46,7 +46,7 @@ public class PropositionAddForm extends Form {
 	private TextField oTitle = new TextField();
 	
 	//Construct
-	PropositionAddForm(VotingApplication app){
+	public PropositionAddForm(VotingApplication app){
 		//General settings
 		this.app = app;
 		setWriteThrough(false);

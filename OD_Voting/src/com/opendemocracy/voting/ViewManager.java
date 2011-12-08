@@ -1,6 +1,7 @@
 package com.opendemocracy.voting;
 
 import com.opendemocracy.voting.ui.MainView;
+import com.opendemocracy.voting.ui.PropositionAddForm;
 import com.opendemocracy.voting.ui.PropositionForm;
 import com.opendemocracy.voting.ui.PropositionList;
 import com.opendemocracy.voting.ui.PropositionMainView;
@@ -13,7 +14,7 @@ import com.vaadin.ui.VerticalSplitPanel;
 
 public class ViewManager {
 	private PropositionList propositionList;
-	private PropositionForm propositionForm;
+	private PropositionAddForm propositionForm;
 	private PropositionMainView propositionMainView;
 	private VerticalSplitPanel layout;
 	private VotingApplication app;
@@ -23,16 +24,16 @@ public class ViewManager {
 		this.app = app;
 	}
 
-	public void valueChange(ValueChangeEvent event) {
-		Property property = event.getProperty();
-		if (property == propositionList) {
-			Item item = propositionList.getItem(propositionList.getValue());
-			showPropositionTab(item);
-			if (item != getPropositionForm().getItemDataSource()) {
-				getPropositionForm().setItemDataSource(item);
-			}
-		}
-	}
+//	public void valueChange(ValueChangeEvent event) {
+//		Property property = event.getProperty();
+//		if (property == propositionList) {
+//			Item item = propositionList.getItem(propositionList.getValue());
+//			showPropositionTab(item);
+//			if (item != getPropositionForm().getItemDataSource()) {
+//				getPropositionForm().setItemDataSource(item);
+//			}
+//		}
+//	}
 
 	public void showPropositionTab(Item item) {
 		getLayout().setSecondComponent(getPropositionMainView());
@@ -52,9 +53,9 @@ public class ViewManager {
 		mainView.buttonClick(event);
 	}
 
-	public PropositionForm getPropositionForm() {
+	public PropositionAddForm getPropositionForm() {
 		if (propositionForm == null) {
-			propositionForm = new PropositionForm(app);
+			propositionForm = new PropositionAddForm(app);
 		}
 		return propositionForm;
 	}

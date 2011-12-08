@@ -1,12 +1,15 @@
 package com.opendemocracy.voting.ui;
 
 import com.opendemocracy.voting.VotingApplication;
+import com.opendemocracy.voting.data.Proposition;
 import com.opendemocracy.voting.data.PropositionContainer;
 import com.vaadin.ui.Table;
 
 @SuppressWarnings("serial")
 public class PropositionList extends Table {
+	private final VotingApplication vApp;
 	public PropositionList(VotingApplication app) {
+		this.vApp = app;
 		setSizeFull();
 		setContainerDataSource(app.getPropositionData());
 
@@ -22,8 +25,17 @@ public class PropositionList extends Table {
 		 */
 		setSelectable(true);
 		setImmediate(true);
-		addListener((ValueChangeListener) app);
+		//addListener((ValueChangeListener) app);
 		setNullSelectionAllowed(true);
+		
+		//Modal propositionview (Temporary)
+		addListener(new ValueChangeListener(){
+			public void valueChange(
+					com.vaadin.data.Property.ValueChangeEvent event) {
+				Proposition p = (Proposition) event.getProperty().getValue();
+				vApp.getMainWindow().addWindow(new ModalWindow(vApp,p));
+			}
+		});
 
 	}
 
