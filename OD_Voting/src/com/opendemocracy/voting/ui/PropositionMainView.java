@@ -66,12 +66,6 @@ public class PropositionMainView extends VerticalLayout implements
 		propositionMenu.addTab(viewTabs, "View", new ThemeResource("icons/16/help.png"));
 		propositionMenu.addTab(help, "Help", new ThemeResource("icons/16/help.png"));
 		
-		//Temp tab for new proposition form
-		VerticalLayout tmpF = new VerticalLayout();
-		tmpF.setSizeFull();
-		tmpF.addComponent(new PropositionAddForm(app));
-		propositionMenu.addTab(tmpF,"Fancy add", new ThemeResource("icons/16/document-add.png"));
-				
 		propositionMenu.addListener(this);
 		addComponent(propositionMenu);
 		
