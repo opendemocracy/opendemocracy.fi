@@ -1,6 +1,21 @@
  @import url(../reindeer/styles.css);
 /* Using the old default theme (runo) as the basis for now */
 
+
+.toolbar .v-button:active .v-button-wrap,
+.toolbar .v-button.v-pressed .v-button-wrap {
+    background-color: #222;
+	background-image: none !important;
+	height: auto !important;
+}
+
+.toolbar .v-button-wrap,
+.toolbar .v-disabled.v-button .v-button-wrap {
+    background-color: transparent;
+    background-image: none !important;
+    height: auto;
+}
+
 /* Add some padding to the tree */
 .v-tree {
       padding-top: 8px;

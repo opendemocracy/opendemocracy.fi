@@ -68,7 +68,7 @@ public class PropositionAddForm extends Form {
 		//pDiscard
 		pDiscard.addListener(new ClickListener() {
 			public void buttonClick(ClickEvent event) {
-				getWindow().showNotification("Discard");
+				getWindow().showNotification("TODO:Discard");
 			}
 		});
 		

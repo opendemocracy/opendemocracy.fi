@@ -32,12 +32,16 @@ public class PropositionContainer extends BeanItemContainer<Proposition>
 
 	public static PropositionContainer createWithTestData() {
 		PropositionContainer c = null;
+		ArrayList<Option> testOptions = new ArrayList<Option>();
+		testOptions.add(new Option(0, "Option 1", "Option 1 Description", null));
+		testOptions.add(new Option(0, "Option 2", "Option 2 Description", null));
+		testOptions.add(new Option(0, "Option 3", "Option 3 Description", null));
 		try {
 			c = new PropositionContainer();
 			for (int i = 0; i < 100; i++) {
 				Proposition p = new Proposition(i, new User(i, null, null),
 						"User #" + i, new ArrayList<Category>(),
-						new ArrayList<Option>(), "Title #" + i, "Description #" + i);
+						testOptions, "Title #" + i, "Description #" + i);
 				c.addItem(p);
 			}
 		} catch (InstantiationException e) {
