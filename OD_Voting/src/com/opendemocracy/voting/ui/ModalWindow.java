@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.opendemocracy.voting.VotingApplication;
+import com.opendemocracy.voting.data.Expert;
 import com.opendemocracy.voting.data.Option;
 import com.opendemocracy.voting.data.Proposition;
 import com.vaadin.ui.Alignment;
@@ -88,6 +89,10 @@ public class ModalWindow extends Window {
 		vLayout.setComponentAlignment(footer, Alignment.BOTTOM_LEFT);
 
 		setWidth("440px");
+	}
+
+	public ModalWindow(VotingApplication app, Expert expertToBeTrusted) {
+		// TODO Auto-generated constructor stub
 	}
 
 	public void close(ClickEvent event) {

@@ -91,5 +91,11 @@ public class Category implements Serializable {
 	public void setLanguage(Locale language) {
 		this.language = language;
 	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return name;
+	}
 
 }

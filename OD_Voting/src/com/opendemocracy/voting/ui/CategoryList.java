@@ -1,20 +1,22 @@
 package com.opendemocracy.voting.ui;
 
 import com.opendemocracy.voting.VotingApplication;
+import com.opendemocracy.voting.data.Category;
+import com.opendemocracy.voting.data.CategoryContainer;
 import com.opendemocracy.voting.data.Proposition;
 import com.opendemocracy.voting.data.PropositionContainer;
 import com.vaadin.ui.Table;
 
 @SuppressWarnings("serial")
-public class PropositionList extends Table {
+public class CategoryList extends Table {
 	private final VotingApplication vApp;
-	public PropositionList(VotingApplication app) {
+	public CategoryList(VotingApplication app) {
 		this.vApp = app;
 		setSizeFull();
-		setContainerDataSource(app.getPropositionData());
+		setContainerDataSource(app.getCategoryData());
 
-		setVisibleColumns(PropositionContainer.NATURAL_COL_ORDER);
-		setColumnHeaders(PropositionContainer.COL_HEADERS_ENGLISH);
+		setVisibleColumns(CategoryContainer.NATURAL_COL_ORDER);
+		setColumnHeaders(CategoryContainer.COL_HEADERS_ENGLISH);
 
 		setColumnCollapsingAllowed(true);
 		setColumnReorderingAllowed(true);
@@ -32,7 +34,7 @@ public class PropositionList extends Table {
 		addListener(new ValueChangeListener(){
 			public void valueChange(
 					com.vaadin.data.Property.ValueChangeEvent event) {
-				Proposition p = (Proposition) event.getProperty().getValue();
+				Category c = (Category) event.getProperty().getValue();
 				//vApp.getMainWindow().addWindow(new PropositionVote(vApp,p));
 			}
 		});

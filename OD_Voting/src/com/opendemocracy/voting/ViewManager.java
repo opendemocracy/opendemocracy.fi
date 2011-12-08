@@ -1,5 +1,11 @@
 package com.opendemocracy.voting;
 
+import com.opendemocracy.voting.ui.CategoryAddExpertForm;
+import com.opendemocracy.voting.ui.CategoryList;
+import com.opendemocracy.voting.ui.CategoryView;
+import com.opendemocracy.voting.ui.ExpertList;
+import com.opendemocracy.voting.ui.ExpertView;
+import com.opendemocracy.voting.ui.TrustExpertModalView;
 import com.opendemocracy.voting.ui.MainView;
 import com.opendemocracy.voting.ui.PropositionAddForm;
 import com.opendemocracy.voting.ui.PropositionForm;
@@ -9,13 +15,19 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalSplitPanel;
 
 public class ViewManager {
 	private PropositionList propositionList;
+	private ExpertList expertList;
 	private PropositionAddForm propositionForm;
 	private PropositionMainView propositionMainView;
+	private CategoryAddExpertForm categoryAddExpertForm;
+	private CategoryView categoryView;
+	private CategoryList categoryList;
+	private ExpertView expertView;
 	private VerticalSplitPanel layout;
 	private VotingApplication app;
 	private MainView mainView;
@@ -45,9 +57,9 @@ public class ViewManager {
 		getPropositionMainView().showPropositionList();
 	}
 
-	public void showExperts() {
-		getLayout().setSecondComponent(new Label("Experts"));
-	}
+//	public void showExperts() {
+//		getLayout().setSecondComponent(new Label("Experts"));
+//	}
 
 	public void buttonClick(ClickEvent event) {
 		mainView.buttonClick(event);
@@ -92,6 +104,51 @@ public class ViewManager {
 					layout.getFirstComponent().getHeightUnits());
 		}
 		return layout;
+	}
+
+	public void showCategories() {
+		getLayout().setSecondComponent(getCategoryView());
+		getCategoryView().showCategoryList();
+	}
+
+	public void showExperts() {
+		getLayout().setSecondComponent(getExpertView());
+		getExpertView().showExpertList();
+	}
+	
+	private CategoryView getCategoryView() {
+		if (categoryView == null) {
+			categoryView = new CategoryView(app);
+		}
+		return categoryView;
+	}
+	
+	private ExpertView getExpertView() {
+	if (expertView == null) {
+		expertView = new ExpertView(app);
+	}
+	return expertView;
+}
+
+	public CategoryAddExpertForm getCategoryAddExpertForm() {
+		if (categoryAddExpertForm == null) {
+			categoryAddExpertForm = new CategoryAddExpertForm(app);
+		}
+		return categoryAddExpertForm;
+	}
+
+	public CategoryList getCategoryList() {
+		if (categoryList == null) {
+			categoryList = new CategoryList(app);
+		}
+		return categoryList;
+	}
+
+	public ExpertList getExpertList() {
+		if (expertList == null) {
+			expertList = new ExpertList(app);
+		}
+		return expertList;
 	}
 
 }

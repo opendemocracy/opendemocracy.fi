@@ -70,6 +70,8 @@ public class MainView {
 			app.getViewManager().showListView();
 		} else if (source == btnExperts) {
 			app.getViewManager().showExperts();
+		} else if (source == btnCategories) {
+			app.getViewManager().showCategories();
 		} else {
 			app.getMainWindow()
 					.addWindow(

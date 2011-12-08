@@ -1,20 +1,24 @@
 package com.opendemocracy.voting.ui;
 
 import com.opendemocracy.voting.VotingApplication;
+import com.opendemocracy.voting.data.Category;
+import com.opendemocracy.voting.data.CategoryContainer;
+import com.opendemocracy.voting.data.Expert;
+import com.opendemocracy.voting.data.ExpertContainer;
 import com.opendemocracy.voting.data.Proposition;
 import com.opendemocracy.voting.data.PropositionContainer;
 import com.vaadin.ui.Table;
 
 @SuppressWarnings("serial")
-public class PropositionList extends Table {
+public class ExpertList extends Table {
 	private final VotingApplication vApp;
-	public PropositionList(VotingApplication app) {
+	public ExpertList(VotingApplication app) {
 		this.vApp = app;
 		setSizeFull();
-		setContainerDataSource(app.getPropositionData());
+		setContainerDataSource(app.getExpertData());
 
-		setVisibleColumns(PropositionContainer.NATURAL_COL_ORDER);
-		setColumnHeaders(PropositionContainer.COL_HEADERS_ENGLISH);
+		setVisibleColumns(ExpertContainer.NATURAL_COL_ORDER);
+		setColumnHeaders(ExpertContainer.COL_HEADERS_ENGLISH);
 
 		setColumnCollapsingAllowed(true);
 		setColumnReorderingAllowed(true);
@@ -32,7 +36,7 @@ public class PropositionList extends Table {
 		addListener(new ValueChangeListener(){
 			public void valueChange(
 					com.vaadin.data.Property.ValueChangeEvent event) {
-				Proposition p = (Proposition) event.getProperty().getValue();
+				Expert e = (Expert) event.getProperty().getValue();
 				//vApp.getMainWindow().addWindow(new PropositionVote(vApp,p));
 			}
 		});

@@ -7,6 +7,8 @@ public class Expert implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -4920773264075330416L;
+	private long id;
+
 	private Category category;
 	private User user;
 
@@ -18,8 +20,9 @@ public class Expert implements Serializable {
 	 * @param category
 	 * @param user
 	 */
-	public Expert(Category category, User user) {
+	public Expert(long id, Category category, User user) {
 		super();
+		this.id = id;
 		this.category = category;
 		this.user = user;
 	}
@@ -52,6 +55,20 @@ public class Expert implements Serializable {
 	 */
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
 	}
 
 }

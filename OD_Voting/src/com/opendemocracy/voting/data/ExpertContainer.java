@@ -1,6 +1,7 @@
 package com.opendemocracy.voting.data;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import com.vaadin.data.util.BeanItemContainer;
 
@@ -12,6 +13,15 @@ public class ExpertContainer extends BeanItemContainer<Expert> implements
 	 */
 	private static final long serialVersionUID = -8523151211034009406L;
 
+	public final static Object[] NATURAL_COL_ORDER = new Object[] { "id",
+			"category", "user" };
+
+	/**
+	 * "Human readable" captions for properties in same order as in
+	 * NATURAL_COL_ORDER.
+	 */
+	public final static String[] COL_HEADERS_ENGLISH = new String[] { "Id",
+			"Category", "User" };
 	public ExpertContainer() throws InstantiationException,
 			IllegalAccessException {
 		super(Expert.class);
@@ -22,7 +32,7 @@ public class ExpertContainer extends BeanItemContainer<Expert> implements
 		try {
 			c = new ExpertContainer();
 			for (int i = 0; i < 100; i++) {
-				Expert p = new Expert();
+				Expert p = new Expert(i, new Category(i, "CategoryName: #" + i, "CategoryDescription: #" + i, Locale.ENGLISH), new User(i, null, null));
 				c.addItem(p);
 			}
 		} catch (InstantiationException e) {

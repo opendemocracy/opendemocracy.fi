@@ -1,12 +1,18 @@
 package com.opendemocracy.voting;
 
+import com.opendemocracy.voting.data.Category;
 import com.opendemocracy.voting.data.CategoryContainer;
+import com.opendemocracy.voting.data.Expert;
 import com.opendemocracy.voting.data.ExpertContainer;
+import com.opendemocracy.voting.data.Option;
 import com.opendemocracy.voting.data.OptionContainer;
 import com.opendemocracy.voting.data.Proposition;
 import com.opendemocracy.voting.data.PropositionContainer;
+import com.opendemocracy.voting.data.Representation;
 import com.opendemocracy.voting.data.RepresentationContainer;
+import com.opendemocracy.voting.data.User;
 import com.opendemocracy.voting.data.UserContainer;
+import com.opendemocracy.voting.data.Vote;
 import com.opendemocracy.voting.data.VoteContainer;
 import com.vaadin.Application;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -24,16 +30,13 @@ public class VotingApplication extends Application implements ClickListener,
 	private ViewManager viewManager;
 
 	// Data sources
-	private RepresentationContainer representationData = RepresentationContainer
-			.createWithTestData();
-	private CategoryContainer categoryData = CategoryContainer
-			.createWithTestData();
+	private RepresentationContainer representationData = RepresentationContainer.createWithTestData();
+	private CategoryContainer categoryData = CategoryContainer.createWithTestData();
 	private ExpertContainer expertData = ExpertContainer.createWithTestData();
 	private OptionContainer optionData = OptionContainer.createWithTestData();
 	private UserContainer userData = UserContainer.createWithTestData();
 	private VoteContainer voteData = VoteContainer.createWithTestData();
-	private PropositionContainer propositionData = PropositionContainer
-			.createWithTestData();
+	private PropositionContainer propositionData = PropositionContainer.createWithTestData();
 
 	@Override
 	public void init() {
@@ -58,32 +61,32 @@ public class VotingApplication extends Application implements ClickListener,
 		return viewManager;
 	}
 
-	public void addCategory() {
-
+	public void addCategory(Category c) {
+		categoryData.addItem(c);
 	}
 
-	public void addExpert() {
-
+	public void addExpert(Expert e) {
+		expertData.addItem(e);
 	}
 
-	public void addOption() {
-
+	public void addOption(Option o) {
+		optionData.addItem(o);
 	}
 
 	public void addProposition(Proposition p) {
 		propositionData.addItem(p);
 	}
 
-	private void addRepresentation() {
-
+	private void addRepresentation(Representation r) {
+		representationData.addItem(r);
 	}
 
-	private void addUser() {
-
+	private void addUser(User u) {
+		userData.addItem(u);
 	}
 
-	private void addVote() {
-
+	private void addVote(Vote v) {
+		voteData.addItem(v);
 	}
 
 	public CategoryContainer getCategoryData() {
@@ -115,7 +118,7 @@ public class VotingApplication extends Application implements ClickListener,
 	}
 
 	public void itemClick(ItemClickEvent event) {
-
+		//getViewManager().itemClick();
 	}
 
 	public void valueChange(ValueChangeEvent event) {

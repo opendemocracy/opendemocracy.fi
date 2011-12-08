@@ -1,6 +1,7 @@
 package com.opendemocracy.voting.data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class Vote implements Serializable {
 	/**
@@ -13,7 +14,7 @@ public class Vote implements Serializable {
 	// Option selected
 	private Option option;
 	// Amount of support for option from user
-	private float support;
+	private BigDecimal support;
 
 	public Vote() {
 
@@ -25,7 +26,7 @@ public class Vote implements Serializable {
 	 * @param option
 	 * @param support
 	 */
-	public Vote(long id, User user, Option option, float support) {
+	public Vote(long id, User user, Option option, BigDecimal support) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -81,7 +82,7 @@ public class Vote implements Serializable {
 	/**
 	 * @return the support
 	 */
-	public float getSupport() {
+	public BigDecimal getSupport() {
 		return support;
 	}
 
@@ -89,7 +90,7 @@ public class Vote implements Serializable {
 	 * @param support
 	 *            the support to set
 	 */
-	public void setSupport(float support) {
+	public void setSupport(BigDecimal support) {
 		this.support = support;
 	}
 
