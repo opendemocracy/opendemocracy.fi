@@ -33,7 +33,7 @@ public class PropositionList extends Table {
 			public void valueChange(
 					com.vaadin.data.Property.ValueChangeEvent event) {
 				Proposition p = (Proposition) event.getProperty().getValue();
-				//vApp.getMainWindow().addWindow(new PropositionVote(vApp,p));
+				vApp.getMainWindow().addWindow(new PropositionVote(vApp,p));
 			}
 		});
 
