@@ -5,19 +5,16 @@ import com.vaadin.event.Action;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.Table.ColumnGenerator;
-import com.vaadin.ui.VerticalLayout;
-
 import com.opendemocracy.voting.VotingApplication;
+import com.opendemocracy.voting.data.Category;
+import com.opendemocracy.voting.data.Proposition;
 
 @SuppressWarnings("serial")
-public class CategoryList extends VerticalLayout {
+public class CategoryList extends Table {
 
     //Controller
     private final VotingApplication vApp;
     
-    Table categoryTable = new Table();
-
     //Right-click actions
     static final Action ACTION_VIEW_DESCRIPTION = new Action("View Description");
     static final Action ACTION_SUBSCRIBE = new Action("Subscribe");
@@ -28,6 +25,11 @@ public class CategoryList extends VerticalLayout {
     static final Action[] ACTIONS_MENU = new Action[] { ACTION_VIEW_DESCRIPTION, ACTION_SUBSCRIBE, ACTION_VIEW_PROPOSITIONS,
             ACTION_VIEW_EXPERTS, ACTION_CLAIM_EXPERTISE };
 	
+    public final static Object[] NATURAL_COL_ORDER = new Object[] { "id",
+		"name"};
+
+    public final static String[] COL_HEADERS_ENGLISH = new String[] { "Id",
+		"Name"};
 
     public CategoryList(VotingApplication app) {
 		this.vApp = app;
@@ -35,43 +37,49 @@ public class CategoryList extends VerticalLayout {
 		setSizeFull();
         
 		//Table properties
-		categoryTable.setSizeFull();
-        categoryTable.setSelectable(true);
-		
-        addComponent(categoryTable);
-        
+		setSizeFull();
+        setSelectable(true);
+		        
         // connect data source
-        categoryTable.setContainerDataSource(vApp.getCategoryData());
+        setContainerDataSource(vApp.getCategoryData());
 
-
+        setVisibleColumns(NATURAL_COL_ORDER);
+        setColumnHeaders(COL_HEADERS_ENGLISH);
+		
 		//Generated columns
         ColumnCountGenerator columnPropositionCount = new ColumnCountGenerator("propositions");
         ColumnCountGenerator columnExpertCount = new ColumnCountGenerator("experts");
         ColumnCountGenerator columnSubscriberCount = new ColumnCountGenerator("subscribers");
         
-        categoryTable.addGeneratedColumn("Propositions", columnPropositionCount);
-		categoryTable.addGeneratedColumn("Subscribers", columnSubscriberCount);
-		categoryTable.addGeneratedColumn("Experts", columnExpertCount);
+        addGeneratedColumn("Propositions", columnPropositionCount);
+		addGeneratedColumn("Subscribers", columnSubscriberCount);
+		addGeneratedColumn("Experts", columnExpertCount);
         
         // set column headers
         //categoryTable.setColumnHeaders(new String[] { "Name", "Propositions", "Subscribers", "Experts" });
 
         // Menu actions
-        categoryTable.addActionHandler(new Action.Handler() {
+        addActionHandler(new Action.Handler() {
             public Action[] getActions(Object target, Object sender) {
                 return ACTIONS_MENU;
             }
 
             public void handleAction(Action action, Object sender, Object target) {
                 if (ACTION_VIEW_DESCRIPTION == action) {
-                	getWindow().showNotification("Propositions");
+                	//Display category description modal
+    				Category c = (Category) target;
+    				vApp.getMainWindow().addWindow(new ModalWindow(c.getName(), c.getDescription()));
                 } else if (ACTION_SUBSCRIBE == action) {
+                	//TODO
                 	getWindow().showNotification("Subscribe");
                 } else if (ACTION_VIEW_PROPOSITIONS == action) {
+                	//TODO
                 	getWindow().showNotification("Propositions");
                 } else if (ACTION_VIEW_EXPERTS == action) {
+                	//TODO
                 	getWindow().showNotification("Experts");
                 } else if (ACTION_CLAIM_EXPERTISE == action) {
+                	//TODO
                 	getWindow().showNotification("Claim");
                 }
 

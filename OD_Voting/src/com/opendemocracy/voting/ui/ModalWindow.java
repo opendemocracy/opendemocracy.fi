@@ -71,7 +71,7 @@ public class ModalWindow extends Window {
 		pDesc.setHeight("200px");
 		pDesc.setWidth("100%");
 		vLayout.addComponent(pDesc);
-		ArrayList pOptions = new ArrayList<Option>(p.getOptions());
+		ArrayList<Option> pOptions = new ArrayList<Option>(p.getOptions());
 		vLayout.addComponent(new Label("Options:"));
 		int i = 1;
 		for (Iterator<Option> it = (Iterator<Option>) pOptions.iterator(); it

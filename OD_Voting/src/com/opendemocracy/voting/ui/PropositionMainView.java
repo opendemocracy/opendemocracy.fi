@@ -36,7 +36,7 @@ public class PropositionMainView extends VerticalLayout implements
 		list = new VerticalLayout();
 		list.setMargin(false);
 		list.addComponent(app.getViewManager().getPropositionList());
-		list.setWidth("100%");
+		list.setSizeFull();
 
 		// Add proposition
 		add = new VerticalLayout();
