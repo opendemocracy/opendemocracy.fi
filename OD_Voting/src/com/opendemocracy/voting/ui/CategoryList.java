@@ -1,44 +1,119 @@
 package com.opendemocracy.voting.ui;
 
-import com.opendemocracy.voting.VotingApplication;
-import com.opendemocracy.voting.data.Category;
-import com.opendemocracy.voting.data.CategoryContainer;
-import com.opendemocracy.voting.data.Proposition;
-import com.opendemocracy.voting.data.PropositionContainer;
+import com.vaadin.data.Property;
+import com.vaadin.event.Action;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.Table.ColumnGenerator;
+import com.vaadin.ui.VerticalLayout;
+
+import com.opendemocracy.voting.VotingApplication;
 
 @SuppressWarnings("serial")
-public class CategoryList extends Table {
-	private final VotingApplication vApp;
-	public CategoryList(VotingApplication app) {
+public class CategoryList extends VerticalLayout {
+
+    //Controller
+    private final VotingApplication vApp;
+    
+    Table categoryTable = new Table();
+
+    //Right-click actions
+    static final Action ACTION_VIEW_DESCRIPTION = new Action("View Description");
+    static final Action ACTION_SUBSCRIBE = new Action("Subscribe");
+    static final Action ACTION_VIEW_PROPOSITIONS = new Action("View Propositions");
+    static final Action ACTION_VIEW_EXPERTS = new Action("View Experts");
+    static final Action ACTION_CLAIM_EXPERTISE = new Action("Claim Expertise");
+    
+    static final Action[] ACTIONS_MENU = new Action[] { ACTION_VIEW_DESCRIPTION, ACTION_SUBSCRIBE, ACTION_VIEW_PROPOSITIONS,
+            ACTION_VIEW_EXPERTS, ACTION_CLAIM_EXPERTISE };
+	
+
+    public CategoryList(VotingApplication app) {
 		this.vApp = app;
+
 		setSizeFull();
-		setContainerDataSource(app.getCategoryData());
-
-		setVisibleColumns(CategoryContainer.NATURAL_COL_ORDER);
-		setColumnHeaders(CategoryContainer.COL_HEADERS_ENGLISH);
-
-		setColumnCollapsingAllowed(true);
-		setColumnReorderingAllowed(true);
-
-		/*
-		 * Make table selectable, react immediatedly to user events, and pass
-		 * events to the controller (our main application)
-		 */
-		setSelectable(true);
-		setImmediate(true);
-		//addListener((ValueChangeListener) app);
-		setNullSelectionAllowed(true);
+        
+		//Table properties
+		categoryTable.setSizeFull();
+        categoryTable.setSelectable(true);
 		
-		//Modal propositionview (Temporary)
-		addListener(new ValueChangeListener(){
-			public void valueChange(
-					com.vaadin.data.Property.ValueChangeEvent event) {
-				Category c = (Category) event.getProperty().getValue();
-				//vApp.getMainWindow().addWindow(new PropositionVote(vApp,p));
-			}
-		});
+        addComponent(categoryTable);
+        
+        // connect data source
+        categoryTable.setContainerDataSource(vApp.getCategoryData());
 
-	}
 
+		//Generated columns
+        ColumnCountGenerator columnPropositionCount = new ColumnCountGenerator("propositions");
+        ColumnCountGenerator columnExpertCount = new ColumnCountGenerator("experts");
+        ColumnCountGenerator columnSubscriberCount = new ColumnCountGenerator("subscribers");
+        
+        categoryTable.addGeneratedColumn("Propositions", columnPropositionCount);
+		categoryTable.addGeneratedColumn("Subscribers", columnSubscriberCount);
+		categoryTable.addGeneratedColumn("Experts", columnExpertCount);
+        
+        // set column headers
+        //categoryTable.setColumnHeaders(new String[] { "Name", "Propositions", "Subscribers", "Experts" });
+
+        // Menu actions
+        categoryTable.addActionHandler(new Action.Handler() {
+            public Action[] getActions(Object target, Object sender) {
+                return ACTIONS_MENU;
+            }
+
+            public void handleAction(Action action, Object sender, Object target) {
+                if (ACTION_VIEW_DESCRIPTION == action) {
+                	getWindow().showNotification("Propositions");
+                } else if (ACTION_SUBSCRIBE == action) {
+                	getWindow().showNotification("Subscribe");
+                } else if (ACTION_VIEW_PROPOSITIONS == action) {
+                	getWindow().showNotification("Propositions");
+                } else if (ACTION_VIEW_EXPERTS == action) {
+                	getWindow().showNotification("Experts");
+                } else if (ACTION_CLAIM_EXPERTISE == action) {
+                	getWindow().showNotification("Claim");
+                }
+
+            }
+
+        });
+
+    }
+    
+    /** Formats the value in a column containing Double objects. */
+    private class ColumnCountGenerator implements Table.ColumnGenerator {
+        String sumType; /* Format string for the Double values. */
+
+        /**
+         * Creates double value column formatter with the given
+         * format string.
+         */
+        public ColumnCountGenerator(String type) {
+            this.sumType = type;
+        }
+
+        /**
+         * Generates the cell containing the Double value.
+         * The column is irrelevant in this use case.
+         */
+        public Component generateCell(Table source, Object itemId,
+                                      Object columnId) {
+            
+        	// Get the object stored in the cell as a property  	
+        	Property prop = source.getItem(itemId).getItemProperty(columnId);
+        	
+        	//TODO: Count associated items and return sum
+        	if(sumType.equals("propositions")){
+                return new Label(sumType);
+        	}else if(sumType.equals("experts")){
+                return new Label(sumType);
+        	}else if(sumType.equals("subscribers")){
+                return new Label(sumType);
+        	}
+        	return null;
+        }
+    }
+    
+    
 }

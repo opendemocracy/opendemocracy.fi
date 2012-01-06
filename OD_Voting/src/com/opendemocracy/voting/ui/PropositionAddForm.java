@@ -25,7 +25,6 @@ import com.vaadin.ui.TextField;
 /*Add proposition form, will replace PropositionForm when finished*/
 public class PropositionAddForm extends Form {
 	private static final long serialVersionUID = 1L;
-	
 	//Data containers
 	private VotingApplication app;
 	private Proposition newProposition = null;
