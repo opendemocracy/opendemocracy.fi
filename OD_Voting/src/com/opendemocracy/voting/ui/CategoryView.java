@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import com.opendemocracy.voting.VotingApplication;
+import com.opendemocracy.voting.data.Category;
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
@@ -41,10 +42,12 @@ public class CategoryView extends VerticalLayout implements
 	private VerticalLayout add;
 	private VerticalLayout view;
 	private VerticalLayout help;
-
+	private final ThemeResource categoryIcon = new ThemeResource("icons/16/folder.png");
 	public CategoryView(VotingApplication app) {
 		this.app = app;
 		this.setSizeFull();
+		
+		
 		// List propositions
 		list = new VerticalLayout();
 		list.setMargin(false);
@@ -63,7 +66,6 @@ public class CategoryView extends VerticalLayout implements
 		view.setMargin(true);
 		view.addComponent(new Label("View category"));
 		view.setSizeFull();
-		categoryMenu = new TabSheet();
 
 		// Help
 		help = new VerticalLayout();
@@ -72,6 +74,7 @@ public class CategoryView extends VerticalLayout implements
 		help.setSizeFull();
 
 		// Add main tabs
+		categoryMenu = new TabSheet();
 		categoryMenu.setSizeFull();
 		categoryMenu.addTab(list, "List categories", new ThemeResource(
 				"icons/16/propositions.png"));
@@ -91,6 +94,23 @@ public class CategoryView extends VerticalLayout implements
 		Tab tab = tabsheet.getTab(tabsheet.getSelectedTab());
 		if (tab != null) {
 			getWindow().showNotification("Selected tab: " + tab.getCaption());
+		}
+	}
+	
+	public void openCategoryTab(Category c){
+		if(false){
+			//TODO: If exists, setselected
+			//categoryMenu.setSelectedTab(newTab.getComponent());
+		}else{
+			VerticalLayout tabContents = new VerticalLayout();
+			tabContents.setMargin(true);
+			tabContents.addComponent(new Label(c.getName()));
+			tabContents.addComponent(new Label(c.getDescription()));
+			tabContents.setMargin(false);
+			Tab newTab = categoryMenu.addTab(tabContents, c.getName());
+	        newTab.setClosable(true);
+	        newTab.setIcon(categoryIcon);
+	        categoryMenu.setSelectedTab(newTab.getComponent());
 		}
 	}
 

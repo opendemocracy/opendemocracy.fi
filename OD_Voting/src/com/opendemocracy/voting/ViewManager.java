@@ -116,7 +116,7 @@ public class ViewManager {
 		getExpertView().showExpertList();
 	}
 	
-	private CategoryView getCategoryView() {
+	public CategoryView getCategoryView() {
 		if (categoryView == null) {
 			categoryView = new CategoryView(app);
 		}

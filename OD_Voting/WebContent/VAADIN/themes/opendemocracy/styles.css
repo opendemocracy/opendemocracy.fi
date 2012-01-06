@@ -1,6 +1,8 @@
  @import url(../reindeer/styles.css);
 /* Using the old default theme (runo) as the basis for now */
-
+.v-tabsheet-tabitem .v-caption-closable{
+	padding: 9px 0 0 6px;
+}
 
 .toolbar .v-button:active .v-button-wrap,
 .toolbar .v-button.v-pressed .v-button-wrap {
