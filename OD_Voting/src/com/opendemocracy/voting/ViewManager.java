@@ -79,7 +79,7 @@ public class ViewManager {
 		return propositionList;
 	}
 	
-	private PropositionMainView getPropositionMainView() {
+	public PropositionMainView getPropositionMainView() {
 		if (propositionMainView == null) {
 			propositionMainView = new PropositionMainView(app);
 		}

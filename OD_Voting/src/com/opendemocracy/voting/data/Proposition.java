@@ -73,12 +73,12 @@ public class Proposition implements Serializable {
 
 	public Collection<Option> getOptions() {
 		//return Collections.unmodifiableCollection(options);
-		//Testing
 		return options;
 	}
 
 	public Collection<Category> getTargetCategories() {
-		return Collections.unmodifiableCollection(targetCategories);
+		//return Collections.unmodifiableCollection(targetCategories);
+		return targetCategories;
 	}
 
 	public int nOptions() {

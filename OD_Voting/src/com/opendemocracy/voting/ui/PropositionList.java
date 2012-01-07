@@ -1,9 +1,12 @@
 package com.opendemocracy.voting.ui;
 
 import com.opendemocracy.voting.VotingApplication;
+import com.opendemocracy.voting.data.Category;
 import com.opendemocracy.voting.data.Proposition;
 import com.opendemocracy.voting.data.PropositionContainer;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.event.Action;
+import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.Table;
 
 @SuppressWarnings("serial")
@@ -38,7 +41,7 @@ public class PropositionList extends Table {
 		setSelectable(true);
 		setImmediate(true);
 		//addListener((ValueChangeListener) app);
-		setNullSelectionAllowed(true);
+		setNullSelectionAllowed(false);
 		
 		//Modal propositionview (Temporary)
 		/*
@@ -50,6 +53,14 @@ public class PropositionList extends Table {
 			}
 		});
 		*/
+        addListener(new ItemClickEvent.ItemClickListener() {
+            public void itemClick(ItemClickEvent event) {
+            	if((event.getButton() == ItemClickEvent.BUTTON_LEFT) && isSelected(event.getItemId())){
+            		Proposition p = (Proposition) ((BeanItem<?>) getItem(event.getItemId())).getBean();
+					vApp.getViewManager().getPropositionMainView().openPropositionTab(p);
+            	}
+            }
+        });
         // Menu actions
         addActionHandler(new Action.Handler() {
             public Action[] getActions(Object target, Object sender) {

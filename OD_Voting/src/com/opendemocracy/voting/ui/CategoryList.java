@@ -38,9 +38,8 @@ public class CategoryList extends Table {
 		//Table properties
 		setSizeFull();
 		setSelectable(true);
-        setMultiSelect(false);
         setNullSelectionAllowed(false);
-		setRowHeaderMode(Table.ROW_HEADER_MODE_ICON_ONLY);
+        setImmediate(true);
         
         // connect data source
         setContainerDataSource(vApp.getCategoryData());
@@ -78,8 +77,7 @@ public class CategoryList extends Table {
                 	//TODO
                 	getWindow().showNotification("Experts");
                 } else if (ACTION_CLAIM_EXPERTISE == action) {
-                	//TODO: Set expert icon on claim
-                	setItemIcon(getItem(target), new ThemeResource("icons/16/experts.png"));
+                	//TODO: Set expert on claim
                 	getWindow().showNotification("Claim");
                 }
 
@@ -89,10 +87,10 @@ public class CategoryList extends Table {
 
         addListener(new ItemClickEvent.ItemClickListener() {
             public void itemClick(ItemClickEvent event) {
-                if (event.isDoubleClick()) {
-    				Category c = (Category) ((BeanItem) getItem(event.getItemId())).getBean();
-    				vApp.getViewManager().getCategoryView().openCategoryTab(c);
-                }
+            	if((event.getButton() == ItemClickEvent.BUTTON_LEFT) && isSelected(event.getItemId())){
+					Category c = (Category) ((BeanItem<?>) getItem(event.getItemId())).getBean();
+					vApp.getViewManager().getCategoryView().openCategoryTab(c);
+            	}
             }
         });
         

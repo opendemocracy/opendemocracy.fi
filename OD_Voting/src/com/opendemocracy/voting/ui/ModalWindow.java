@@ -90,7 +90,7 @@ public class ModalWindow extends Window {
 
 		setWidth("440px");
 	}
-
+	
 	public ModalWindow(VotingApplication app, Expert expertToBeTrusted) {
 		// TODO Auto-generated constructor stub
 	}
