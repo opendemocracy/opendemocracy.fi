@@ -1,0 +1,107 @@
+[EL Info]: 2012-01-08 19:29:14.268--ServerSession(1401862072)--EclipseLink, version: Eclipse Persistence Services - 2.2.0.v20110202-r8913
+[EL Info]: 2012-01-08 19:29:15.781--ServerSession(1401862072)--file:/C:/Users/ThanE/Documents/workspace-sts-2.8.1.RELEASE/OpenDemocracy/target/classes/_persistenceUnit login successful
+[EL Warning]: 2012-01-08 19:29:16.015--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'josef_odvoting.PROPOSITION' doesn't exist
+Error Code: 1146
+Call: ALTER TABLE PROPOSITION DROP FOREIGN KEY FK_PROPOSITION_AUTHOR_id
+Query: DataModifyQuery(sql="ALTER TABLE PROPOSITION DROP FOREIGN KEY FK_PROPOSITION_AUTHOR_id")
+[EL Warning]: 2012-01-08 19:29:16.108--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'josef_odvoting.VOTE' doesn't exist
+Error Code: 1146
+Call: ALTER TABLE VOTE DROP FOREIGN KEY FK_VOTE_ODUSER_id
+Query: DataModifyQuery(sql="ALTER TABLE VOTE DROP FOREIGN KEY FK_VOTE_ODUSER_id")
+[EL Warning]: 2012-01-08 19:29:16.171--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'josef_odvoting.VOTE' doesn't exist
+Error Code: 1146
+Call: ALTER TABLE VOTE DROP FOREIGN KEY FK_VOTE_PROPOSITIONOPTION_id
+Query: DataModifyQuery(sql="ALTER TABLE VOTE DROP FOREIGN KEY FK_VOTE_PROPOSITIONOPTION_id")
+[EL Warning]: 2012-01-08 19:29:16.233--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'josef_odvoting.EXPERT' doesn't exist
+Error Code: 1146
+Call: ALTER TABLE EXPERT DROP FOREIGN KEY FK_EXPERT_ODUSER_id
+Query: DataModifyQuery(sql="ALTER TABLE EXPERT DROP FOREIGN KEY FK_EXPERT_ODUSER_id")
+[EL Warning]: 2012-01-08 19:29:16.296--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'josef_odvoting.EXPERT' doesn't exist
+Error Code: 1146
+Call: ALTER TABLE EXPERT DROP FOREIGN KEY FK_EXPERT_CATEGORY_id
+Query: DataModifyQuery(sql="ALTER TABLE EXPERT DROP FOREIGN KEY FK_EXPERT_CATEGORY_id")
+[EL Warning]: 2012-01-08 19:29:16.358--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'josef_odvoting.REPRESENTATION' doesn't exist
+Error Code: 1146
+Call: ALTER TABLE REPRESENTATION DROP FOREIGN KEY FK_REPRESENTATION_EXPERT_id
+Query: DataModifyQuery(sql="ALTER TABLE REPRESENTATION DROP FOREIGN KEY FK_REPRESENTATION_EXPERT_id")
+[EL Warning]: 2012-01-08 19:29:16.42--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'josef_odvoting.REPRESENTATION' doesn't exist
+Error Code: 1146
+Call: ALTER TABLE REPRESENTATION DROP FOREIGN KEY FK_REPRESENTATION_CATEGORY_id
+Query: DataModifyQuery(sql="ALTER TABLE REPRESENTATION DROP FOREIGN KEY FK_REPRESENTATION_CATEGORY_id")
+[EL Warning]: 2012-01-08 19:29:16.498--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'josef_odvoting.REPRESENTATION' doesn't exist
+Error Code: 1146
+Call: ALTER TABLE REPRESENTATION DROP FOREIGN KEY FK_REPRESENTATION_ODUSER_id
+Query: DataModifyQuery(sql="ALTER TABLE REPRESENTATION DROP FOREIGN KEY FK_REPRESENTATION_ODUSER_id")
+[EL Warning]: 2012-01-08 19:29:16.561--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'josef_odvoting.PROPOSITION_CATEGORY' doesn't exist
+Error Code: 1146
+Call: ALTER TABLE PROPOSITION_CATEGORY DROP FOREIGN KEY FK_PROPOSITION_CATEGORY_categories_id
+Query: DataModifyQuery(sql="ALTER TABLE PROPOSITION_CATEGORY DROP FOREIGN KEY FK_PROPOSITION_CATEGORY_categories_id")
+[EL Warning]: 2012-01-08 19:29:16.623--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'josef_odvoting.PROPOSITION_CATEGORY' doesn't exist
+Error Code: 1146
+Call: ALTER TABLE PROPOSITION_CATEGORY DROP FOREIGN KEY FK_PROPOSITION_CATEGORY_Proposition_id
+Query: DataModifyQuery(sql="ALTER TABLE PROPOSITION_CATEGORY DROP FOREIGN KEY FK_PROPOSITION_CATEGORY_Proposition_id")
+[EL Warning]: 2012-01-08 19:29:16.689--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'josef_odvoting.PROPOSITION_PROPOSITIONOPTION' doesn't exist
+Error Code: 1146
+Call: ALTER TABLE PROPOSITION_PROPOSITIONOPTION DROP FOREIGN KEY FK_PROPOSITION_PROPOSITIONOPTION_Proposition_id
+Query: DataModifyQuery(sql="ALTER TABLE PROPOSITION_PROPOSITIONOPTION DROP FOREIGN KEY FK_PROPOSITION_PROPOSITIONOPTION_Proposition_id")
+[EL Warning]: 2012-01-08 19:29:16.753--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Table 'josef_odvoting.PROPOSITION_PROPOSITIONOPTION' doesn't exist
+Error Code: 1146
+Call: ALTER TABLE PROPOSITION_PROPOSITIONOPTION DROP FOREIGN KEY PROPOSITION_PROPOSITIONOPTIONpropositionOptions_id
+Query: DataModifyQuery(sql="ALTER TABLE PROPOSITION_PROPOSITIONOPTION DROP FOREIGN KEY PROPOSITION_PROPOSITIONOPTIONpropositionOptions_id")
+[EL Warning]: 2012-01-08 19:29:16.818--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown table 'PROPOSITION'
+Error Code: 1051
+Call: DROP TABLE PROPOSITION
+Query: DataModifyQuery(sql="DROP TABLE PROPOSITION")
+[EL Warning]: 2012-01-08 19:29:17.008--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown table 'PROPOSITIONOPTION'
+Error Code: 1051
+Call: DROP TABLE PROPOSITIONOPTION
+Query: DataModifyQuery(sql="DROP TABLE PROPOSITIONOPTION")
+[EL Warning]: 2012-01-08 19:29:17.179--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown table 'VOTE'
+Error Code: 1051
+Call: DROP TABLE VOTE
+Query: DataModifyQuery(sql="DROP TABLE VOTE")
+[EL Warning]: 2012-01-08 19:29:17.352--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown table 'CATEGORY'
+Error Code: 1051
+Call: DROP TABLE CATEGORY
+Query: DataModifyQuery(sql="DROP TABLE CATEGORY")
+[EL Warning]: 2012-01-08 19:29:17.525--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown table 'EXPERT'
+Error Code: 1051
+Call: DROP TABLE EXPERT
+Query: DataModifyQuery(sql="DROP TABLE EXPERT")
+[EL Warning]: 2012-01-08 19:29:17.706--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown table 'REPRESENTATION'
+Error Code: 1051
+Call: DROP TABLE REPRESENTATION
+Query: DataModifyQuery(sql="DROP TABLE REPRESENTATION")
+[EL Warning]: 2012-01-08 19:29:17.893--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown table 'ODUSER'
+Error Code: 1051
+Call: DROP TABLE ODUSER
+Query: DataModifyQuery(sql="DROP TABLE ODUSER")
+[EL Warning]: 2012-01-08 19:29:18.08--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown table 'PROPOSITION_CATEGORY'
+Error Code: 1051
+Call: DROP TABLE PROPOSITION_CATEGORY
+Query: DataModifyQuery(sql="DROP TABLE PROPOSITION_CATEGORY")
+[EL Warning]: 2012-01-08 19:29:18.252--ServerSession(1401862072)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.2.0.v20110202-r8913): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown table 'PROPOSITION_PROPOSITIONOPTION'
+Error Code: 1051
+Call: DROP TABLE PROPOSITION_PROPOSITIONOPTION
+Query: DataModifyQuery(sql="DROP TABLE PROPOSITION_PROPOSITIONOPTION")

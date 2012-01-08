@@ -1,0 +1,33 @@
+<aspectj>
+<aspects>
+<aspect name="fi.opendemocracy.domain.CategoryIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="fi.opendemocracy.domain.CategoryDataOnDemand_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.ODUserDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="fi.opendemocracy.domain.ExpertIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="fi.opendemocracy.domain.ExpertIntegrationTest_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.VoteIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="fi.opendemocracy.domain.PropositionOptionIntegrationTest_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.PropositionOptionDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="fi.opendemocracy.domain.CategoryIntegrationTest_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.CategoryDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="fi.opendemocracy.domain.PropositionIntegrationTest_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.ODUserDataOnDemand_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.ODUserIntegrationTest_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.RepresentationIntegrationTest_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.ExpertDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="fi.opendemocracy.domain.RepresentationIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="fi.opendemocracy.domain.VoteIntegrationTest_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.PropositionDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="fi.opendemocracy.domain.VoteDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="fi.opendemocracy.domain.PropositionDataOnDemand_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.ODUserIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="fi.opendemocracy.domain.RepresentationDataOnDemand_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.VoteDataOnDemand_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.ExpertDataOnDemand_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.PropositionIntegrationTest_Roo_IntegrationTest"/>
+<aspect name="fi.opendemocracy.domain.PropositionOptionDataOnDemand_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.RepresentationDataOnDemand_Roo_DataOnDemand"/>
+<aspect name="fi.opendemocracy.domain.PropositionOptionIntegrationTest_Roo_IntegrationTest"/>
+</aspects>
+</aspectj>
+

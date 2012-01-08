@@ -1,0 +1,49 @@
+<aspectj>
+<aspects>
+<aspect name="fi.opendemocracy.domain.Expert_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.Expert_Roo_ToString"/>
+<aspect name="fi.opendemocracy.domain.Category_Roo_ToString"/>
+<aspect name="fi.opendemocracy.domain.Representation_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.web.ui.ODUserView_Roo_VaadinEntityView"/>
+<aspect name="fi.opendemocracy.domain.Category_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.web.ui.VoteView_Roo_VaadinEntityView"/>
+<aspect name="fi.opendemocracy.domain.ODUser_Roo_Entity"/>
+<aspect name="fi.opendemocracy.web.ui.RepresentationForm_Roo_VaadinVisuallyComposableEntityForm"/>
+<aspect name="fi.opendemocracy.domain.PropositionOption_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.ODUser_Roo_ToString"/>
+<aspect name="fi.opendemocracy.web.ui.ExpertForm_Roo_VaadinVisuallyComposableEntityForm"/>
+<aspect name="fi.opendemocracy.web.ui.ExpertView_Roo_VaadinEntityView"/>
+<aspect name="fi.opendemocracy.web.OpenDemocracyVotingEntityManagerView_Roo_VaadinEntityManagerView"/>
+<aspect name="fi.opendemocracy.domain.Proposition_Roo_ToString"/>
+<aspect name="fi.opendemocracy.domain.Representation_Roo_Entity"/>
+<aspect name="fi.opendemocracy.domain.Category_Roo_Entity"/>
+<aspect name="fi.opendemocracy.domain.Expert_Roo_Entity"/>
+<aspect name="fi.opendemocracy.web.ui.CategoryForm_Roo_VaadinVisuallyComposableEntityForm"/>
+<aspect name="fi.opendemocracy.web.ui.PropositionOptionView_Roo_VaadinEntityView"/>
+<aspect name="fi.opendemocracy.domain.ODUser_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.Vote_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.web.ui.VoteForm_Roo_VaadinVisuallyComposableEntityForm"/>
+<aspect name="fi.opendemocracy.domain.PropositionOption_Roo_Entity"/>
+<aspect name="fi.opendemocracy.web.ui.PropositionForm_Roo_VaadinVisuallyComposableEntityForm"/>
+<aspect name="fi.opendemocracy.domain.Proposition_Roo_JavaBean"/>
+<aspect name="fi.opendemocracy.domain.PropositionOption_Roo_ToString"/>
+<aspect name="fi.opendemocracy.domain.Representation_Roo_ToString"/>
+<aspect name="fi.opendemocracy.web.ui.CategoryView_Roo_VaadinEntityView"/>
+<aspect name="fi.opendemocracy.web.ui.ODUserForm_Roo_VaadinVisuallyComposableEntityForm"/>
+<aspect name="fi.opendemocracy.domain.Vote_Roo_ToString"/>
+<aspect name="fi.opendemocracy.domain.Vote_Roo_Entity"/>
+<aspect name="fi.opendemocracy.domain.Category_Roo_JavaBean"/>
+<aspect name="fi.opendemocracy.domain.Proposition_Roo_Entity"/>
+<aspect name="fi.opendemocracy.domain.Expert_Roo_JavaBean"/>
+<aspect name="fi.opendemocracy.web.ui.PropositionView_Roo_VaadinEntityView"/>
+<aspect name="fi.opendemocracy.domain.Proposition_Roo_Configurable"/>
+<aspect name="fi.opendemocracy.domain.ODUser_Roo_JavaBean"/>
+<aspect name="fi.opendemocracy.domain.PropositionOption_Roo_JavaBean"/>
+<aspect name="fi.opendemocracy.web.AbstractEntityView_Roo_AbstractEntityView"/>
+<aspect name="fi.opendemocracy.web.ui.RepresentationView_Roo_VaadinEntityView"/>
+<aspect name="fi.opendemocracy.domain.Vote_Roo_JavaBean"/>
+<aspect name="fi.opendemocracy.web.ui.PropositionOptionForm_Roo_VaadinVisuallyComposableEntityForm"/>
+<aspect name="fi.opendemocracy.domain.Representation_Roo_JavaBean"/>
+</aspects>
+</aspectj>
+

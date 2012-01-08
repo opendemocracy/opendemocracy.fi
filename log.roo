@@ -1,0 +1,118 @@
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-01-08 19:07:33
+project --topLevelPackage fi.opendemocracy --projectName OpenDemocracy --java 6
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-01-08 19:07:38
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-01-08 19:07:46
+pgp trust --keyId 0xBF0451C0
+download accept terms of use
+addon search com.vaadin.spring.roo.addon
+osgi obr url add --url http://vaadin.com/springroo/repository.xml
+osgi obr start --bundleSymbolicName com.vaadin.spring.roo.addon
+osgi obr url remove --url http://vaadin.com/springroo/repository.xml
+addon install bundle --bundleSymbolicName com.vaadin.spring.roo.addon
+persistence setup --provider ECLIPSELINK --database MYSQL 
+entity --class ~.domain.ODUser --testAutomatically
+field string --fieldName username --notNull --sizeMin 2
+field string --fieldName password --notNull --sizeMin 4
+field boolean --fieldName admin --primitive
+entity --class ~.domain.Proposition --testAutomatically
+// [failed] script --file D:\domain.txt
+// [failed] entity --class ~.domain.ODUser --testAutomatically
+// [failed] script --file D:\domain.txt
+entity --class ~.domain.ODUser --testAutomatically
+field string --fieldName username --notNull --sizeMin 2
+field string --fieldName password --notNull --sizeMin 4
+field boolean --fieldName admin --primitive
+entity --class ~.domain.Proposition --testAutomatically
+// [failed] script --file D:\domain.txt
+entity --class ~.domain.ODUser --testAutomatically
+field string --fieldName username --notNull --sizeMin 2
+field string --fieldName password --notNull --sizeMin 4
+field boolean --fieldName admin --primitive
+entity --class ~.domain.Category --testAutomatically
+field string --fieldName name --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+// [failed] entity --class ~.domain.Option --testAutomatically
+// [failed] script --file D:\domain.txt
+entity --class ~.domain.ODUser --testAutomatically
+field string --fieldName username --notNull --sizeMin 2
+field string --fieldName password --notNull --sizeMin 4
+field boolean --fieldName admin --primitive
+entity --class ~.domain.Category --testAutomatically
+field string --fieldName name --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+entity --class ~.domain.PropositionOption --testAutomatically
+field string --fieldName title --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+// [failed] field reference --fieldName proposition --type ~.domain.Proposition --notNull
+// [failed] script --file D:\domain.txt
+entity --class ~.domain.ODUser --testAutomatically
+field string --fieldName username --notNull --sizeMin 2
+field string --fieldName password --notNull --sizeMin 4
+field boolean --fieldName admin --primitive
+entity --class ~.domain.Category --testAutomatically
+field string --fieldName name --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+entity --class ~.domain.PropositionOption --testAutomatically
+field string --fieldName title --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+entity --class ~.domain.Proposition --testAutomatically
+field reference --fieldName author --type ~.domain.ODUser --notNull
+field string --fieldName title --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+field set --fieldName categories --type ~.domain.Category
+field set --fieldName options --type ~.domain.PropositionOption
+entity --class ~.domain.Vote --testAutomatically
+// [failed] field reference --fieldName user --type ~.domain.ODUser --notNull
+// [failed] script --file D:\domain.txt
+entity --class ~.domain.ODUser --testAutomatically
+field string --fieldName username --notNull --sizeMin 2
+field string --fieldName password --notNull --sizeMin 4
+field boolean --fieldName admin --primitive
+entity --class ~.domain.Category --testAutomatically
+field string --fieldName name --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+entity --class ~.domain.PropositionOption --testAutomatically
+field string --fieldName title --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+entity --class ~.domain.Proposition --testAutomatically
+field reference --fieldName author --type ~.domain.ODUser --notNull
+field string --fieldName title --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+field set --fieldName categories --type ~.domain.Category
+field set --fieldName propositionOptions --type ~.domain.PropositionOption
+entity --class ~.domain.Vote --testAutomatically
+field reference --fieldName odUser --type ~.domain.ODUser --notNull
+field reference --fieldName propositionOption --type ~.domain.PropositionOption --notNull
+// [failed] script --file D:\domain.txt
+entity --class ~.domain.ODUser --testAutomatically
+field string --fieldName username --notNull --sizeMin 2
+field string --fieldName password --notNull --sizeMin 4
+field boolean --fieldName admin --primitive
+entity --class ~.domain.Category --testAutomatically
+field string --fieldName name --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+entity --class ~.domain.PropositionOption --testAutomatically
+field string --fieldName title --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+entity --class ~.domain.Proposition --testAutomatically
+field reference --fieldName author --type ~.domain.ODUser --notNull
+field string --fieldName title --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+field set --fieldName categories --type ~.domain.Category
+field set --fieldName propositionOptions --type ~.domain.PropositionOption
+entity --class ~.domain.Vote --testAutomatically
+field reference --fieldName odUser --type ~.domain.ODUser --notNull
+field reference --fieldName propositionOption --type ~.domain.PropositionOption --notNull
+field number --fieldName support --notNull --type java.math.BigDecimal
+entity --class ~.domain.Expert --testAutomatically
+field reference --fieldName category --type ~.domain.Category --notNull
+field reference --fieldName odUser --type ~.domain.ODUser --notNull
+entity --class ~.domain.Representation --testAutomatically
+field reference --fieldName category --type ~.domain.Category --notNull
+field reference --fieldName expert --type ~.domain.Expert --notNull
+field reference --fieldName odUser --type ~.domain.ODUser --notNull
+field number --fieldName trust --notNull --type java.math.BigDecimal
+// script --file D:\domain.txt
+perform tests
+vaadin setup --applicationPackage ~.web --baseName OpenDemocracyVoting --themeName OpenDemocracyTheme --useJpaContainer true
+vaadin generate all --package ~.web.ui --visuallyComposable true
