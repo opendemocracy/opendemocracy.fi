@@ -116,3 +116,4 @@ field number --fieldName trust --notNull --type java.math.BigDecimal
 perform tests
 vaadin setup --applicationPackage ~.web --baseName OpenDemocracyVoting --themeName OpenDemocracyTheme --useJpaContainer true
 vaadin generate all --package ~.web.ui --visuallyComposable true
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-01-09 00:09:04

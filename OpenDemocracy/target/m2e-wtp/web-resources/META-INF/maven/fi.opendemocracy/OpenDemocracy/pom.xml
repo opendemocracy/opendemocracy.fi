@@ -463,4 +463,9 @@
             </plugin>
         </plugins>
     </build>
+    <scm>
+        <connection>scm:git:git@github.com:opendemocracy/opendemocracy.fi.git</connection>
+            <url>scm:git:git@github.com:opendemocracy/opendemocracy.fi.git</url>
+            <developerConnection>scm:git:git@github.com:tobrien/opendemocracy/opendemocracy.fi.git</developerConnection>
+    </scm>
 </project>
