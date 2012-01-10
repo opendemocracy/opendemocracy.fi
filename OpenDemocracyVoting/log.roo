@@ -2,3 +2,40 @@
 project --topLevelPackage fi.opendemocracy.voting --projectName OpenDemocracyVoting --java 6
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-01-10 21:26:26
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-01-10 21:26:30
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-01-10 21:41:08
+persistence setup --provider ECLIPSELINK --database MYSQL
+entity --class ~.domain.ODUser --testAutomatically
+field string --fieldName name --notNull --sizeMin 2
+field string --fieldName password --notNull --sizeMin 4
+field boolean --fieldName admin --primitive
+entity --class ~.domain.Category --testAutomatically
+field string --fieldName name --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+entity --class ~.domain.PropositionOption --testAutomatically
+field string --fieldName name --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+entity --class ~.domain.Proposition --testAutomatically
+field reference --fieldName author --type ~.domain.ODUser --notNull
+field string --fieldName name --notNull --sizeMin 2 --sizeMax 255
+field string --fieldName description --notNull --sizeMin 2 --sizeMax 4096
+field set --fieldName categories --type ~.domain.Category
+field set --fieldName propositionOptions --type ~.domain.PropositionOption
+focus --class ~.domain.PropositionOption
+field reference --fieldName proposition --type ~.domain.Proposition --notNull
+entity --class ~.domain.Vote --testAutomatically
+field reference --fieldName odUser --type ~.domain.ODUser --notNull
+field reference --fieldName propositionOption --type ~.domain.PropositionOption --notNull
+field number --fieldName support --notNull --type java.math.BigDecimal
+field string --fieldName comment --sizeMax 4096
+entity --class ~.domain.Expert --testAutomatically
+field reference --fieldName category --type ~.domain.Category --notNull
+field reference --fieldName odUser --type ~.domain.ODUser --notNull
+entity --class ~.domain.Representation --testAutomatically
+field reference --fieldName category --type ~.domain.Category --notNull
+field reference --fieldName expert --type ~.domain.Expert --notNull
+field reference --fieldName odUser --type ~.domain.ODUser --notNull
+field number --fieldName trust --notNull --type java.math.BigDecimal
+// script --file c:\roo\domain.txt
+vaadin setup --applicationPackage ~.web --baseName OpenDemocracyVoting --themeName OpenDemocracyTheme --useJpaContainer true
+vaadin generate all --package ~.web.ui --visuallyComposable true
+// script --file C:\roo\after.txt
