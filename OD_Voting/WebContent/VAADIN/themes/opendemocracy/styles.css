@@ -51,12 +51,6 @@
       color: #bbb;
 }
 
-.v-app {
-      background: #fff;
-      font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
-      color: #222;
-}
-
 .toolbar {
       background: #ccc url(images/gradient.png) repeat-x bottom left;
 }

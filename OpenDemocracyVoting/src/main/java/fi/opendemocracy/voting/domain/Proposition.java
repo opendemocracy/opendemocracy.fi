@@ -12,7 +12,6 @@ import fi.opendemocracy.voting.domain.Category;
 import java.util.HashSet;
 import javax.persistence.ManyToMany;
 import javax.persistence.CascadeType;
-import fi.opendemocracy.voting.domain.PropositionOption;
 
 @RooJavaBean
 @RooToString
@@ -33,7 +32,4 @@ public class Proposition {
 
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Category> categories = new HashSet<Category>();
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<PropositionOption> propositionOptions = new HashSet<PropositionOption>();
 }

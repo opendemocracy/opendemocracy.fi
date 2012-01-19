@@ -16,7 +16,6 @@ import com.vaadin.ui.TextField;
 import fi.opendemocracy.voting.domain.Category;
 import fi.opendemocracy.voting.domain.ODUser;
 import fi.opendemocracy.voting.domain.Proposition;
-import fi.opendemocracy.voting.domain.PropositionOption;
 import fi.opendemocracy.voting.web.EntityProviderUtil;
 import java.lang.Class;
 import java.lang.Long;
@@ -43,10 +42,8 @@ privileged aspect PropositionForm_Roo_VaadinVisuallyComposableEntityForm {
     
     private JPAContainer<Category> PropositionForm.containerForCategorys;
     
-    private JPAContainer<PropositionOption> PropositionForm.containerForPropositionOptions;
-    
     public Collection<Object> PropositionForm.getBeanPropertyIds() {
-        return Arrays.asList(new Object[] { "author", "name", "description", "categories", "propositionOptions" });
+        return Arrays.asList(new Object[] { "author", "name", "description", "categories" });
     }
     
     public Field PropositionForm.getField(Object propertyId) {
@@ -84,7 +81,6 @@ privileged aspect PropositionForm_Roo_VaadinVisuallyComposableEntityForm {
         fieldMap.put("name", nameField);
         fieldMap.put("description", descriptionField);
         fieldMap.put("categories", categoriesField);
-        fieldMap.put("propositionOptions", propositionOptionsField);
     }
     
     public void PropositionForm.configureFields() {
@@ -125,17 +121,6 @@ privileged aspect PropositionForm_Roo_VaadinVisuallyComposableEntityForm {
                 ((AbstractSelect) field).setItemCaptionMode(AbstractSelect.ITEM_CAPTION_MODE_ITEM);
             }
         }
-        
-        field = getField("propositionOptions");
-        if (field instanceof AbstractSelect) {
-            ((AbstractSelect) field).setContainerDataSource(getContainerForPropositionOptions());
-            Object captionId = getPropositionOptionCaptionPropertyId();
-            if (captionId != null) {
-                ((AbstractSelect) field).setItemCaptionPropertyId(captionId);
-            } else {
-                ((AbstractSelect) field).setItemCaptionMode(AbstractSelect.ITEM_CAPTION_MODE_ITEM);
-            }
-        }
     }
     
     public void PropositionForm.configureConverters() {
@@ -156,13 +141,6 @@ privileged aspect PropositionForm_Roo_VaadinVisuallyComposableEntityForm {
             container = ((AbstractSelect) field).getContainerDataSource();
             converter = new BeanSetFieldPropertyConverter<Category, Long>(Category.class, container, "id");
             converterMap.put("categories", converter);
-        }
-        
-        field = getField("propositionOptions");
-        if (field instanceof AbstractSelect) {
-            container = ((AbstractSelect) field).getContainerDataSource();
-            converter = new BeanSetFieldPropertyConverter<PropositionOption, Long>(PropositionOption.class, container, "id");
-            converterMap.put("propositionOptions", converter);
         }
     }
     
@@ -215,24 +193,11 @@ privileged aspect PropositionForm_Roo_VaadinVisuallyComposableEntityForm {
         return containerForCategorys;
     }
     
-    public JPAContainer<PropositionOption> PropositionForm.getContainerForPropositionOptions() {
-        if (containerForPropositionOptions == null) {
-            JPAContainer<PropositionOption> container = new JPAContainer<PropositionOption>(PropositionOption.class);
-            container.setEntityProvider(EntityProviderUtil.get().getEntityProvider(PropositionOption.class));
-            containerForPropositionOptions = container;
-        }
-        return containerForPropositionOptions;
-    }
-    
     public Object PropositionForm.getODUserCaptionPropertyId() {
         return "name";
     }
     
     public Object PropositionForm.getCategoryCaptionPropertyId() {
-        return "name";
-    }
-    
-    public Object PropositionForm.getPropositionOptionCaptionPropertyId() {
         return "name";
     }
     

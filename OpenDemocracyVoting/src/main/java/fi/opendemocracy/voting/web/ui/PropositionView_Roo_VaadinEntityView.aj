@@ -107,8 +107,6 @@ privileged aspect PropositionView_Roo_VaadinEntityView {
         table.addGeneratedColumn("author", new EntityTableColumnGenerator((String) getODUserCaptionPropertyId()));
         table.removeGeneratedColumn("categories");
         table.addGeneratedColumn("categories", new EntityTableColumnGenerator((String) getCategoryCaptionPropertyId()));
-        table.removeGeneratedColumn("propositionOptions");
-        table.addGeneratedColumn("propositionOptions", new EntityTableColumnGenerator((String) getPropositionOptionCaptionPropertyId()));
     }
     
     public Object PropositionView.getODUserCaptionPropertyId() {
@@ -116,10 +114,6 @@ privileged aspect PropositionView_Roo_VaadinEntityView {
     }
     
     public Object PropositionView.getCategoryCaptionPropertyId() {
-        return "name";
-    }
-    
-    public Object PropositionView.getPropositionOptionCaptionPropertyId() {
         return "name";
     }
     

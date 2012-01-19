@@ -1,9 +1,6 @@
 package fi.opendemocracy.voting.web;
 
 import java.util.ArrayList;
-
-import org.vaadin.navigator.Navigator;
-
 import com.vaadin.Application;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
@@ -22,12 +19,12 @@ import com.vaadin.ui.themes.Reindeer;
  * entity views. This class is not specific to any entity class.
  */
 @RooVaadinAbstractEntityView(useJpaContainer = true)
-public abstract class AbstractEntityView<E> extends CustomComponent implements Navigator.View {
+public abstract class AbstractEntityView<E> extends CustomComponent implements TabNavigator.View {
 
     private VerticalSplitPanel mainLayout;
     private Table table;
     private EntityEditor form;
-    private Navigator navigator;
+    private TabNavigator navigator;
     private boolean dirty = false;
 
     /**
@@ -67,7 +64,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements N
 
     // View interface and related
 
-    public void init(Navigator navigator, Application application) {
+    public void init(TabNavigator navigator, Application application) {
         this.navigator = navigator;
     }
 

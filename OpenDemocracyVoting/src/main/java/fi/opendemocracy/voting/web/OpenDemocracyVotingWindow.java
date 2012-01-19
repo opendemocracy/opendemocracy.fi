@@ -6,6 +6,7 @@ public class OpenDemocracyVotingWindow extends Window {
 
     public OpenDemocracyVotingWindow() {
 
+        setCaption(ThemeConstants.APPLICATION_NAME);
         // entity manager
         OpenDemocracyVotingEntityManagerView entityManagerView = new OpenDemocracyVotingEntityManagerView();
         setContent(entityManagerView);

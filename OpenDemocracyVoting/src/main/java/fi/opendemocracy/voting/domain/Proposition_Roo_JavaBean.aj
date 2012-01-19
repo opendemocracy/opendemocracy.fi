@@ -5,7 +5,6 @@ package fi.opendemocracy.voting.domain;
 
 import fi.opendemocracy.voting.domain.Category;
 import fi.opendemocracy.voting.domain.ODUser;
-import fi.opendemocracy.voting.domain.PropositionOption;
 import java.lang.String;
 import java.util.Set;
 
@@ -41,14 +40,6 @@ privileged aspect Proposition_Roo_JavaBean {
     
     public void Proposition.setCategories(Set<Category> categories) {
         this.categories = categories;
-    }
-    
-    public Set<PropositionOption> Proposition.getPropositionOptions() {
-        return this.propositionOptions;
-    }
-    
-    public void Proposition.setPropositionOptions(Set<PropositionOption> propositionOptions) {
-        this.propositionOptions = propositionOptions;
     }
     
 }
