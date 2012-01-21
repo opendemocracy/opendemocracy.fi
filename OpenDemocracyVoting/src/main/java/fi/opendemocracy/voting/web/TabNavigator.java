@@ -144,7 +144,7 @@ public class TabNavigator extends CustomComponent implements TabSheet.SelectedTa
 			uriFragmentUtil.setFragment(currentFragment, false);
 		}
 		
-		addTab(v);
+		openTab(v);
 		v.navigateTo(requestedDataId);
 		View previousView = currentView;
 		currentView = v;
@@ -154,7 +154,7 @@ public class TabNavigator extends CustomComponent implements TabSheet.SelectedTa
 		}
 	}
 
-	private void addTab(Component c) {
+	private void openTab(Component c) {
 		Tab t = tabSheet.getTab(c);
 		if(t == null){
 			t = tabSheet.addTab(c);
@@ -482,9 +482,9 @@ public class TabNavigator extends CustomComponent implements TabSheet.SelectedTa
 	@Override
 	public void selectedTabChange(SelectedTabChangeEvent event) {
 		final TabSheet source = (TabSheet) event.getSource();	
-		//if (source == tabSheet) {
+		if (source == tabSheet) {
 			navigateTo(tabSheet.getSelectedTab().getCaption());
-        //}
+        }
 	}
 	
 	@Override

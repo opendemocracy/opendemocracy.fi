@@ -56,3 +56,5 @@ vaadin generate all --package ~.web.ui --visuallyComposable true
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-01-19 08:58:31
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-01-19 09:07:28
 // [failed] perform clean 
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-01-21 14:05:30
+// [failed] perform clean

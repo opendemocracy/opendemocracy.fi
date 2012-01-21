@@ -11,6 +11,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 import com.vaadin.ui.themes.Reindeer;
 
@@ -21,7 +22,7 @@ import com.vaadin.ui.themes.Reindeer;
 @RooVaadinAbstractEntityView(useJpaContainer = true)
 public abstract class AbstractEntityView<E> extends CustomComponent implements TabNavigator.View {
 
-    private VerticalSplitPanel mainLayout;
+    private VerticalLayout mainLayout;
     private Table table;
     private EntityEditor form;
     private TabNavigator navigator;
@@ -36,9 +37,9 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
         // custom component size, must be set to allow inner layout take 100% size
         setSizeFull();
 
-        mainLayout = new VerticalSplitPanel();
+        mainLayout = new VerticalLayout();
         mainLayout.addStyleName("blue-bottom");
-        mainLayout.setSplitPosition(30);
+        mainLayout.setSizeFull();
         setCompositionRoot(mainLayout);
 
         // table settings, display a fixed number of rows
@@ -48,8 +49,8 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
         getTable().addStyleName(Reindeer.TABLE_BORDERLESS);
         getTable().addStyleName(Reindeer.TABLE_STRONG);
 
-        mainLayout.setFirstComponent(getTable());
-        mainLayout.setSecondComponent(getForm());
+        mainLayout.addComponent(getTable());
+        //mainLayout.setSecondComponent(getForm());
 
         // hide buttons if certain operations are not allowed
         getForm().setSaveAllowed(isCreateAllowed() || isUpdateAllowed());
@@ -85,6 +86,14 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
                 Long id = Long.valueOf(requestedDataId.substring(5));
                 setCurrentEntity(getEntityForItem(getTable().getItem(id)));
                 getTable().setValue(id);
+                return;
+            } catch (NumberFormatException e) {
+                navigateToFragment(null);
+                return;
+            }
+        } else if (requestedDataId.startsWith("view/")) {
+            try {
+                navigator.navigateTo("propositions");
                 return;
             } catch (NumberFormatException e) {
                 navigateToFragment(null);
@@ -147,7 +156,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
             public void valueChange(ValueChangeEvent event) {
                 Object value = event.getProperty().getValue();
                 if (value != null) {
-                    navigateToFragment("edit/"+String.valueOf(value).replaceAll("[^0-9]", ""));
+                    navigateToFragment("view/"+String.valueOf(value).replaceAll("[^0-9]", ""));
                 }
             }
         });
@@ -201,6 +210,12 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
         } else {
             getForm().setItemDataSource(null);
         }
+    }
+    protected void openEntityTab(E entity) {
+    	if(entity != null){
+    		
+    		
+    	}
     }
 
     // getters for the components
@@ -329,7 +344,6 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
      * @return
      */
     protected abstract EntityEditor createForm();
-
     protected abstract void configureTable(Table table);
 
 }
