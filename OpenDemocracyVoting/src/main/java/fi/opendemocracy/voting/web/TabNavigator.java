@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import com.vaadin.Application;
 import com.vaadin.terminal.ExternalResource;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.terminal.gwt.client.ui.AlignmentInfo.Bits;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -22,6 +23,7 @@ import com.vaadin.ui.UriFragmentUtility;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UriFragmentUtility.FragmentChangedEvent;
 import com.vaadin.ui.UriFragmentUtility.FragmentChangedListener;
 
@@ -42,6 +44,9 @@ public class TabNavigator extends CustomComponent {
 	private View currentView = null;
 	private LinkedList<ViewChangeListener> listeners = new LinkedList<ViewChangeListener>();
 
+    private Panel helpPanel;
+    private Button helpToggle;
+    
 	public TabNavigator() {
 		tabSheet.setSizeFull();
 		setSizeFull();
@@ -50,26 +55,33 @@ public class TabNavigator extends CustomComponent {
 		container.addComponent(tabSheet);
 		container.setSizeFull();
 		container.setExpandRatio(tabSheet, 1.0f);
+		createHelpPanel();
 		setCompositionRoot(container);
 		addListeners();
 	}
 
-	private void addListeners(){
-		uriFragmentUtil.addListener(new FragmentChangedListener() {
-			public void fragmentChanged(FragmentChangedEvent source) {
-				TabNavigator.this.fragmentChanged();
-			}
-		});
-		tabSheet.addListener(new SelectedTabChangeListener(){
-			public void selectedTabChange(SelectedTabChangeEvent event) {
-				//TODO: Update uri navigateTo
-			}
-		});
-		tabSheet.setCloseHandler(new CloseHandler() {
-			public void onTabClose(TabSheet tabsheet, Component tabContent) {
-				// TODO: Clear view on close
-			}
-		});
+	private void createHelpPanel(){
+        // Help panel
+        helpPanel = new Panel("No help available in this section.");
+        
+        //Toggle bar
+        helpToggle = new Button();        
+        helpToggle.setStyleName("toggle-help");
+        helpToggle.setHeight("100.0%");
+        helpToggle.setIcon(new ThemeResource("icons/16/help.png"));
+        helpToggle.setImmediate(true);
+        container.addComponent(helpToggle);
+        
+        //Help panel properties
+        helpPanel.setHeight("100.0%");
+        helpPanel.setWidth("200px");
+        helpPanel.setStyleName("panel-help");
+        helpPanel.setVisible(false);
+        container.addComponent(helpPanel);
+	}
+	
+	public void setHelpText(String h) {
+        helpPanel.setCaption(h);
 	}
 	
 	private void fragmentChanged() {
@@ -79,11 +91,9 @@ public class TabNavigator extends CustomComponent {
 		}
 		int i = newFragment.indexOf('/');
 		String uri = i < 0 ? newFragment : newFragment.substring(0, i);
-		final String requestedDataId = i < 0 || i + 1 == newFragment.length() ? null
-				: newFragment.substring(i + 1);
+		final String requestedDataId = i < 0 || i + 1 == newFragment.length() ? null : newFragment.substring(i + 1);
 		if (uriToClass.containsKey(uri)) {
 			final View newView = getOrCreateView(uri);
-
 			String warn = currentView == null ? null : currentView
 					.getWarningForNavigatingFrom();
 			if (warn != null && warn.length() > 0) {
@@ -108,8 +118,7 @@ public class TabNavigator extends CustomComponent {
 		final Window main = getWindow();
 		main.addWindow(wDialog);
 		lo.addComponent(new Label(warn));
-		lo.addComponent(new Label(
-				"If you do not want to navigate away from the current screen, press Cancel."));
+		lo.addComponent(new Label("If you do not want to navigate away from the current screen, press Cancel."));
 		Button cancel = new Button("Cancel", new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				uriFragmentUtil.setFragment(currentFragment, false);
@@ -151,8 +160,7 @@ public class TabNavigator extends CustomComponent {
 		return v;
 	}
 	
-	private void moveTo(View v, String requestedDataId,
-			boolean noFragmentSetting) {
+	private void moveTo(View v, String requestedDataId, boolean noFragmentSetting) {
 		currentFragment = classToUri.get(v.getClass());
 		if (requestedDataId != null) {
 			currentFragment += "/" + requestedDataId;
@@ -171,13 +179,43 @@ public class TabNavigator extends CustomComponent {
 		}
 	}
 
-	private void openTab(Component c) {
+	public void openTab(Component c) {
 		Tab t = tabSheet.getTab(c);
 		if(t == null){
 			t = tabSheet.addTab(c, c.getCaption(), c.getIcon());
 			t.setClosable(!c.isReadOnly());
 		}
 		tabSheet.setSelectedTab(c);
+		//TODO: navigateTo
+	}
+	public void closeTab(Component c) {
+		tabSheet.removeTab(tabSheet.getTab(c));
+		currentView = previousView;
+		previousView = null;
+	}
+	
+	private void addListeners(){
+		uriFragmentUtil.addListener(new FragmentChangedListener() {
+			public void fragmentChanged(FragmentChangedEvent source) {
+				TabNavigator.this.fragmentChanged();
+			}
+		});
+		tabSheet.addListener(new SelectedTabChangeListener(){
+			public void selectedTabChange(SelectedTabChangeEvent event) {
+				//TODO: Update uri navigateTo
+			}
+		});
+		tabSheet.setCloseHandler(new CloseHandler() {
+			public void onTabClose(TabSheet tabsheet, Component tabContent) {
+				// TODO: Clear view on close
+				tabsheet.removeComponent(tabContent);
+			}
+		});
+    	helpToggle.addListener(new ClickListener() {
+        	  public void buttonClick(ClickEvent event) {
+        	    helpPanel.setVisible(!helpPanel.isVisible());
+        	  }
+        });
 	}
 	
 	/**
@@ -269,6 +307,8 @@ public class TabNavigator extends CustomComponent {
 		addView(uri, viewClass, false);
 	}
 
+	
+	
 	/**
 	 * Remove view from navigator.
 	 * 

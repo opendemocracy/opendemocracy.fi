@@ -53,7 +53,6 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
         getTable().addStyleName(Reindeer.TABLE_STRONG);
 
         mainLayout.addComponent(getTable());
-        //mainLayout.setSecondComponent(getForm());
 
         // hide buttons if certain operations are not allowed
         getForm().setSaveAllowed(isCreateAllowed() || isUpdateAllowed());
@@ -96,7 +95,6 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
             }
         } else if (requestedDataId.startsWith("view/")) {
             try {
-            	getWindow().showNotification(requestedDataId);
                 return;
             } catch (NumberFormatException e) {
                 navigateToFragment(null);
@@ -135,30 +133,25 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
 
     // other methods
 
+    // new instance form
     public void createNewEntity() {
         if (isCreateAllowed()) {
             getTable().setValue(null);
-
             getForm().setVisible(true);
-
             getForm().setDeleteAllowed(false);
             getForm().setSaveAllowed(isCreateAllowed());
             setCurrentEntity(createEntityInstance());
-            getForm().setCaption("New " + getEntityName());
-
-            getForm().focus();
+            navigator.openTab(getForm());
         }
     }
 
-    /**
-     * Adds listeners for the various buttons on the form and for table
-     * selection change.
-     */
+    // add listeners
     protected void addListeners() {
         getTable().addListener(new ValueChangeListener() {
             public void valueChange(ValueChangeEvent event) {
                 Object value = event.getProperty().getValue();
                 if (value != null) {
+                	getWindow().showNotification(String.valueOf(value).replaceAll("[^0-9]", ""));
                     navigateToFragment("view/"+String.valueOf(value).replaceAll("[^0-9]", ""));
                 }
             }
@@ -214,12 +207,6 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
             getForm().setItemDataSource(null);
         }
     }
-    protected void openEntityTab(E entity) {
-    	if(entity != null){
-    		
-    		
-    	}
-    }
 
     // getters for the components
     protected Table getTable() {
@@ -274,9 +261,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
     public Object[] getTableColumns() {
         ArrayList<Object> columnIds = new ArrayList<Object>();
         for (Object property : getTable().getContainerPropertyIds()) {
-            if (property != null && property.equals(getIdProperty())) {
-                columnIds.add(0, property);
-            } else if (property != null && !property.equals(getVersionProperty())) {
+        	if (property != null && !property.equals(getVersionProperty()) && !property.equals(getIdProperty())) {
                 columnIds.add(property);
             }
         }
