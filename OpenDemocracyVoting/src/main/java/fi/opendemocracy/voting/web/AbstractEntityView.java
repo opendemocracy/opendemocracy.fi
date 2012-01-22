@@ -1,6 +1,7 @@
 package fi.opendemocracy.voting.web;
 
 import java.util.ArrayList;
+
 import com.vaadin.Application;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
@@ -17,6 +18,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 import com.vaadin.ui.themes.Reindeer;
+
+import fi.opendemocracy.voting.web.TabNavigator.View;
 
 /**
  * Base class for that defines the common layout and some UI logic for all
@@ -141,7 +144,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
             getForm().setDeleteAllowed(false);
             getForm().setSaveAllowed(isCreateAllowed());
             setCurrentEntity(createEntityInstance());
-            navigator.openTab(getForm());
+            navigator.openTab(getForm(), "new");
         }
     }
 
@@ -191,7 +194,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
     protected void setCurrentEntity(E entity) {
         getForm().setVisible(entity != null);
         if (entity != null) {
-            getForm().refresh();
+            //getForm().refresh();
             getForm().setCaption("Edit " + getEntityName());
 
             boolean newEntity = isNewEntity(entity);
@@ -212,6 +215,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
     protected Table getTable() {
         if (table == null) {
             table = createTable();
+            configureTable(table);
         }
         return table;
     }
@@ -233,6 +237,10 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
     protected Table createTable() {
         return new Table();
     }
+    
+    protected Component createInstanceTab(){
+    	return null;	
+    }
 
     /**
      * Refresh the table and any other relevant parts of the entity view.
@@ -240,11 +248,8 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
      * This is called after entities are saved or deleted or when navigating to a new view.
      */
     protected void refresh() {
-        Object sortContainerPropertyId = getTable()
-                .getSortContainerPropertyId();
+        Object sortContainerPropertyId = getTable().getSortContainerPropertyId();
         boolean sortAscending = getTable().isSortAscending();
-
-        configureTable(getTable());
 
         if (sortContainerPropertyId != null) {
             getTable().setSortAscending(sortAscending);

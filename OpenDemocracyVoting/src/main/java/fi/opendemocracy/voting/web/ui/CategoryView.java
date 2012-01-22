@@ -9,6 +9,7 @@ import com.vaadin.spring.roo.addon.annotations.RooVaadinEntityView;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.VerticalLayout;
 
 @RooVaadinEntityView(formBackingObject = fi.opendemocracy.voting.domain.Category.class)
 public class CategoryView extends AbstractEntityView<fi.opendemocracy.voting.domain.Category> {
@@ -86,6 +87,16 @@ public class CategoryView extends AbstractEntityView<fi.opendemocracy.voting.dom
         setupGeneratedColumns(table);
     }
     
+    @Override
+    protected Component createInstanceTab(){
+    	// TODO: Link to category data, new view class + roo notation?
+    	VerticalLayout temp = new VerticalLayout();
+    	temp.addComponent(new Label("GREAT SUCCESS"));
+    	temp.setCaption("CATEGORY VIEW?!?");
+    	temp.setIcon(ThemeConstants.TAB_ICON_CATEGORIES);
+    	return temp;
+    }
+
     // column generator for data linked to category
     private class ColumnCountGenerator implements Table.ColumnGenerator {
         private String sumType;

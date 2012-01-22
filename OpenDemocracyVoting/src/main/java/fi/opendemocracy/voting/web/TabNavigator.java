@@ -26,15 +26,13 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UriFragmentUtility.FragmentChangedEvent;
 import com.vaadin.ui.UriFragmentUtility.FragmentChangedListener;
-
-import fi.opendemocracy.voting.domain.Proposition;
-
 @SuppressWarnings("serial")
 public class TabNavigator extends CustomComponent {
 
 	private HashMap<String, Class<?extends Component>> uriToClass = new HashMap<String, Class<?extends Component>>();
 	private HashMap<Class<?extends Component>, String> classToUri = new HashMap<Class<?extends Component>, String>();
 	private HashMap<Class<?extends Component>, View> classToView = new HashMap<Class<?extends Component>, View>();
+	private HashMap<Component, String> tabToUri = new HashMap<Component, String>();
 	private String mainViewUri = null;
 	private HorizontalLayout container;
 	private TabSheet tabSheet = new TabSheet();
@@ -58,6 +56,7 @@ public class TabNavigator extends CustomComponent {
 		createHelpPanel();
 		setCompositionRoot(container);
 		addListeners();
+		addHandlers();
 	}
 
 	private void createHelpPanel(){
@@ -80,10 +79,11 @@ public class TabNavigator extends CustomComponent {
         container.addComponent(helpPanel);
 	}
 	
-	public void setHelpText(String h) {
-        helpPanel.setCaption(h);
+	public void setHelpText(Component c) {
+        helpPanel.replaceComponent(helpPanel.getComponentIterator().next(), c);
 	}
 	
+	// uri handling methods
 	private void fragmentChanged() {
 		String newFragment = uriFragmentUtil.getFragment();
 		if ("".equals(newFragment)) {
@@ -94,8 +94,7 @@ public class TabNavigator extends CustomComponent {
 		final String requestedDataId = i < 0 || i + 1 == newFragment.length() ? null : newFragment.substring(i + 1);
 		if (uriToClass.containsKey(uri)) {
 			final View newView = getOrCreateView(uri);
-			String warn = currentView == null ? null : currentView
-					.getWarningForNavigatingFrom();
+			String warn = currentView == null ? null : currentView.getWarningForNavigatingFrom();
 			if (warn != null && warn.length() > 0) {
 				confirmedMoveToNewView(requestedDataId, newView, warn);
 			} else {
@@ -106,7 +105,6 @@ public class TabNavigator extends CustomComponent {
 			uriFragmentUtil.setFragment(currentFragment, false);
 		}
 	}
-
 	private void confirmedMoveToNewView(final String requestedDataId,
 			final View newView, String warn) {
 		VerticalLayout lo = new VerticalLayout();
@@ -165,34 +163,30 @@ public class TabNavigator extends CustomComponent {
 		if (requestedDataId != null) {
 			currentFragment += "/" + requestedDataId;
 		}
-		if (!noFragmentSetting
-				&& !currentFragment.equals(uriFragmentUtil.getFragment())) {
+		if (!noFragmentSetting && !currentFragment.equals(uriFragmentUtil.getFragment())) {
 			uriFragmentUtil.setFragment(currentFragment, false);
 		}
 		
-		openTab(v);
-		v.navigateTo(requestedDataId);
 		previousView = currentView;
 		currentView = v;
+		openTab(v, requestedDataId);
+		
 		for (ViewChangeListener l : listeners) {
 			l.navigatorViewChange(previousView, currentView);
 		}
 	}
 
-	public void openTab(Component c) {
-		Tab t = tabSheet.getTab(c);
+	public void openTab(Component v, String uri) {
+		Tab t = tabSheet.getTab(v);
 		if(t == null){
-			t = tabSheet.addTab(c, c.getCaption(), c.getIcon());
-			t.setClosable(!c.isReadOnly());
+			t = tabSheet.addTab(v, v.getCaption(), v.getIcon());
+			t.setClosable(!v.isReadOnly());
+			tabToUri.put(v, uri);
 		}
-		tabSheet.setSelectedTab(c);
-		//TODO: navigateTo
+		tabSheet.setSelectedTab(v);
+		currentView.navigateTo(uri);
 	}
-	public void closeTab(Component c) {
-		tabSheet.removeTab(tabSheet.getTab(c));
-		currentView = previousView;
-		previousView = null;
-	}
+	
 	
 	private void addListeners(){
 		uriFragmentUtil.addListener(new FragmentChangedListener() {
@@ -205,17 +199,19 @@ public class TabNavigator extends CustomComponent {
 				//TODO: Update uri navigateTo
 			}
 		});
+    	helpToggle.addListener(new ClickListener() {
+        	  public void buttonClick(ClickEvent event) {
+        	    helpPanel.setVisible(!helpPanel.isVisible());
+        	  }
+        });
+	}
+	private void addHandlers(){
 		tabSheet.setCloseHandler(new CloseHandler() {
 			public void onTabClose(TabSheet tabsheet, Component tabContent) {
 				// TODO: Clear view on close
 				tabsheet.removeComponent(tabContent);
 			}
 		});
-    	helpToggle.addListener(new ClickListener() {
-        	  public void buttonClick(ClickEvent event) {
-        	    helpPanel.setVisible(!helpPanel.isVisible());
-        	  }
-        });
 	}
 	
 	/**
