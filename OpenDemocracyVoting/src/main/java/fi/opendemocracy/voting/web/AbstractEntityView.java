@@ -9,7 +9,10 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.spring.roo.addon.annotations.RooVaadinAbstractEntityView;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
@@ -27,7 +30,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
     private EntityEditor form;
     private TabNavigator navigator;
     private boolean dirty = false;
-
+	
     /**
      * Constructor for an abstract entity view.
      * 
@@ -63,8 +66,8 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
         setCurrentEntity(null);
     }
 
+    
     // View interface and related
-
     public void init(TabNavigator navigator, Application application) {
         this.navigator = navigator;
     }
@@ -93,7 +96,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
             }
         } else if (requestedDataId.startsWith("view/")) {
             try {
-                navigator.navigateTo("propositions");
+            	getWindow().showNotification(requestedDataId);
                 return;
             } catch (NumberFormatException e) {
                 navigateToFragment(null);
@@ -103,7 +106,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
 
         setCurrentEntity(null);
     }
-
+    
     public String getWarningForNavigatingFrom() {
         return (isDirty() && getForm().isModified()) ? "Discard unsaved changes?" : null;
     }

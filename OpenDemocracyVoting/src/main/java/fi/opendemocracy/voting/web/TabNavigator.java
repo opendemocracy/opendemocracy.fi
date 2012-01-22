@@ -14,7 +14,9 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TabSheet.CloseHandler;
 import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
+import com.vaadin.ui.TabSheet.SelectedTabChangeListener;
 import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.UriFragmentUtility;
 import com.vaadin.ui.VerticalLayout;
@@ -23,8 +25,10 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.UriFragmentUtility.FragmentChangedEvent;
 import com.vaadin.ui.UriFragmentUtility.FragmentChangedListener;
 
+import fi.opendemocracy.voting.domain.Proposition;
+
 @SuppressWarnings("serial")
-public class TabNavigator extends CustomComponent implements TabSheet.SelectedTabChangeListener, TabSheet.CloseHandler{
+public class TabNavigator extends CustomComponent {
 
 	private HashMap<String, Class<?extends Component>> uriToClass = new HashMap<String, Class<?extends Component>>();
 	private HashMap<Class<?extends Component>, String> classToUri = new HashMap<Class<?extends Component>, String>();
@@ -34,6 +38,7 @@ public class TabNavigator extends CustomComponent implements TabSheet.SelectedTa
 	private TabSheet tabSheet = new TabSheet();
 	private UriFragmentUtility uriFragmentUtil = new UriFragmentUtility();
 	private String currentFragment = "";
+	private View previousView = null;
 	private View currentView = null;
 	private LinkedList<ViewChangeListener> listeners = new LinkedList<ViewChangeListener>();
 
@@ -46,13 +51,27 @@ public class TabNavigator extends CustomComponent implements TabSheet.SelectedTa
 		container.setSizeFull();
 		container.setExpandRatio(tabSheet, 1.0f);
 		setCompositionRoot(container);
+		addListeners();
+	}
+
+	private void addListeners(){
 		uriFragmentUtil.addListener(new FragmentChangedListener() {
 			public void fragmentChanged(FragmentChangedEvent source) {
 				TabNavigator.this.fragmentChanged();
 			}
 		});
+		tabSheet.addListener(new SelectedTabChangeListener(){
+			public void selectedTabChange(SelectedTabChangeEvent event) {
+				//TODO: Update uri navigateTo
+			}
+		});
+		tabSheet.setCloseHandler(new CloseHandler() {
+			public void onTabClose(TabSheet tabsheet, Component tabContent) {
+				// TODO: Clear view on close
+			}
+		});
 	}
-
+	
 	private void fragmentChanged() {
 		String newFragment = uriFragmentUtil.getFragment();
 		if ("".equals(newFragment)) {
@@ -92,7 +111,6 @@ public class TabNavigator extends CustomComponent implements TabSheet.SelectedTa
 		lo.addComponent(new Label(
 				"If you do not want to navigate away from the current screen, press Cancel."));
 		Button cancel = new Button("Cancel", new Button.ClickListener() {
-
 			public void buttonClick(ClickEvent event) {
 				uriFragmentUtil.setFragment(currentFragment, false);
 				main.removeWindow(wDialog);
@@ -146,9 +164,8 @@ public class TabNavigator extends CustomComponent implements TabSheet.SelectedTa
 		
 		openTab(v);
 		v.navigateTo(requestedDataId);
-		View previousView = currentView;
+		previousView = currentView;
 		currentView = v;
-		
 		for (ViewChangeListener l : listeners) {
 			l.navigatorViewChange(previousView, currentView);
 		}
@@ -157,14 +174,12 @@ public class TabNavigator extends CustomComponent implements TabSheet.SelectedTa
 	private void openTab(Component c) {
 		Tab t = tabSheet.getTab(c);
 		if(t == null){
-			t = tabSheet.addTab(c);
+			t = tabSheet.addTab(c, c.getCaption(), c.getIcon());
 			t.setClosable(!c.isReadOnly());
-			t.setCaption(c.getCaption());
-			t.setIcon(c.getIcon());
 		}
 		tabSheet.setSelectedTab(c);
 	}
-
+	
 	/**
 	 * Get the main view.
 	 * 
@@ -478,18 +493,4 @@ public class TabNavigator extends CustomComponent implements TabSheet.SelectedTa
 		w.open(new ExternalResource(w.getURL()));
 		return w;
 	}
-
-	@Override
-	public void selectedTabChange(SelectedTabChangeEvent event) {
-		final TabSheet source = (TabSheet) event.getSource();	
-		if (source == tabSheet) {
-			navigateTo(tabSheet.getSelectedTab().getCaption());
-        }
-	}
-	
-	@Override
-	public void onTabClose(final TabSheet tabsheet, final Component tabContent){
-		removeView(tabContent.getCaption());
-	}
-
 }
