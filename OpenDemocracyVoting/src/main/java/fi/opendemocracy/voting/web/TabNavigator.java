@@ -26,13 +26,16 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UriFragmentUtility.FragmentChangedEvent;
 import com.vaadin.ui.UriFragmentUtility.FragmentChangedListener;
-@SuppressWarnings("serial")
+
 public class TabNavigator extends CustomComponent {
 
 	private HashMap<String, Class<?extends Component>> uriToClass = new HashMap<String, Class<?extends Component>>();
 	private HashMap<Class<?extends Component>, String> classToUri = new HashMap<Class<?extends Component>, String>();
 	private HashMap<Class<?extends Component>, View> classToView = new HashMap<Class<?extends Component>, View>();
+	
 	private HashMap<Component, String> tabToUri = new HashMap<Component, String>();
+	private HashMap<Component, View> tabToView = new HashMap<Component, View>();
+	
 	private String mainViewUri = null;
 	private HorizontalLayout container;
 	private TabSheet tabSheet = new TabSheet();
@@ -184,7 +187,7 @@ public class TabNavigator extends CustomComponent {
 			tabToUri.put(v, uri);
 		}
 		tabSheet.setSelectedTab(v);
-		currentView.navigateTo(uri);
+		//currentView.navigateTo(uri);
 	}
 	
 	

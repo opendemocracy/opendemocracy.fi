@@ -276,5 +276,8 @@ public class PropositionOptionForm extends CustomComponent implements EntityEdit
 
         return buttonLayout;
     }
-
+    
+    public void setProposition(){
+    	
+    }
 }

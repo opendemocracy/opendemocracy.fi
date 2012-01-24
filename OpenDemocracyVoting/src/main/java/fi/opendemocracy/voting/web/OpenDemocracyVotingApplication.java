@@ -5,6 +5,8 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
+import fi.opendemocracy.voting.domain.ODUser;
+
 public class OpenDemocracyVotingApplication extends Application {
 
 	@Override
