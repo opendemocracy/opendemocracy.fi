@@ -1,6 +1,7 @@
 package fi.opendemocracy.voting.web;
 
 import java.util.ArrayList;
+
 import com.vaadin.Application;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
@@ -9,11 +10,16 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.spring.roo.addon.annotations.RooVaadinAbstractEntityView;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 import com.vaadin.ui.themes.Reindeer;
+
+import fi.opendemocracy.voting.web.TabNavigator.View;
 
 /**
  * Base class for that defines the common layout and some UI logic for all
@@ -27,7 +33,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
     private EntityEditor form;
     private TabNavigator navigator;
     private boolean dirty = false;
-
+	
     /**
      * Constructor for an abstract entity view.
      * 
@@ -50,7 +56,6 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
         getTable().addStyleName(Reindeer.TABLE_STRONG);
 
         mainLayout.addComponent(getTable());
-        //mainLayout.setSecondComponent(getForm());
 
         // hide buttons if certain operations are not allowed
         getForm().setSaveAllowed(isCreateAllowed() || isUpdateAllowed());
@@ -63,8 +68,8 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
         setCurrentEntity(null);
     }
 
+    
     // View interface and related
-
     public void init(TabNavigator navigator, Application application) {
         this.navigator = navigator;
     }
@@ -93,7 +98,6 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
             }
         } else if (requestedDataId.startsWith("view/")) {
             try {
-                navigator.navigateTo("propositions");
                 return;
             } catch (NumberFormatException e) {
                 navigateToFragment(null);
@@ -103,7 +107,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
 
         setCurrentEntity(null);
     }
-
+    
     public String getWarningForNavigatingFrom() {
         return (isDirty() && getForm().isModified()) ? "Discard unsaved changes?" : null;
     }
@@ -132,30 +136,25 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
 
     // other methods
 
+    // new instance form
     public void createNewEntity() {
         if (isCreateAllowed()) {
             getTable().setValue(null);
-
             getForm().setVisible(true);
-
             getForm().setDeleteAllowed(false);
             getForm().setSaveAllowed(isCreateAllowed());
             setCurrentEntity(createEntityInstance());
-            getForm().setCaption("New " + getEntityName());
-
-            getForm().focus();
+            navigator.openTab(getForm(), "new");
         }
     }
 
-    /**
-     * Adds listeners for the various buttons on the form and for table
-     * selection change.
-     */
+    // add listeners
     protected void addListeners() {
         getTable().addListener(new ValueChangeListener() {
             public void valueChange(ValueChangeEvent event) {
                 Object value = event.getProperty().getValue();
                 if (value != null) {
+                	getWindow().showNotification(String.valueOf(value).replaceAll("[^0-9]", ""));
                     navigateToFragment("view/"+String.valueOf(value).replaceAll("[^0-9]", ""));
                 }
             }
@@ -195,7 +194,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
     protected void setCurrentEntity(E entity) {
         getForm().setVisible(entity != null);
         if (entity != null) {
-            getForm().refresh();
+            //getForm().refresh();
             getForm().setCaption("Edit " + getEntityName());
 
             boolean newEntity = isNewEntity(entity);
@@ -211,17 +210,12 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
             getForm().setItemDataSource(null);
         }
     }
-    protected void openEntityTab(E entity) {
-    	if(entity != null){
-    		
-    		
-    	}
-    }
 
     // getters for the components
     protected Table getTable() {
         if (table == null) {
             table = createTable();
+            configureTable(table);
         }
         return table;
     }
@@ -243,6 +237,10 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
     protected Table createTable() {
         return new Table();
     }
+    
+    protected Component createInstanceTab(){
+    	return null;	
+    }
 
     /**
      * Refresh the table and any other relevant parts of the entity view.
@@ -250,11 +248,8 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
      * This is called after entities are saved or deleted or when navigating to a new view.
      */
     protected void refresh() {
-        Object sortContainerPropertyId = getTable()
-                .getSortContainerPropertyId();
+        Object sortContainerPropertyId = getTable().getSortContainerPropertyId();
         boolean sortAscending = getTable().isSortAscending();
-
-        configureTable(getTable());
 
         if (sortContainerPropertyId != null) {
             getTable().setSortAscending(sortAscending);
@@ -271,9 +266,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements T
     public Object[] getTableColumns() {
         ArrayList<Object> columnIds = new ArrayList<Object>();
         for (Object property : getTable().getContainerPropertyIds()) {
-            if (property != null && property.equals(getIdProperty())) {
-                columnIds.add(0, property);
-            } else if (property != null && !property.equals(getVersionProperty())) {
+        	if (property != null && !property.equals(getVersionProperty()) && !property.equals(getIdProperty())) {
                 columnIds.add(property);
             }
         }

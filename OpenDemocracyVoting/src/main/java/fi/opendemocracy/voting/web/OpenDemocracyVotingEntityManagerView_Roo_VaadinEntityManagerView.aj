@@ -3,6 +3,7 @@
 
 package fi.opendemocracy.voting.web;
 
+import fi.opendemocracy.voting.web.ui.CategoryInstanceView;
 import fi.opendemocracy.voting.web.ui.CategoryView;
 import fi.opendemocracy.voting.web.ui.ExpertView;
 import fi.opendemocracy.voting.web.ui.ODUserView;
@@ -26,6 +27,7 @@ privileged aspect OpenDemocracyVotingEntityManagerView_Roo_VaadinEntityManagerVi
         result.put("O D User",ODUserView.class);
         result.put("Expert",ExpertView.class);
         result.put("Category",CategoryView.class);
+        result.put("Category",CategoryInstanceView.class);
         return result;
     }
     

@@ -23,12 +23,14 @@ public class ThemeConstants {
 	public static final ThemeResource TAB_ICON_CATEGORIES = new ThemeResource("icons/16/folder.png");
 	public static final ThemeResource TAB_ICON_HOME = new ThemeResource("icons/16/propositions.png");
 	public static final ThemeResource TAB_ICON_PROPOSITION = new ThemeResource("icons/16/propositions.png");
+	public static final ThemeResource TAB_ICON_NEW_CATEGORY = new ThemeResource("icons/16/folder.png");
 	public static final ThemeResource TAB_ICON_LOGIN = new ThemeResource("icons/16/propositions.png");
 	
 	//Tab captions
 	public static final String TAB_CAPTION_CATEGORIES = "Categories";
 	public static final String TAB_CAPTION_HOME = "Home";
 	public static final String TAB_CAPTION_PROPOSITION = "Propositions";
+	public static final String TAB_CAPTION_NEW_CATEGORY = "New category";
 	public static final String TAB_CAPTION_LOGIN = "Login";
 
 }

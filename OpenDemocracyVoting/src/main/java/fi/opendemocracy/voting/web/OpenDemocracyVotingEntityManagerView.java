@@ -31,6 +31,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
 import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
@@ -68,122 +69,72 @@ import fi.opendemocracy.voting.web.ui.PropositionView;
 @RooVaadinEntityManagerView
 public class OpenDemocracyVotingEntityManagerView extends CustomComponent {
 
-	//OpenDemocracy layout objects
+	//UI objects
 	private VerticalLayout mainLayout;
 	private HorizontalLayout toolbar;
-	private TabSheet content;
-	private Panel help;
 	private Button btnPropositions;
 	private Button btnCategories;
 	private Button btnLogin;
-	//End OpenDemocracy layout objects
-	private VerticalLayout homePage;
-
     private TabNavigator navigator;
-    
-    
-    public static class HomeView extends VerticalLayout implements TabNavigator.View {
-        public HomeView() {
-        	setCaption(ThemeConstants.TAB_CAPTION_HOME);
-        	setIcon(ThemeConstants.TAB_ICON_HOME);
-    		setMargin(true);
-    		setSizeFull();
-    		addStyleName(Reindeer.LAYOUT_WHITE);
-            Label l = new Label(
-                    "<h1 class=\"v-label-h1\" style=\"text-align: center;\">Welcome to OpenDemocracy Alpha</h1> Select an option above to begin",
-                    Label.CONTENT_XHTML);
-            l.setSizeUndefined();
-            l.addStyleName(Reindeer.LABEL_SMALL);
-            addComponent(l);
-            setComponentAlignment(l, Alignment.MIDDLE_CENTER);
-        	setReadOnly(true);
-        }
-
-        public void init(TabNavigator navigator, Application application) {
-            // nothing to do
-        }
-
-        public void navigateTo(String requestedDataId) {
-            // no subpages
-        }
-
-        public String getWarningForNavigatingFrom() {
-            return null;
-        }
-    }
-    
-    /**
-     * Builds the main layout, sets the composition root.
-     */
+       
+    //Construct main layout.
     public OpenDemocracyVotingEntityManagerView() {
         setSizeFull();
-
         // build the layout
         buildMainLayout();
         setCompositionRoot(mainLayout);
-
         // layout and style adjustments
         mainLayout.addStyleName("main");
         mainLayout.addStyleName(Reindeer.TABSHEET_BORDERLESS);
-        
+        // add listeners
         addListeners();
     }
-	
-    //Create page header toolbar
-	private HorizontalLayout buildToolbar() {
-		//Create layout
+    
+    private void buildMainLayout() {
+        // top-level component properties
+        setWidth("100.0%");
+        setHeight("100.0%");
+        // common part: create layout
+        mainLayout = new VerticalLayout();
+        mainLayout.setWidth("100.0%");
+        mainLayout.setHeight("100.0%");
+        // add content
+        buildToolbar();
+        buildNavigator();
+        // expand tabsheet
+        mainLayout.setExpandRatio(navigator, 1.0f);
+    }
+    
+    //Construct toolbar header
+	private void buildToolbar() {
 		toolbar = new HorizontalLayout();
-		//Toolbar properties
-		toolbar.setMargin(true);
-		toolbar.setSpacing(true);
-		toolbar.setStyleName("toolbar");
-		toolbar.setWidth("100%");
-		toolbar.setHeight(90, Sizeable.UNITS_PIXELS);
-		
-		//Toolbar buttons
+		//layout constants
+		Embedded logo = new Embedded("", ThemeConstants.LOGO);
+		//buttons
 		btnPropositions = new Button("Propositions");
 		btnCategories = new Button("Categories");
 		btnLogin = new Button("Login/out");
 		btnPropositions.setIcon(ThemeConstants.TOOLBAR_ICON_PROPOSITION);
 		btnCategories.setIcon(ThemeConstants.TOOLBAR_ICON_CATEGORIES);
-		btnLogin.setIcon(ThemeConstants.TOOLBAR_ICON_LOGIN);
-
-		//TODO: Listeners
-		//proposition.addListener((ClickListener) app);
-
+		//add components
 		toolbar.addComponent(btnPropositions);
 		toolbar.addComponent(btnCategories);
 		toolbar.addComponent(btnLogin);
-		
-		//Logo
-		Embedded logo = new Embedded("", ThemeConstants.LOGO);
 		toolbar.addComponent(logo);
+		//properties
+		toolbar.setMargin(true);
+		toolbar.setSpacing(true);
+		toolbar.setStyleName("toolbar");
+		toolbar.setWidth("100%");
+		toolbar.setHeight(90, Sizeable.UNITS_PIXELS);
 		toolbar.setComponentAlignment(logo, Alignment.MIDDLE_RIGHT);
 		toolbar.setExpandRatio(logo, 1.0f);
-
-		return toolbar;
+		//add toolbar to layout
+        mainLayout.addComponent(toolbar);
 	}
-	
-    private VerticalLayout buildMainLayout() {
-        // top-level component properties
-        setWidth("100.0%");
-        setHeight("100.0%");
-        
-        // common part: create layout
-        mainLayout = new VerticalLayout();
-        mainLayout.setWidth("100.0%");
-        mainLayout.setHeight("100.0%");
-
-        //Add content
-        mainLayout.addComponent(buildToolbar());
-        mainLayout.addComponent(buildNavigator());
-        
-        //mainLayout.addComponent(buildContent());
-        mainLayout.setExpandRatio(navigator, 1.0f);
-              
-        return mainLayout;
-    }
-    private TabNavigator buildNavigator(){
+    
+    // initialize navigator
+    private void buildNavigator(){
         navigator = new TabNavigator();
         navigator.setSizeFull();
         navigator.setImmediate(false);
@@ -191,9 +142,10 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent {
     	navigator.addView("category", CategoryView.class);
     	navigator.addView("proposition", PropositionView.class);
         navigator.addView("login", LoginView.class);
-    	return navigator;
+        mainLayout.addComponent(navigator);
     }
         
+    // add listeners
     private void addListeners(){
     	btnCategories.addListener(new Button.ClickListener() {
             public void buttonClick(ClickEvent event) {
@@ -212,41 +164,26 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent {
         });
     }
     
-    //Create tab or set selected if exists
-    private MainTab openTab(Class<? extends AbstractEntityView> contentClass, String caption, ThemeResource icon){
-    	Tab t;
-    	
-    	//Check if exists    	
-    	for (Iterator<Component> it = content.getComponentIterator();it.hasNext();){
-			t = content.getTab(it.next());
-			if(t.getCaption().equals(caption)){
-				content.setSelectedTab(t.getComponent());
-				return (MainTab)t.getComponent();
-			}
-		}
-    	//Create component
-    	Component c;
-    	
-    	try {
-			c = contentClass.newInstance();
-		} catch (InstantiationException e) {
-			// TODO: Proper exception handling
-			return null;
-		} catch (IllegalAccessException e) {
-			// TODO: Proper exception handling
-			return null;
-		}
-		((AbstractEntityView<?>) c).refresh();
-		//Fill tab with contents
-		MainTab newTab = new MainTab(c);
-		t = content.addTab(newTab, caption, icon);
-	    content.setSelectedTab(t.getComponent());
-	    
-	    //Tab properties
-	    t.setClosable(true);
-	    t.setIcon(icon);
-		
-	    return newTab;
+    //Home view
+    public static class HomeView extends VerticalLayout implements TabNavigator.View {
+        public HomeView() {
+        	setCaption(ThemeConstants.TAB_CAPTION_HOME);
+        	setIcon(ThemeConstants.TAB_ICON_HOME);
+    		setMargin(true);
+    		setSizeFull();
+    		addStyleName(Reindeer.LAYOUT_WHITE);
+            Label l = new Label(
+                    "<h1 class=\"v-label-h1\" style=\"text-align: center;\">Welcome to OpenDemocracy Alpha</h1> Select an option above to begin",
+                    Label.CONTENT_XHTML);
+            l.setSizeUndefined();
+            l.addStyleName(Reindeer.LABEL_SMALL);
+            addComponent(l);
+            setComponentAlignment(l, Alignment.MIDDLE_CENTER);
+        	setReadOnly(true);
+        }
+        //Unused interfaces
+        public void init(TabNavigator navigator, Application application) {}
+        public void navigateTo(String requestedDataId) {}
+        public String getWarningForNavigatingFrom() {return null;}
     }
-
 }

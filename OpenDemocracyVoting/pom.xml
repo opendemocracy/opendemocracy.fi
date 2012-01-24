@@ -14,6 +14,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <repositories>
+		<repository>
+			<id>dyuproject-repo</id>
+			<name>dyuproject-repo</name>      
+			<url>http://dyuproject.googlecode.com/svn/repos/maven2</url>
+		</repository>
         <repository>
             <id>spring-maven-release</id>
             <name>Spring Maven Release Repository</name>
@@ -166,7 +171,7 @@
             <artifactId>spring-tx</artifactId>
             <version>${spring.version}</version>
         </dependency>
-    <dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.13</version>
@@ -175,14 +180,7 @@
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
-            <version>2.2.0</version>
-            <classifier/>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>javax.persistence</artifactId>
-            <version>2.0.3</version>
-            <classifier/>
+            <version>2.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -270,7 +268,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-    <dependency>
+        <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin</artifactId>
             <version>6.7.1</version>
@@ -302,12 +300,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-    <dependency>
+        <dependency>
             <groupId>com.vaadin.addon</groupId>
             <artifactId>beanvalidation-addon</artifactId>
             <version>0.6.1</version>
         </dependency>
-    <dependency>
+        <dependency>
             <groupId>com.vaadin.addon</groupId>
             <artifactId>jpacontainer-addon-agpl-3.0</artifactId>
             <version>1.2.1</version>
@@ -318,6 +316,21 @@
                     <artifactId>persistence-api</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>openid-integration</artifactId>
+            <version>0.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dyuproject</groupId>
+            <artifactId>dyuproject-openid</artifactId>
+            <version>1.1.7</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.persistence</groupId>
+        	<artifactId>javax.persistence</artifactId>
+        	<version>2.0.3</version>
         </dependency>
     </dependencies>
     <build>

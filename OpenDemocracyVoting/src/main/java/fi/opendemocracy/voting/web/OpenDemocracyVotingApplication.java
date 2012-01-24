@@ -10,6 +10,7 @@ public class OpenDemocracyVotingApplication extends Application {
 	@Override
 	public void init() {
 		Window window = createNewWindow();
+		window.setName("mainWindow");
 		setMainWindow(window);
 	}
 
