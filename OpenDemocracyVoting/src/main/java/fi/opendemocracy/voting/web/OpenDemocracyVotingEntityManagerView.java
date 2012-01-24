@@ -37,6 +37,7 @@ import com.vaadin.ui.themes.Reindeer;
 
 import fi.opendemocracy.voting.domain.Category;
 import fi.opendemocracy.voting.web.ui.CategoryView;
+import fi.opendemocracy.voting.web.ui.LoginView;
 import fi.opendemocracy.voting.web.ui.PropositionView;
 
 /**
@@ -74,6 +75,7 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent {
 	private Panel help;
 	private Button btnPropositions;
 	private Button btnCategories;
+	private Button btnLogin;
 	//End OpenDemocracy layout objects
 	private VerticalLayout homePage;
 
@@ -141,14 +143,17 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent {
 		//Toolbar buttons
 		btnPropositions = new Button("Propositions");
 		btnCategories = new Button("Categories");
+		btnLogin = new Button("Login/out");
 		btnPropositions.setIcon(ThemeConstants.TOOLBAR_ICON_PROPOSITION);
 		btnCategories.setIcon(ThemeConstants.TOOLBAR_ICON_CATEGORIES);
+		btnLogin.setIcon(ThemeConstants.TOOLBAR_ICON_LOGIN);
 
 		//TODO: Listeners
 		//proposition.addListener((ClickListener) app);
 
 		toolbar.addComponent(btnPropositions);
 		toolbar.addComponent(btnCategories);
+		toolbar.addComponent(btnLogin);
 		
 		//Logo
 		Embedded logo = new Embedded("", ThemeConstants.LOGO);
@@ -185,6 +190,7 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent {
         navigator.addView("home", HomeView.class, true);
     	navigator.addView("category", CategoryView.class);
     	navigator.addView("proposition", PropositionView.class);
+        navigator.addView("login", LoginView.class);
     	return navigator;
     }
         
@@ -197,6 +203,11 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent {
     	btnPropositions.addListener(new Button.ClickListener() {
             public void buttonClick(ClickEvent event) {
             	navigator.navigateTo("proposition");
+            }
+        });
+    	btnLogin.addListener(new Button.ClickListener() {
+            public void buttonClick(ClickEvent event) {
+            	navigator.navigateTo("login");
             }
         });
     }
