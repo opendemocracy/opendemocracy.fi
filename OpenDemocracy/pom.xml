@@ -14,6 +14,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <repositories>
+		<repository>
+			<id>dyuproject-repo</id>
+			<name>dyuproject-repo</name>      
+			<url>http://dyuproject.googlecode.com/svn/repos/maven2</url>
+		</repository>
         <repository>
             <id>spring-maven-release</id>
             <name>Spring Maven Release Repository</name>
@@ -67,6 +72,11 @@
         </pluginRepository>
     </pluginRepositories>
     <dependencies>
+		<dependency>
+		   <groupId>org.vaadin.addons</groupId>
+		   <artifactId>openid-integration</artifactId>
+		   <version>0.2.0</version>
+		</dependency>
         <!-- General dependencies for standard applications -->
         <dependency>
             <groupId>junit</groupId>
@@ -319,6 +329,41 @@
                 </exclusion>
             </exclusions>
         </dependency>
+    <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-openid</artifactId>
+            <version>3.0.5.RELEASE</version>
+        </dependency>
+    <dependency>
+            <groupId>org.openid4java</groupId>
+            <artifactId>openid4java</artifactId>
+            <version>0.9.5</version>
+        </dependency>
+    <dependency>
+    	<groupId>com.dyuproject</groupId>
+    	<artifactId>dyuproject-openid</artifactId>
+    	<version>1.1.7</version>
+    </dependency>
+    <dependency>
+    	<groupId>javax.servlet</groupId>
+    	<artifactId>jstl</artifactId>
+    	<version>1.1.2</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.springframework.security</groupId>
+    	<artifactId>spring-security-web</artifactId>
+    	<version>3.0.5.RELEASE</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.springframework.security</groupId>
+    	<artifactId>spring-security-config</artifactId>
+    	<version>3.0.5.RELEASE</version>
+    </dependency>
+    <dependency>
+    	<groupId>taglibs</groupId>
+    	<artifactId>standard</artifactId>
+    	<version>1.1.1</version>
+    </dependency>
     </dependencies>
     <build>
         <plugins>

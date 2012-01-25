@@ -1,9 +1,13 @@
 package fi.opendemocracy.web;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.vaadin.navigator.Navigator;
 
 import com.vaadin.Application;
@@ -217,6 +221,23 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent implem
         }
     }
 
+	public boolean hasAnyRole(String... roles)
+	{
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Collection<GrantedAuthority> authorities = authentication.getAuthorities();
+		for (GrantedAuthority authority : authorities)
+		{
+			for (String role : roles)
+			{
+				if (role.equals(authority.getAuthority()))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
     /**
      * List all the entity views (classes annotated with
      * {@link RooVaadinEntityView}) and add them to the list on the left as
@@ -226,6 +247,39 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent implem
     private void addEntityViewsToList() {
         final Map<String, Class> entityViews = listEntityViews();
         navigator.addView("welcome", WelcomeView.class);
+        
+        navigator.addView("Login", OpenIDView.class);
+        EntitySidebarItem loginMenuItem = new EntitySidebarItem("Login", OpenIDView.class);
+        menuItems.add(loginMenuItem);
+        
+
+		Label label;
+		if (hasAnyRole(Roles.ROLE_ADMIN))
+		{
+			label = new Label("You have admin role.");
+		}
+		else
+		{
+			label = new Label("You have user role.");
+		}
+
+		Button logout = new Button("logout");
+		logout.addListener(new Button.ClickListener()
+		{
+            private static final long serialVersionUID = 1L;
+
+			@Override
+			public void buttonClick(ClickEvent event)
+			{
+				getWindow().getApplication().close();
+			}
+		});
+
+		viewList.addComponent(label);
+		viewList.addComponent(logout);
+        
+        viewList.addComponent(loginMenuItem);
+        
         for (final String key : entityViews.keySet()) {
             Class viewClass = entityViews.get(key);
 
