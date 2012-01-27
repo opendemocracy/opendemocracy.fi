@@ -61,3 +61,4 @@ field date --fieldName ts --type java.util.Date --persistenceType JPA_TIMESTAMP
 vaadin setup --applicationPackage ~.web --baseName OpenDemocracyVoting --themeName OpenDemocracyTheme --useJpaContainer true
 vaadin generate all --package ~.web.ui --visuallyComposable true
 // script --file d:\OpenDemocracy.roo
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-01-27 19:13:31

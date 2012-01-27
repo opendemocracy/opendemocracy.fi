@@ -12,7 +12,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.VerticalSplitPanel;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
 /**
@@ -23,11 +23,11 @@ import com.vaadin.ui.themes.Reindeer;
 public abstract class AbstractEntityView<E> extends CustomComponent implements
 		TabNavigator.View {
 
-	private VerticalSplitPanel mainLayout;
-	private Table table;
-	private EntityEditor form;
-	private TabNavigator navigator;
-	private boolean dirty = false;
+    private VerticalLayout mainLayout;
+    private Table table;
+    private EntityEditor form;
+    private TabNavigator navigator;
+    private boolean dirty = false;
 
 	/**
 	 * Constructor for an abstract entity view.
@@ -36,34 +36,32 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 	 * create the main parts of the view.
 	 */
 	public AbstractEntityView() {
-		// custom component size, must be set to allow inner layout take 100%
-		// size
-		setSizeFull();
+        // custom component size, must be set to allow inner layout take 100% size
+        setSizeFull();
 
-		mainLayout = new VerticalSplitPanel();
-		mainLayout.addStyleName("blue-bottom");
-		mainLayout.setSplitPosition(30);
-		setCompositionRoot(mainLayout);
+        mainLayout = new VerticalLayout();
+        mainLayout.addStyleName("blue-bottom");
+        mainLayout.setSizeFull();
+        setCompositionRoot(mainLayout);
 
-		// table settings, display a fixed number of rows
-		getTable().setSizeFull();
-		getTable().setImmediate(true);
-		getTable().setSelectable(true);
-		getTable().addStyleName(Reindeer.TABLE_BORDERLESS);
-		getTable().addStyleName(Reindeer.TABLE_STRONG);
+        // table settings, display a fixed number of rows
+        getTable().setSizeFull();
+        getTable().setImmediate(true);
+        getTable().setSelectable(true);
+        getTable().addStyleName(Reindeer.TABLE_BORDERLESS);
+        getTable().addStyleName(Reindeer.TABLE_STRONG);
 
-		mainLayout.setFirstComponent(getTable());
-		mainLayout.setSecondComponent(getForm());
+        mainLayout.addComponent(getTable());
 
-		// hide buttons if certain operations are not allowed
-		getForm().setSaveAllowed(isCreateAllowed() || isUpdateAllowed());
-		getForm().setDeleteAllowed(isDeleteAllowed());
+        // hide buttons if certain operations are not allowed
+        getForm().setSaveAllowed(isCreateAllowed() || isUpdateAllowed());
+        getForm().setDeleteAllowed(isDeleteAllowed());
 
-		// add listeners for the buttons
-		addListeners();
+        // add listeners for the buttons
+        addListeners();
 
-		// initially nothing on the form
-		setCurrentEntity(null);
+        // initially nothing on the form
+        setCurrentEntity(null);
 	}
 
 	// View interface and related
@@ -132,18 +130,13 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 	// other methods
 
 	public void createNewEntity() {
-		if (isCreateAllowed()) {
-			getTable().setValue(null);
-
-			getForm().setVisible(true);
-
-			getForm().setDeleteAllowed(false);
-			getForm().setSaveAllowed(isCreateAllowed());
-			setCurrentEntity(createEntityInstance());
-			getForm().setCaption("New " + getEntityName());
-
-			getForm().focus();
-		}
+        if (isCreateAllowed()) {
+            getTable().setValue(null);
+        	getForm().setCaption("New " + getEntityName());
+            setCurrentEntity(createEntityInstance());
+            //TODO Dependency injection instead of getForm()
+            navigator.openChildTab(getForm(), "new");
+        }
 	}
 
 	/**
@@ -151,7 +144,23 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 	 * selection change.
 	 */
 	protected void addListeners() {
-		getTable().addListener(new ValueChangeListener() {
+		
+		//TODO: Click on selected tab to open
+		/*getTable().addListener(new ItemClickListener() {
+			@Override
+			public void itemClick(ItemClickEvent event) {
+				Object value = event.getItemId();
+				if(getTable().getValue() == value && event.getButton() == ItemClickEvent.BUTTON_LEFT){
+					if (value != null) {
+						navigateToFragment("edit/" + String.valueOf(value).replaceAll("[^0-9]", ""));
+						getWindow().showNotification("TODO: Open instance view tab");
+					}
+				}
+			}
+		});*/
+		
+		//No use for this atm
+		/*getTable().addListener(new ValueChangeListener() {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				Object value = event.getProperty().getValue();
@@ -160,7 +169,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 							+ String.valueOf(value).replaceAll("[^0-9]", ""));
 				}
 			}
-		});
+		});*/
 
 		getForm().addSaveActionListener(new ClickListener() {
 			@Override
@@ -200,8 +209,6 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 		getForm().setVisible(entity != null);
 		if (entity != null) {
 			getForm().refresh();
-			getForm().setCaption("Edit " + getEntityName());
-
 			boolean newEntity = isNewEntity(entity);
 			getForm().setDeleteAllowed(isDeleteAllowed());
 			boolean saveAllowed = newEntity ? isCreateAllowed()
