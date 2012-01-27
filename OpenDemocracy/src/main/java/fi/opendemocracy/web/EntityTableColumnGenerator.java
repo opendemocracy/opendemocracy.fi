@@ -19,44 +19,45 @@ import com.vaadin.ui.Table.ColumnGenerator;
  */
 public class EntityTableColumnGenerator implements ColumnGenerator {
 
-    private final String displayProperty;
+	private final String displayProperty;
 
-    public EntityTableColumnGenerator(String displayProperty) {
-        this.displayProperty = displayProperty;
-    }
+	public EntityTableColumnGenerator(String displayProperty) {
+		this.displayProperty = displayProperty;
+	}
 
-    public Component generateCell(Table source, Object itemId, Object columnId) {
-        Property property = source.getContainerProperty(itemId, columnId);
-        if (property == null) {
-            return null;
-        }
-        Object cellContent = property.getValue();
-        if (cellContent instanceof Collection) {
-            StringBuilder sb = new StringBuilder();
-            Iterator<?> it = ((Collection<?>) cellContent).iterator();
-            while (it.hasNext()) {
-                if (displayProperty != null) {
-                    Object value = new MethodProperty(it.next(),
-                            displayProperty).getValue();
-                    sb.append(value);
-                } else {
-                    sb.append(it.next());
-                }
-                if (it.hasNext()) {
-                    sb.append(", ");
-                }
-            }
-            return new Label(sb.toString());
-        } else if (cellContent != null) {
-            Object value = cellContent;
-            if (displayProperty != null) {
-                value = new MethodProperty(cellContent, displayProperty)
-                        .getValue();
-            }
-            return new Label(value != null ? value.toString() : "");
-        } else {
-            return null;
-        }
-    }
+	@Override
+	public Component generateCell(Table source, Object itemId, Object columnId) {
+		Property property = source.getContainerProperty(itemId, columnId);
+		if (property == null) {
+			return null;
+		}
+		Object cellContent = property.getValue();
+		if (cellContent instanceof Collection) {
+			StringBuilder sb = new StringBuilder();
+			Iterator<?> it = ((Collection<?>) cellContent).iterator();
+			while (it.hasNext()) {
+				if (displayProperty != null) {
+					Object value = new MethodProperty(it.next(),
+							displayProperty).getValue();
+					sb.append(value);
+				} else {
+					sb.append(it.next());
+				}
+				if (it.hasNext()) {
+					sb.append(", ");
+				}
+			}
+			return new Label(sb.toString());
+		} else if (cellContent != null) {
+			Object value = cellContent;
+			if (displayProperty != null) {
+				value = new MethodProperty(cellContent, displayProperty)
+						.getValue();
+			}
+			return new Label(value != null ? value.toString() : "");
+		} else {
+			return null;
+		}
+	}
 
 }

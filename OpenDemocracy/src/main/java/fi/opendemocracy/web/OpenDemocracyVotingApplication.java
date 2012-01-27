@@ -18,6 +18,7 @@ public class OpenDemocracyVotingApplication extends Application {
 
 		// remove window on close to avoid memory leaks
 		window.addListener(new CloseListener() {
+			@Override
 			public void windowClose(CloseEvent e) {
 				if (getMainWindow() != window) {
 					OpenDemocracyVotingApplication.this.removeWindow(window);

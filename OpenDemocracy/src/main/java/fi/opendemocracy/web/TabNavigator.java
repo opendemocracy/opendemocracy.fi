@@ -2,10 +2,12 @@ package fi.opendemocracy.web;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+
 import com.vaadin.Application;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -16,11 +18,11 @@ import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
 import com.vaadin.ui.TabSheet.SelectedTabChangeListener;
 import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.UriFragmentUtility;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.UriFragmentUtility.FragmentChangedEvent;
 import com.vaadin.ui.UriFragmentUtility.FragmentChangedListener;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+
 /* TODO List:
  * Scrollable tabs
  */
@@ -30,11 +32,11 @@ public class TabNavigator extends HorizontalLayout {
 	private HashMap<String, Class<? extends Component>> uriToClass = new HashMap<String, Class<? extends Component>>();
 	private HashMap<Class<? extends Component>, String> classToUri = new HashMap<Class<? extends Component>, String>();
 	private HashMap<Class<? extends Component>, View> classToView = new HashMap<Class<? extends Component>, View>();
-	
+
 	private HashMap<String, Component> uriToTab = new HashMap<String, Component>();
 	private HashMap<Component, String> tabToUri = new HashMap<Component, String>();
 	private HashMap<Component, View> tabToView = new HashMap<Component, View>();
-	
+
 	private String mainViewUri = null;
 	private UriFragmentUtility uriFragmentUtil = new UriFragmentUtility();
 	private String currentFragment = "";
@@ -43,74 +45,79 @@ public class TabNavigator extends HorizontalLayout {
 
 	private TabSheet tabSheet = new TabSheet();
 	private Component helpPanel;
-    private Button helpToggle;
-    
+	private Button helpToggle;
+
 	public TabNavigator() {
 		setSizeFull();
 		tabSheet.setSizeFull();
-		
+
 		addComponent(uriFragmentUtil);
 		addComponent(tabSheet);
 		createHelpPanel();
-		
+
 		setExpandRatio(tabSheet, 1.0F);
 		addListeners();
 		addHandlers();
 	}
-	
-	private void createHelpPanel(){
-        // Help panel
-        helpPanel = new Label("No help available in this section.");
-        
-        //Toggle bar
-        helpToggle = new Button();
-        helpToggle.setIcon(ThemeConstants.HELP_ICON);
-        helpToggle.setStyleName("toggle-help");
-        helpToggle.setHeight("100.0%");
-        helpToggle.setImmediate(true);
-        addComponent(helpToggle);
-        
-        //Help panel properties
-        helpPanel.setHeight("100.0%");
-        helpPanel.setWidth("200px");
-        helpPanel.setStyleName("panel-help");
-        helpPanel.setVisible(false);
-        addComponent(helpPanel);
+
+	private void createHelpPanel() {
+		// Help panel
+		helpPanel = new Label("No help available in this section.");
+
+		// Toggle bar
+		helpToggle = new Button();
+		helpToggle.setIcon(ThemeConstants.HELP_ICON);
+		helpToggle.setStyleName("toggle-help");
+		helpToggle.setHeight("100.0%");
+		helpToggle.setImmediate(true);
+		addComponent(helpToggle);
+
+		// Help panel properties
+		helpPanel.setHeight("100.0%");
+		helpPanel.setWidth("200px");
+		helpPanel.setStyleName("panel-help");
+		helpPanel.setVisible(false);
+		addComponent(helpPanel);
 	}
 
 	public void setHelp(Component c) {
-        helpPanel = c;
+		helpPanel = c;
 	}
-	
-	private void addListeners(){
+
+	private void addListeners() {
 		uriFragmentUtil.addListener(new FragmentChangedListener() {
+			@Override
 			public void fragmentChanged(FragmentChangedEvent source) {
 				TabNavigator.this.fragmentChanged();
 			}
 		});
-		tabSheet.addListener(new SelectedTabChangeListener(){
+		tabSheet.addListener(new SelectedTabChangeListener() {
+			@Override
 			public void selectedTabChange(SelectedTabChangeEvent event) {
 				Component tab = tabSheet.getSelectedTab();
 				String uri = getUri(tab.getClass());
 				String s;
-				
-				if((s = tabToUri.get(tab)) != null){
-					uri += s; 
+
+				if ((s = tabToUri.get(tab)) != null) {
+					uri += s;
 				}
-				
+
 				if (uri != null) {
 					navigateTo(uri);
 				}
 			}
 		});
 		helpToggle.addListener(new ClickListener() {
-      	  public void buttonClick(ClickEvent event) {
-      	    helpPanel.setVisible(!helpPanel.isVisible());
-      	  }
+			@Override
+			public void buttonClick(ClickEvent event) {
+				helpPanel.setVisible(!helpPanel.isVisible());
+			}
 		});
 	}
-	private void addHandlers(){
+
+	private void addHandlers() {
 		tabSheet.setCloseHandler(new CloseHandler() {
+			@Override
 			public void onTabClose(TabSheet tabsheet, Component tabContent) {
 				// TODO: Clear view on close
 				View v = tabToView.get(tabContent);
@@ -161,6 +168,7 @@ public class TabNavigator extends HorizontalLayout {
 				"If you do not want to navigate away from the current screen, press Cancel."));
 		Button cancel = new Button("Cancel", new Button.ClickListener() {
 
+			@Override
 			public void buttonClick(ClickEvent event) {
 				uriFragmentUtil.setFragment(currentFragment, false);
 				main.removeWindow(wDialog);
@@ -168,6 +176,7 @@ public class TabNavigator extends HorizontalLayout {
 		});
 		Button cont = new Button("Continue", new Button.ClickListener() {
 
+			@Override
 			public void buttonClick(ClickEvent event) {
 				main.removeWindow(wDialog);
 				moveTo(newView, requestedDataId, false);
@@ -215,18 +224,18 @@ public class TabNavigator extends HorizontalLayout {
 		v.navigateTo(requestedDataId);
 		moveToTab(v, requestedDataId, true);
 	}
-	
-	private void changeView(View newView){
+
+	private void changeView(View newView) {
 		View previousView = currentView;
 		currentView = newView;
 		for (ViewChangeListener l : listeners) {
 			l.navigatorViewChange(previousView, currentView);
 		}
 	}
-	
-	private void moveToTab(Component c, String uri, boolean isView){
+
+	private void moveToTab(Component c, String uri, boolean isView) {
 		Tab t = tabSheet.getTab(c);
-		if(t == null){
+		if (t == null) {
 			t = tabSheet.addTab(c, c.getCaption(), c.getIcon());
 			t.setClosable(!c.isReadOnly());
 			tabToUri.put(t.getComponent(), uri);
@@ -234,25 +243,21 @@ public class TabNavigator extends HorizontalLayout {
 		}
 		tabSheet.setSelectedTab(c);
 	}
-	
-	
+
 	public void openChildTab(Component c, String uri) {
 		uri = getUri(currentView.getClass()).concat("/").concat(uri);
 		moveToTab(c, uri, false);
 		uriFragmentUtil.setFragment(uri, false);
-		//uriFragmentUtil.setFragment(uri);
+		// uriFragmentUtil.setFragment(uri);
 	}
 
-	private void showNotification(String message){
+	private void showNotification(String message) {
 		Window w = currentView.getWindow();
-		if(w != null){
+		if (w != null) {
 			w.showNotification(message);
 		}
 	}
-	
-	
-	
-	
+
 	/**
 	 * Get the main view.
 	 * 
