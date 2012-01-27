@@ -10,13 +10,5 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/ThanE/.m2/repository/org/vaadin/addons/openid-integration/0.2.0/openid-integration-0.2.0.jar">
-		<attributes>
-			<attribute name="maven.groupId" value="org.vaadin.addons"/>
-			<attribute name="maven.artifactId" value="openid-integration"/>
-			<attribute name="maven.version" value="0.2.0"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
