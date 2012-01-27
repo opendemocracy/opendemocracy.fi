@@ -103,16 +103,10 @@ privileged aspect RepresentationView_Roo_VaadinEntityView {
     }
     
     public void RepresentationView.setupGeneratedColumns(Table table) {
-        table.removeGeneratedColumn("category");
-        table.addGeneratedColumn("category", new EntityTableColumnGenerator((String) getCategoryCaptionPropertyId()));
         table.removeGeneratedColumn("expert");
         table.addGeneratedColumn("expert", new EntityTableColumnGenerator((String) getExpertCaptionPropertyId()));
         table.removeGeneratedColumn("odUser");
         table.addGeneratedColumn("odUser", new EntityTableColumnGenerator((String) getODUserCaptionPropertyId()));
-    }
-    
-    public Object RepresentationView.getCategoryCaptionPropertyId() {
-        return "name";
     }
     
     public Object RepresentationView.getExpertCaptionPropertyId() {

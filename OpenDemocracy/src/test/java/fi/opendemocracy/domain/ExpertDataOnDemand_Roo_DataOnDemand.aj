@@ -7,9 +7,12 @@ import fi.opendemocracy.domain.Category;
 import fi.opendemocracy.domain.CategoryDataOnDemand;
 import fi.opendemocracy.domain.Expert;
 import fi.opendemocracy.domain.ODUser;
-import fi.opendemocracy.domain.ODUserDataOnDemand;
+import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -29,13 +32,12 @@ privileged aspect ExpertDataOnDemand_Roo_DataOnDemand {
     @Autowired
     private CategoryDataOnDemand ExpertDataOnDemand.categoryDataOnDemand;
     
-    @Autowired
-    private ODUserDataOnDemand ExpertDataOnDemand.oDUserDataOnDemand;
-    
     public Expert ExpertDataOnDemand.getNewTransientExpert(int index) {
         Expert obj = new Expert();
         setCategory(obj, index);
+        setExpertise(obj, index);
         setOdUser(obj, index);
+        setTs(obj, index);
         return obj;
     }
     
@@ -44,9 +46,19 @@ privileged aspect ExpertDataOnDemand_Roo_DataOnDemand {
         obj.setCategory(category);
     }
     
+    public void ExpertDataOnDemand.setExpertise(Expert obj, int index) {
+        String expertise = "expertise_" + index;
+        obj.setExpertise(expertise);
+    }
+    
     public void ExpertDataOnDemand.setOdUser(Expert obj, int index) {
-        ODUser odUser = oDUserDataOnDemand.getRandomODUser();
+        ODUser odUser = null;
         obj.setOdUser(odUser);
+    }
+    
+    public void ExpertDataOnDemand.setTs(Expert obj, int index) {
+        Date ts = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setTs(ts);
     }
     
     public Expert ExpertDataOnDemand.getSpecificExpert(int index) {

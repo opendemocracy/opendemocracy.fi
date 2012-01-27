@@ -14,6 +14,7 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.TextField;
 import fi.opendemocracy.domain.ODUser;
+import fi.opendemocracy.domain.Proposition;
 import fi.opendemocracy.domain.PropositionOption;
 import fi.opendemocracy.domain.Vote;
 import fi.opendemocracy.web.EntityProviderUtil;
@@ -39,10 +40,12 @@ privileged aspect VoteForm_Roo_VaadinVisuallyComposableEntityForm {
     
     private JPAContainer<ODUser> VoteForm.containerForODUsers;
     
+    private JPAContainer<Proposition> VoteForm.containerForPropositions;
+    
     private JPAContainer<PropositionOption> VoteForm.containerForPropositionOptions;
     
     public Collection<Object> VoteForm.getBeanPropertyIds() {
-        return Arrays.asList(new Object[] { "odUser", "propositionOption", "support" });
+        return Arrays.asList(new Object[] { "odUser", "proposition", "propositionOption", "support", "comment", "ts" });
     }
     
     public Field VoteForm.getField(Object propertyId) {
@@ -77,8 +80,11 @@ privileged aspect VoteForm_Roo_VaadinVisuallyComposableEntityForm {
     
     public void VoteForm.configureFieldMap() {
         fieldMap.put("odUser", odUserField);
+        fieldMap.put("proposition", propositionField);
         fieldMap.put("propositionOption", propositionOptionField);
         fieldMap.put("support", supportField);
+        fieldMap.put("comment", commentField);
+        fieldMap.put("ts", tsField);
     }
     
     public void VoteForm.configureFields() {
@@ -97,6 +103,17 @@ privileged aspect VoteForm_Roo_VaadinVisuallyComposableEntityForm {
     
     public void VoteForm.configureContainersForFields() {
         Field field;
+        
+        field = getField("proposition");
+        if (field instanceof AbstractSelect) {
+            ((AbstractSelect) field).setContainerDataSource(getContainerForPropositions());
+            Object captionId = getPropositionCaptionPropertyId();
+            if (captionId != null) {
+                ((AbstractSelect) field).setItemCaptionPropertyId(captionId);
+            } else {
+                ((AbstractSelect) field).setItemCaptionMode(AbstractSelect.ITEM_CAPTION_MODE_ITEM);
+            }
+        }
         
         field = getField("propositionOption");
         if (field instanceof AbstractSelect) {
@@ -126,6 +143,13 @@ privileged aspect VoteForm_Roo_VaadinVisuallyComposableEntityForm {
         PropertyConverter converter;
         Container container;
         Field field;
+        
+        field = getField("proposition");
+        if (field instanceof AbstractSelect) {
+            container = ((AbstractSelect) field).getContainerDataSource();
+            converter = new BeanFieldPropertyConverter<Proposition, Long>(Proposition.class, container, "id");
+            converterMap.put("proposition", converter);
+        }
         
         field = getField("propositionOption");
         if (field instanceof AbstractSelect) {
@@ -182,6 +206,15 @@ privileged aspect VoteForm_Roo_VaadinVisuallyComposableEntityForm {
         return containerForODUsers;
     }
     
+    public JPAContainer<Proposition> VoteForm.getContainerForPropositions() {
+        if (containerForPropositions == null) {
+            JPAContainer<Proposition> container = new JPAContainer<Proposition>(Proposition.class);
+            container.setEntityProvider(EntityProviderUtil.get().getEntityProvider(Proposition.class));
+            containerForPropositions = container;
+        }
+        return containerForPropositions;
+    }
+    
     public JPAContainer<PropositionOption> VoteForm.getContainerForPropositionOptions() {
         if (containerForPropositionOptions == null) {
             JPAContainer<PropositionOption> container = new JPAContainer<PropositionOption>(PropositionOption.class);
@@ -195,8 +228,12 @@ privileged aspect VoteForm_Roo_VaadinVisuallyComposableEntityForm {
         return null;
     }
     
+    public Object VoteForm.getPropositionCaptionPropertyId() {
+        return "name";
+    }
+    
     public Object VoteForm.getPropositionOptionCaptionPropertyId() {
-        return null;
+        return "name";
     }
     
     public String VoteForm.getIdProperty() {

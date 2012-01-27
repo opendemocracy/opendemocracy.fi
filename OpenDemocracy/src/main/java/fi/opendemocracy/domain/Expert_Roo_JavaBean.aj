@@ -5,6 +5,8 @@ package fi.opendemocracy.domain;
 
 import fi.opendemocracy.domain.Category;
 import fi.opendemocracy.domain.ODUser;
+import java.lang.String;
+import java.util.Date;
 
 privileged aspect Expert_Roo_JavaBean {
     
@@ -22,6 +24,22 @@ privileged aspect Expert_Roo_JavaBean {
     
     public void Expert.setOdUser(ODUser odUser) {
         this.odUser = odUser;
+    }
+    
+    public String Expert.getExpertise() {
+        return this.expertise;
+    }
+    
+    public void Expert.setExpertise(String expertise) {
+        this.expertise = expertise;
+    }
+    
+    public Date Expert.getTs() {
+        return this.ts;
+    }
+    
+    public void Expert.setTs(Date ts) {
+        this.ts = ts;
     }
     
 }

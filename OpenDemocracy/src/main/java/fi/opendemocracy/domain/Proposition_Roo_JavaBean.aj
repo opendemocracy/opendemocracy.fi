@@ -7,6 +7,7 @@ import fi.opendemocracy.domain.Category;
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.PropositionOption;
 import java.lang.String;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect Proposition_Roo_JavaBean {
@@ -19,12 +20,12 @@ privileged aspect Proposition_Roo_JavaBean {
         this.author = author;
     }
     
-    public String Proposition.getTitle() {
-        return this.title;
+    public String Proposition.getName() {
+        return this.name;
     }
     
-    public void Proposition.setTitle(String title) {
-        this.title = title;
+    public void Proposition.setName(String name) {
+        this.name = name;
     }
     
     public String Proposition.getDescription() {
@@ -49,6 +50,14 @@ privileged aspect Proposition_Roo_JavaBean {
     
     public void Proposition.setPropositionOptions(Set<PropositionOption> propositionOptions) {
         this.propositionOptions = propositionOptions;
+    }
+    
+    public Date Proposition.getTs() {
+        return this.ts;
+    }
+    
+    public void Proposition.setTs(Date ts) {
+        this.ts = ts;
     }
     
 }

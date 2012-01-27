@@ -9,11 +9,11 @@ privileged aspect Representation_Roo_ToString {
     
     public String Representation.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Category: ").append(getCategory()).append(", ");
         sb.append("Expert: ").append(getExpert()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("OdUser: ").append(getOdUser()).append(", ");
         sb.append("Trust: ").append(getTrust()).append(", ");
+        sb.append("Ts: ").append(getTs()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

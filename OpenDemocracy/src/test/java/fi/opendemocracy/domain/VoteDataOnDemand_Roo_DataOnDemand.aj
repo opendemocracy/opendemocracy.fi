@@ -4,13 +4,18 @@
 package fi.opendemocracy.domain;
 
 import fi.opendemocracy.domain.ODUser;
-import fi.opendemocracy.domain.ODUserDataOnDemand;
+import fi.opendemocracy.domain.Proposition;
+import fi.opendemocracy.domain.PropositionDataOnDemand;
 import fi.opendemocracy.domain.PropositionOption;
 import fi.opendemocracy.domain.PropositionOptionDataOnDemand;
 import fi.opendemocracy.domain.Vote;
+import java.lang.String;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -28,22 +33,35 @@ privileged aspect VoteDataOnDemand_Roo_DataOnDemand {
     private List<Vote> VoteDataOnDemand.data;
     
     @Autowired
-    private ODUserDataOnDemand VoteDataOnDemand.oDUserDataOnDemand;
+    private PropositionDataOnDemand VoteDataOnDemand.propositionDataOnDemand;
     
     @Autowired
     private PropositionOptionDataOnDemand VoteDataOnDemand.propositionOptionDataOnDemand;
     
     public Vote VoteDataOnDemand.getNewTransientVote(int index) {
         Vote obj = new Vote();
+        setComment(obj, index);
         setOdUser(obj, index);
+        setProposition(obj, index);
         setPropositionOption(obj, index);
         setSupport(obj, index);
+        setTs(obj, index);
         return obj;
     }
     
+    public void VoteDataOnDemand.setComment(Vote obj, int index) {
+        String comment = "comment_" + index;
+        obj.setComment(comment);
+    }
+    
     public void VoteDataOnDemand.setOdUser(Vote obj, int index) {
-        ODUser odUser = oDUserDataOnDemand.getRandomODUser();
+        ODUser odUser = null;
         obj.setOdUser(odUser);
+    }
+    
+    public void VoteDataOnDemand.setProposition(Vote obj, int index) {
+        Proposition proposition = propositionDataOnDemand.getRandomProposition();
+        obj.setProposition(proposition);
     }
     
     public void VoteDataOnDemand.setPropositionOption(Vote obj, int index) {
@@ -54,6 +72,11 @@ privileged aspect VoteDataOnDemand_Roo_DataOnDemand {
     public void VoteDataOnDemand.setSupport(Vote obj, int index) {
         BigDecimal support = BigDecimal.valueOf(index);
         obj.setSupport(support);
+    }
+    
+    public void VoteDataOnDemand.setTs(Vote obj, int index) {
+        Date ts = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setTs(ts);
     }
     
     public Vote VoteDataOnDemand.getSpecificVote(int index) {

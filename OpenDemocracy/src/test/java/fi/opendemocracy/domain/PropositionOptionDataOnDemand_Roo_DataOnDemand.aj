@@ -7,6 +7,9 @@ import fi.opendemocracy.domain.PropositionOption;
 import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -25,24 +28,27 @@ privileged aspect PropositionOptionDataOnDemand_Roo_DataOnDemand {
     public PropositionOption PropositionOptionDataOnDemand.getNewTransientPropositionOption(int index) {
         PropositionOption obj = new PropositionOption();
         setDescription(obj, index);
-        setTitle(obj, index);
+        setName(obj, index);
+        setTs(obj, index);
         return obj;
     }
     
     public void PropositionOptionDataOnDemand.setDescription(PropositionOption obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 4096) {
-            description = description.substring(0, 4096);
-        }
         obj.setDescription(description);
     }
     
-    public void PropositionOptionDataOnDemand.setTitle(PropositionOption obj, int index) {
-        String title = "title_" + index;
-        if (title.length() > 255) {
-            title = title.substring(0, 255);
+    public void PropositionOptionDataOnDemand.setName(PropositionOption obj, int index) {
+        String name = "name_" + index;
+        if (name.length() > 255) {
+            name = name.substring(0, 255);
         }
-        obj.setTitle(title);
+        obj.setName(name);
+    }
+    
+    public void PropositionOptionDataOnDemand.setTs(PropositionOption obj, int index) {
+        Date ts = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setTs(ts);
     }
     
     public PropositionOption PropositionOptionDataOnDemand.getSpecificPropositionOption(int index) {

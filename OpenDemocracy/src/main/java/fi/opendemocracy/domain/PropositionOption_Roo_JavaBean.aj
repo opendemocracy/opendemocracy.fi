@@ -4,15 +4,16 @@
 package fi.opendemocracy.domain;
 
 import java.lang.String;
+import java.util.Date;
 
 privileged aspect PropositionOption_Roo_JavaBean {
     
-    public String PropositionOption.getTitle() {
-        return this.title;
+    public String PropositionOption.getName() {
+        return this.name;
     }
     
-    public void PropositionOption.setTitle(String title) {
-        this.title = title;
+    public void PropositionOption.setName(String name) {
+        this.name = name;
     }
     
     public String PropositionOption.getDescription() {
@@ -21,6 +22,14 @@ privileged aspect PropositionOption_Roo_JavaBean {
     
     public void PropositionOption.setDescription(String description) {
         this.description = description;
+    }
+    
+    public Date PropositionOption.getTs() {
+        return this.ts;
+    }
+    
+    public void PropositionOption.setTs(Date ts) {
+        this.ts = ts;
     }
     
 }

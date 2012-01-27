@@ -42,7 +42,7 @@ privileged aspect ExpertForm_Roo_VaadinVisuallyComposableEntityForm {
     private JPAContainer<ODUser> ExpertForm.containerForODUsers;
     
     public Collection<Object> ExpertForm.getBeanPropertyIds() {
-        return Arrays.asList(new Object[] { "category", "odUser" });
+        return Arrays.asList(new Object[] { "category", "odUser", "expertise", "ts" });
     }
     
     public Field ExpertForm.getField(Object propertyId) {
@@ -78,6 +78,8 @@ privileged aspect ExpertForm_Roo_VaadinVisuallyComposableEntityForm {
     public void ExpertForm.configureFieldMap() {
         fieldMap.put("category", categoryField);
         fieldMap.put("odUser", odUserField);
+        fieldMap.put("expertise", expertiseField);
+        fieldMap.put("ts", tsField);
     }
     
     public void ExpertForm.configureFields() {

@@ -13,6 +13,10 @@ import java.util.HashSet;
 import javax.persistence.ManyToMany;
 import javax.persistence.CascadeType;
 import fi.opendemocracy.domain.PropositionOption;
+import java.util.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @RooJavaBean
 @RooToString
@@ -24,11 +28,11 @@ public class Proposition {
     private ODUser author;
 
     @NotNull
-    @Size(min = 2, max = 255)
-    private String title;
+    @Size(min = 2, max = 127)
+    private String name;
 
     @NotNull
-    @Size(min = 2, max = 4096)
+    @Size(min = 2)
     private String description;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -36,4 +40,8 @@ public class Proposition {
 
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<PropositionOption> propositionOptions = new HashSet<PropositionOption>();
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date ts;
 }

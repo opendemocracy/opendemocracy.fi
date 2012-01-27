@@ -30,7 +30,7 @@ privileged aspect PropositionOptionForm_Roo_VaadinVisuallyComposableEntityForm {
     private Map<Object, PropertyConverter> PropositionOptionForm.converterMap = new LinkedHashMap<Object, PropertyConverter>();
     
     public Collection<Object> PropositionOptionForm.getBeanPropertyIds() {
-        return Arrays.asList(new Object[] { "title", "description" });
+        return Arrays.asList(new Object[] { "name", "description", "ts" });
     }
     
     public Field PropositionOptionForm.getField(Object propertyId) {
@@ -64,8 +64,9 @@ privileged aspect PropositionOptionForm_Roo_VaadinVisuallyComposableEntityForm {
     }
     
     public void PropositionOptionForm.configureFieldMap() {
-        fieldMap.put("title", titleField);
+        fieldMap.put("name", nameField);
         fieldMap.put("description", descriptionField);
+        fieldMap.put("ts", tsField);
     }
     
     public void PropositionOptionForm.configureFields() {

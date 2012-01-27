@@ -11,7 +11,8 @@ privileged aspect PropositionOption_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("Description: ").append(getDescription()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
-        sb.append("Title: ").append(getTitle()).append(", ");
+        sb.append("Name: ").append(getName()).append(", ");
+        sb.append("Ts: ").append(getTs()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

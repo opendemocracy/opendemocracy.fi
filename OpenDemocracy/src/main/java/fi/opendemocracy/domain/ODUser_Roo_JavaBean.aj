@@ -3,9 +3,27 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.UserRole;
 import java.lang.String;
+import java.util.Date;
 
 privileged aspect ODUser_Roo_JavaBean {
+    
+    public UserRole ODUser.getUserRole() {
+        return this.userRole;
+    }
+    
+    public void ODUser.setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+    }
+    
+    public String ODUser.getOpenIdIdentifier() {
+        return this.openIdIdentifier;
+    }
+    
+    public void ODUser.setOpenIdIdentifier(String openIdIdentifier) {
+        this.openIdIdentifier = openIdIdentifier;
+    }
     
     public String ODUser.getUsername() {
         return this.username;
@@ -15,20 +33,44 @@ privileged aspect ODUser_Roo_JavaBean {
         this.username = username;
     }
     
-    public String ODUser.getPassword() {
-        return this.password;
+    public String ODUser.getEmailAddress() {
+        return this.emailAddress;
     }
     
-    public void ODUser.setPassword(String password) {
-        this.password = password;
+    public void ODUser.setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
     
-    public boolean ODUser.isAdmin() {
-        return this.admin;
+    public String ODUser.getDescription() {
+        return this.description;
     }
     
-    public void ODUser.setAdmin(boolean admin) {
-        this.admin = admin;
+    public void ODUser.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public String ODUser.getFirstName() {
+        return this.firstName;
+    }
+    
+    public void ODUser.setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    
+    public String ODUser.getLastName() {
+        return this.lastName;
+    }
+    
+    public void ODUser.setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    
+    public Date ODUser.getTs() {
+        return this.ts;
+    }
+    
+    public void ODUser.setTs(Date ts) {
+        this.ts = ts;
     }
     
 }

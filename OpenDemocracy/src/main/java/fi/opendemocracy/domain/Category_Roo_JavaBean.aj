@@ -4,6 +4,7 @@
 package fi.opendemocracy.domain;
 
 import java.lang.String;
+import java.util.Date;
 
 privileged aspect Category_Roo_JavaBean {
     
@@ -21,6 +22,14 @@ privileged aspect Category_Roo_JavaBean {
     
     public void Category.setDescription(String description) {
         this.description = description;
+    }
+    
+    public Date Category.getTs() {
+        return this.ts;
+    }
+    
+    public void Category.setTs(Date ts) {
+        this.ts = ts;
     }
     
 }

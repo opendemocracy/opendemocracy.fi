@@ -4,13 +4,17 @@
 package fi.opendemocracy.web.ui;
 
 import com.vaadin.addon.beanvalidation.BeanValidationValidator;
+import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Validator;
+import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.TextField;
 import fi.opendemocracy.domain.ODUser;
+import fi.opendemocracy.domain.UserRole;
 import java.lang.Class;
 import java.lang.Object;
 import java.lang.String;
@@ -29,8 +33,10 @@ privileged aspect ODUserForm_Roo_VaadinVisuallyComposableEntityForm {
     
     private Map<Object, PropertyConverter> ODUserForm.converterMap = new LinkedHashMap<Object, PropertyConverter>();
     
+    private BeanItemContainer<UserRole> ODUserForm.containerForUserRoles;
+    
     public Collection<Object> ODUserForm.getBeanPropertyIds() {
-        return Arrays.asList(new Object[] { "username", "password", "admin" });
+        return Arrays.asList(new Object[] { "userRole", "openIdIdentifier", "username", "emailAddress", "description", "firstName", "lastName", "ts" });
     }
     
     public Field ODUserForm.getField(Object propertyId) {
@@ -64,9 +70,14 @@ privileged aspect ODUserForm_Roo_VaadinVisuallyComposableEntityForm {
     }
     
     public void ODUserForm.configureFieldMap() {
+        fieldMap.put("userRole", userRoleField);
+        fieldMap.put("openIdIdentifier", openIdIdentifierField);
         fieldMap.put("username", usernameField);
-        fieldMap.put("password", passwordField);
-        fieldMap.put("admin", adminField);
+        fieldMap.put("emailAddress", emailAddressField);
+        fieldMap.put("description", descriptionField);
+        fieldMap.put("firstName", firstNameField);
+        fieldMap.put("lastName", lastNameField);
+        fieldMap.put("ts", tsField);
     }
     
     public void ODUserForm.configureFields() {
@@ -84,11 +95,26 @@ privileged aspect ODUserForm_Roo_VaadinVisuallyComposableEntityForm {
     }
     
     public void ODUserForm.configureContainersForFields() {
-        // no fields require special containers
+        Field field;
+        
+        field = getField("userRole");
+        if (field instanceof AbstractSelect) {
+            ((AbstractSelect) field).setContainerDataSource(getContainerForUserRoles());
+            Object captionId = getUserRoleCaptionPropertyId();
+            if (captionId != null) {
+                ((AbstractSelect) field).setItemCaptionPropertyId(captionId);
+            } else {
+                ((AbstractSelect) field).setItemCaptionMode(AbstractSelect.ITEM_CAPTION_MODE_EXPLICIT_DEFAULTS_ID);
+            }
+        }
     }
     
     public void ODUserForm.configureConverters() {
-        // no converters needed
+        // cannot parametrize PropertyConverter here due to an AJDT bug
+        PropertyConverter converter;
+        Container container;
+        Field field;
+        
     }
     
     public void ODUserForm.configureValidators() {
@@ -120,6 +146,19 @@ privileged aspect ODUserForm_Roo_VaadinVisuallyComposableEntityForm {
     
     public PropertyConverter ODUserForm.getConverter(Object propertyId) {
         return converterMap.get(propertyId);
+    }
+    
+    public BeanItemContainer<UserRole> ODUserForm.getContainerForUserRoles() {
+        if (containerForUserRoles == null) {
+            Collection<UserRole> items = Arrays.asList(UserRole.class.getEnumConstants());
+            BeanItemContainer<UserRole> container = new BeanItemContainer<UserRole>(items);
+            containerForUserRoles = container;
+        }
+        return containerForUserRoles;
+    }
+    
+    public Object ODUserForm.getUserRoleCaptionPropertyId() {
+        return null;
     }
     
     public String ODUserForm.getIdProperty() {

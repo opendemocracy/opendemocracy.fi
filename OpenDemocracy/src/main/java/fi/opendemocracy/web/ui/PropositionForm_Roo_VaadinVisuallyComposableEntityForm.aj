@@ -46,7 +46,7 @@ privileged aspect PropositionForm_Roo_VaadinVisuallyComposableEntityForm {
     private JPAContainer<PropositionOption> PropositionForm.containerForPropositionOptions;
     
     public Collection<Object> PropositionForm.getBeanPropertyIds() {
-        return Arrays.asList(new Object[] { "author", "title", "description", "categories", "propositionOptions" });
+        return Arrays.asList(new Object[] { "author", "name", "description", "categories", "propositionOptions", "ts" });
     }
     
     public Field PropositionForm.getField(Object propertyId) {
@@ -81,10 +81,11 @@ privileged aspect PropositionForm_Roo_VaadinVisuallyComposableEntityForm {
     
     public void PropositionForm.configureFieldMap() {
         fieldMap.put("author", authorField);
-        fieldMap.put("title", titleField);
+        fieldMap.put("name", nameField);
         fieldMap.put("description", descriptionField);
         fieldMap.put("categories", categoriesField);
         fieldMap.put("propositionOptions", propositionOptionsField);
+        fieldMap.put("ts", tsField);
     }
     
     public void PropositionForm.configureFields() {
@@ -233,7 +234,7 @@ privileged aspect PropositionForm_Roo_VaadinVisuallyComposableEntityForm {
     }
     
     public Object PropositionForm.getPropositionOptionCaptionPropertyId() {
-        return null;
+        return "name";
     }
     
     public String PropositionForm.getIdProperty() {

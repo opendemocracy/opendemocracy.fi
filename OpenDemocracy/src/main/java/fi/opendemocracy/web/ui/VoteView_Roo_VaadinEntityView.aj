@@ -105,6 +105,8 @@ privileged aspect VoteView_Roo_VaadinEntityView {
     public void VoteView.setupGeneratedColumns(Table table) {
         table.removeGeneratedColumn("odUser");
         table.addGeneratedColumn("odUser", new EntityTableColumnGenerator((String) getODUserCaptionPropertyId()));
+        table.removeGeneratedColumn("proposition");
+        table.addGeneratedColumn("proposition", new EntityTableColumnGenerator((String) getPropositionCaptionPropertyId()));
         table.removeGeneratedColumn("propositionOption");
         table.addGeneratedColumn("propositionOption", new EntityTableColumnGenerator((String) getPropositionOptionCaptionPropertyId()));
     }
@@ -113,8 +115,12 @@ privileged aspect VoteView_Roo_VaadinEntityView {
         return null;
     }
     
+    public Object VoteView.getPropositionCaptionPropertyId() {
+        return "name";
+    }
+    
     public Object VoteView.getPropositionOptionCaptionPropertyId() {
-        return null;
+        return "name";
     }
     
 }

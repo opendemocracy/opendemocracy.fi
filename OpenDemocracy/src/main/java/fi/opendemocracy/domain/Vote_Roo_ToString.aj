@@ -9,10 +9,13 @@ privileged aspect Vote_Roo_ToString {
     
     public String Vote.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Comment: ").append(getComment()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("OdUser: ").append(getOdUser()).append(", ");
+        sb.append("Proposition: ").append(getProposition()).append(", ");
         sb.append("PropositionOption: ").append(getPropositionOption()).append(", ");
         sb.append("Support: ").append(getSupport()).append(", ");
+        sb.append("Ts: ").append(getTs()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

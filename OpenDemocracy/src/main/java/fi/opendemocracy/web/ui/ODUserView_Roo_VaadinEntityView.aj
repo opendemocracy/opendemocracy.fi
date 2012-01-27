@@ -11,6 +11,7 @@ import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.web.EntityProviderUtil;
 import fi.opendemocracy.web.EntityTableColumnGenerator;
 import java.lang.Class;
+import java.lang.Object;
 import java.lang.String;
 import java.util.List;
 
@@ -103,6 +104,10 @@ privileged aspect ODUserView_Roo_VaadinEntityView {
     
     public void ODUserView.setupGeneratedColumns(Table table) {
         // Add generated columns here
+    }
+    
+    public Object ODUserView.getUserRoleCaptionPropertyId() {
+        return null;
     }
     
 }

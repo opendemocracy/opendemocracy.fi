@@ -4,17 +4,18 @@
 package fi.opendemocracy.domain;
 
 import fi.opendemocracy.domain.ODUser;
-import fi.opendemocracy.domain.ODUserDataOnDemand;
 import fi.opendemocracy.domain.Proposition;
 import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 privileged aspect PropositionDataOnDemand_Roo_DataOnDemand {
@@ -25,36 +26,36 @@ privileged aspect PropositionDataOnDemand_Roo_DataOnDemand {
     
     private List<Proposition> PropositionDataOnDemand.data;
     
-    @Autowired
-    private ODUserDataOnDemand PropositionDataOnDemand.oDUserDataOnDemand;
-    
     public Proposition PropositionDataOnDemand.getNewTransientProposition(int index) {
         Proposition obj = new Proposition();
         setAuthor(obj, index);
         setDescription(obj, index);
-        setTitle(obj, index);
+        setName(obj, index);
+        setTs(obj, index);
         return obj;
     }
     
     public void PropositionDataOnDemand.setAuthor(Proposition obj, int index) {
-        ODUser author = oDUserDataOnDemand.getRandomODUser();
+        ODUser author = null;
         obj.setAuthor(author);
     }
     
     public void PropositionDataOnDemand.setDescription(Proposition obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 4096) {
-            description = description.substring(0, 4096);
-        }
         obj.setDescription(description);
     }
     
-    public void PropositionDataOnDemand.setTitle(Proposition obj, int index) {
-        String title = "title_" + index;
-        if (title.length() > 255) {
-            title = title.substring(0, 255);
+    public void PropositionDataOnDemand.setName(Proposition obj, int index) {
+        String name = "name_" + index;
+        if (name.length() > 127) {
+            name = name.substring(0, 127);
         }
-        obj.setTitle(title);
+        obj.setName(name);
+    }
+    
+    public void PropositionDataOnDemand.setTs(Proposition obj, int index) {
+        Date ts = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setTs(ts);
     }
     
     public Proposition PropositionDataOnDemand.getSpecificProposition(int index) {

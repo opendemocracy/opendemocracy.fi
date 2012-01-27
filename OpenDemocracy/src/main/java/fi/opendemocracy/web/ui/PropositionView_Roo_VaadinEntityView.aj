@@ -120,7 +120,7 @@ privileged aspect PropositionView_Roo_VaadinEntityView {
     }
     
     public Object PropositionView.getPropositionOptionCaptionPropertyId() {
-        return null;
+        return "name";
     }
     
 }

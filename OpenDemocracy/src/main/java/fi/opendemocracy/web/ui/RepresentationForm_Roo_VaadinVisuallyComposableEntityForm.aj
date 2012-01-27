@@ -13,7 +13,6 @@ import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.TextField;
-import fi.opendemocracy.domain.Category;
 import fi.opendemocracy.domain.Expert;
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.Representation;
@@ -38,14 +37,12 @@ privileged aspect RepresentationForm_Roo_VaadinVisuallyComposableEntityForm {
     
     private Map<Object, PropertyConverter> RepresentationForm.converterMap = new LinkedHashMap<Object, PropertyConverter>();
     
-    private JPAContainer<Category> RepresentationForm.containerForCategorys;
-    
     private JPAContainer<Expert> RepresentationForm.containerForExperts;
     
     private JPAContainer<ODUser> RepresentationForm.containerForODUsers;
     
     public Collection<Object> RepresentationForm.getBeanPropertyIds() {
-        return Arrays.asList(new Object[] { "category", "expert", "odUser", "trust" });
+        return Arrays.asList(new Object[] { "expert", "odUser", "trust", "ts" });
     }
     
     public Field RepresentationForm.getField(Object propertyId) {
@@ -79,10 +76,10 @@ privileged aspect RepresentationForm_Roo_VaadinVisuallyComposableEntityForm {
     }
     
     public void RepresentationForm.configureFieldMap() {
-        fieldMap.put("category", categoryField);
         fieldMap.put("expert", expertField);
         fieldMap.put("odUser", odUserField);
         fieldMap.put("trust", trustField);
+        fieldMap.put("ts", tsField);
     }
     
     public void RepresentationForm.configureFields() {
@@ -113,17 +110,6 @@ privileged aspect RepresentationForm_Roo_VaadinVisuallyComposableEntityForm {
             }
         }
         
-        field = getField("category");
-        if (field instanceof AbstractSelect) {
-            ((AbstractSelect) field).setContainerDataSource(getContainerForCategorys());
-            Object captionId = getCategoryCaptionPropertyId();
-            if (captionId != null) {
-                ((AbstractSelect) field).setItemCaptionPropertyId(captionId);
-            } else {
-                ((AbstractSelect) field).setItemCaptionMode(AbstractSelect.ITEM_CAPTION_MODE_ITEM);
-            }
-        }
-        
         field = getField("odUser");
         if (field instanceof AbstractSelect) {
             ((AbstractSelect) field).setContainerDataSource(getContainerForODUsers());
@@ -147,13 +133,6 @@ privileged aspect RepresentationForm_Roo_VaadinVisuallyComposableEntityForm {
             container = ((AbstractSelect) field).getContainerDataSource();
             converter = new BeanFieldPropertyConverter<Expert, Long>(Expert.class, container, "id");
             converterMap.put("expert", converter);
-        }
-        
-        field = getField("category");
-        if (field instanceof AbstractSelect) {
-            container = ((AbstractSelect) field).getContainerDataSource();
-            converter = new BeanFieldPropertyConverter<Category, Long>(Category.class, container, "id");
-            converterMap.put("category", converter);
         }
         
         field = getField("odUser");
@@ -195,15 +174,6 @@ privileged aspect RepresentationForm_Roo_VaadinVisuallyComposableEntityForm {
         return converterMap.get(propertyId);
     }
     
-    public JPAContainer<Category> RepresentationForm.getContainerForCategorys() {
-        if (containerForCategorys == null) {
-            JPAContainer<Category> container = new JPAContainer<Category>(Category.class);
-            container.setEntityProvider(EntityProviderUtil.get().getEntityProvider(Category.class));
-            containerForCategorys = container;
-        }
-        return containerForCategorys;
-    }
-    
     public JPAContainer<Expert> RepresentationForm.getContainerForExperts() {
         if (containerForExperts == null) {
             JPAContainer<Expert> container = new JPAContainer<Expert>(Expert.class);
@@ -220,10 +190,6 @@ privileged aspect RepresentationForm_Roo_VaadinVisuallyComposableEntityForm {
             containerForODUsers = container;
         }
         return containerForODUsers;
-    }
-    
-    public Object RepresentationForm.getCategoryCaptionPropertyId() {
-        return "name";
     }
     
     public Object RepresentationForm.getExpertCaptionPropertyId() {

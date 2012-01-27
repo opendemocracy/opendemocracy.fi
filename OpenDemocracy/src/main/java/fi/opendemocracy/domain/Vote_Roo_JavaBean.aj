@@ -4,8 +4,11 @@
 package fi.opendemocracy.domain;
 
 import fi.opendemocracy.domain.ODUser;
+import fi.opendemocracy.domain.Proposition;
 import fi.opendemocracy.domain.PropositionOption;
+import java.lang.String;
 import java.math.BigDecimal;
+import java.util.Date;
 
 privileged aspect Vote_Roo_JavaBean {
     
@@ -15,6 +18,14 @@ privileged aspect Vote_Roo_JavaBean {
     
     public void Vote.setOdUser(ODUser odUser) {
         this.odUser = odUser;
+    }
+    
+    public Proposition Vote.getProposition() {
+        return this.proposition;
+    }
+    
+    public void Vote.setProposition(Proposition proposition) {
+        this.proposition = proposition;
     }
     
     public PropositionOption Vote.getPropositionOption() {
@@ -31,6 +42,22 @@ privileged aspect Vote_Roo_JavaBean {
     
     public void Vote.setSupport(BigDecimal support) {
         this.support = support;
+    }
+    
+    public String Vote.getComment() {
+        return this.comment;
+    }
+    
+    public void Vote.setComment(String comment) {
+        this.comment = comment;
+    }
+    
+    public Date Vote.getTs() {
+        return this.ts;
+    }
+    
+    public void Vote.setTs(Date ts) {
+        this.ts = ts;
     }
     
 }

@@ -30,7 +30,7 @@ privileged aspect CategoryForm_Roo_VaadinVisuallyComposableEntityForm {
     private Map<Object, PropertyConverter> CategoryForm.converterMap = new LinkedHashMap<Object, PropertyConverter>();
     
     public Collection<Object> CategoryForm.getBeanPropertyIds() {
-        return Arrays.asList(new Object[] { "name", "description" });
+        return Arrays.asList(new Object[] { "name", "description", "ts" });
     }
     
     public Field CategoryForm.getField(Object propertyId) {
@@ -66,6 +66,7 @@ privileged aspect CategoryForm_Roo_VaadinVisuallyComposableEntityForm {
     public void CategoryForm.configureFieldMap() {
         fieldMap.put("name", nameField);
         fieldMap.put("description", descriptionField);
+        fieldMap.put("ts", tsField);
     }
     
     public void CategoryForm.configureFields() {

@@ -3,16 +3,16 @@
 
 package fi.opendemocracy.domain;
 
-import fi.opendemocracy.domain.Category;
-import fi.opendemocracy.domain.CategoryDataOnDemand;
 import fi.opendemocracy.domain.Expert;
 import fi.opendemocracy.domain.ExpertDataOnDemand;
 import fi.opendemocracy.domain.ODUser;
-import fi.opendemocracy.domain.ODUserDataOnDemand;
 import fi.opendemocracy.domain.Representation;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -30,26 +30,15 @@ privileged aspect RepresentationDataOnDemand_Roo_DataOnDemand {
     private List<Representation> RepresentationDataOnDemand.data;
     
     @Autowired
-    private CategoryDataOnDemand RepresentationDataOnDemand.categoryDataOnDemand;
-    
-    @Autowired
     private ExpertDataOnDemand RepresentationDataOnDemand.expertDataOnDemand;
-    
-    @Autowired
-    private ODUserDataOnDemand RepresentationDataOnDemand.oDUserDataOnDemand;
     
     public Representation RepresentationDataOnDemand.getNewTransientRepresentation(int index) {
         Representation obj = new Representation();
-        setCategory(obj, index);
         setExpert(obj, index);
         setOdUser(obj, index);
         setTrust(obj, index);
+        setTs(obj, index);
         return obj;
-    }
-    
-    public void RepresentationDataOnDemand.setCategory(Representation obj, int index) {
-        Category category = categoryDataOnDemand.getRandomCategory();
-        obj.setCategory(category);
     }
     
     public void RepresentationDataOnDemand.setExpert(Representation obj, int index) {
@@ -58,13 +47,18 @@ privileged aspect RepresentationDataOnDemand_Roo_DataOnDemand {
     }
     
     public void RepresentationDataOnDemand.setOdUser(Representation obj, int index) {
-        ODUser odUser = oDUserDataOnDemand.getRandomODUser();
+        ODUser odUser = null;
         obj.setOdUser(odUser);
     }
     
     public void RepresentationDataOnDemand.setTrust(Representation obj, int index) {
         BigDecimal trust = BigDecimal.valueOf(index);
         obj.setTrust(trust);
+    }
+    
+    public void RepresentationDataOnDemand.setTs(Representation obj, int index) {
+        Date ts = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setTs(ts);
     }
     
     public Representation RepresentationDataOnDemand.getSpecificRepresentation(int index) {

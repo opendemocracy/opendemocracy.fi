@@ -3,20 +3,12 @@
 
 package fi.opendemocracy.domain;
 
-import fi.opendemocracy.domain.Category;
 import fi.opendemocracy.domain.Expert;
 import fi.opendemocracy.domain.ODUser;
 import java.math.BigDecimal;
+import java.util.Date;
 
 privileged aspect Representation_Roo_JavaBean {
-    
-    public Category Representation.getCategory() {
-        return this.category;
-    }
-    
-    public void Representation.setCategory(Category category) {
-        this.category = category;
-    }
     
     public Expert Representation.getExpert() {
         return this.expert;
@@ -40,6 +32,14 @@ privileged aspect Representation_Roo_JavaBean {
     
     public void Representation.setTrust(BigDecimal trust) {
         this.trust = trust;
+    }
+    
+    public Date Representation.getTs() {
+        return this.ts;
+    }
+    
+    public void Representation.setTs(Date ts) {
+        this.ts = ts;
     }
     
 }

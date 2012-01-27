@@ -9,11 +9,16 @@ privileged aspect ODUser_Roo_ToString {
     
     public String ODUser.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Description: ").append(getDescription()).append(", ");
+        sb.append("EmailAddress: ").append(getEmailAddress()).append(", ");
+        sb.append("FirstName: ").append(getFirstName()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
-        sb.append("Password: ").append(getPassword()).append(", ");
+        sb.append("LastName: ").append(getLastName()).append(", ");
+        sb.append("OpenIdIdentifier: ").append(getOpenIdIdentifier()).append(", ");
+        sb.append("Ts: ").append(getTs()).append(", ");
+        sb.append("UserRole: ").append(getUserRole()).append(", ");
         sb.append("Username: ").append(getUsername()).append(", ");
-        sb.append("Version: ").append(getVersion()).append(", ");
-        sb.append("Admin: ").append(isAdmin());
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

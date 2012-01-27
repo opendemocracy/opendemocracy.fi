@@ -12,6 +12,7 @@ privileged aspect Category_Roo_ToString {
         sb.append("Description: ").append(getDescription()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("Name: ").append(getName()).append(", ");
+        sb.append("Ts: ").append(getTs()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

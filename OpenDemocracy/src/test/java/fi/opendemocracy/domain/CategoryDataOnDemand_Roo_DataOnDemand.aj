@@ -7,6 +7,9 @@ import fi.opendemocracy.domain.Category;
 import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -26,14 +29,12 @@ privileged aspect CategoryDataOnDemand_Roo_DataOnDemand {
         Category obj = new Category();
         setDescription(obj, index);
         setName(obj, index);
+        setTs(obj, index);
         return obj;
     }
     
     public void CategoryDataOnDemand.setDescription(Category obj, int index) {
         String description = "description_" + index;
-        if (description.length() > 4096) {
-            description = description.substring(0, 4096);
-        }
         obj.setDescription(description);
     }
     
@@ -43,6 +44,11 @@ privileged aspect CategoryDataOnDemand_Roo_DataOnDemand {
             name = name.substring(0, 255);
         }
         obj.setName(name);
+    }
+    
+    public void CategoryDataOnDemand.setTs(Category obj, int index) {
+        Date ts = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setTs(ts);
     }
     
     public Category CategoryDataOnDemand.getSpecificCategory(int index) {
