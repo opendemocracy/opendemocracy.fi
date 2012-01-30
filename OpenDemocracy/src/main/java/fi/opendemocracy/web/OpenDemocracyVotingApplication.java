@@ -1,16 +1,28 @@
 package fi.opendemocracy.web;
 
+import java.util.Collection;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.context.WebApplicationContext;
+
 import com.vaadin.Application;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
+import fi.opendemocracy.domain.ODUser;
+
 public class OpenDemocracyVotingApplication extends Application {
+
+	public WebApplicationContext appContext;
 
 	@Override
 	public void init() {
 		Window window = createNewWindow();
 		setMainWindow(window);
+		setLogoutURL("OpenDemocracy/resources/j_spring_security_logout");
 	}
 
 	public Window createNewWindow() {
@@ -47,6 +59,29 @@ public class OpenDemocracyVotingApplication extends Application {
 		}
 
 		return window;
+	}
+
+	public boolean hasAnyRole(String... roles) {
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
+		Object user = authentication.getPrincipal();
+		if (user != null && user instanceof ODUser) {
+			setUser(user);
+		}
+		Collection<GrantedAuthority> authorities = authentication
+				.getAuthorities();
+		for (GrantedAuthority authority : authorities) {
+			for (String role : roles) {
+				if (role.equals(authority.getAuthority())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public void setWebApplicationContext(WebApplicationContext appContext) {
+		this.appContext = appContext;
 	}
 
 }
