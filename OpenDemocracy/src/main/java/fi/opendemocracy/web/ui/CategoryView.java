@@ -93,9 +93,8 @@ public class CategoryView extends
 	
 	private void claimExpertise(){
 		final ODUser currentUser = (ODUser)getApplication().getUser();
-		final Category category = (Category) getEntityForItem(getTable().getItem(getTable().getValue()));
 		final Window main = getWindow();
-		
+		final RichTextArea description = new RichTextArea("Please describe your expertise in a few words:");
 		
 		if(currentUser == null){
 			main.showNotification("Not logged in.");
@@ -108,13 +107,8 @@ public class CategoryView extends
 			expertForm.setMargin(true);
 			expertForm.setSpacing(true);
 			expertForm.setWidth("400px");
-			
-
-			final RichTextArea description = new RichTextArea("Please describe your expertise in a few words:");
-			expertForm.addComponent(new Label("Claim expertise in \"" + category.getName() + "\""));
-			expertForm.addComponent(description);
-			
-			expertModal = new Window("Claim expertise?", expertForm);
+						
+			expertModal = new Window(null, expertForm);
 			expertModal.setModal(true);
 			
 			Button cancel = new Button("Cancel", new Button.ClickListener() {
@@ -126,6 +120,7 @@ public class CategoryView extends
 			Button add = new Button("Claim", new Button.ClickListener() {
 				@Override
 				public void buttonClick(ClickEvent event) {
+					Category category = (Category) getEntityForItem(getTable().getItem(getTable().getValue()));
 					Expert newExpert = new Expert();
 					newExpert.setCategory(category);
 					newExpert.setOdUser(currentUser);
@@ -141,9 +136,14 @@ public class CategoryView extends
 			buttons.addComponent(cancel);
 			buttons.addComponent(add);
 			buttons.setSpacing(true);
+			
+			expertForm.addComponent(description);
 			expertForm.addComponent(buttons);
 			expertForm.setComponentAlignment(buttons, Alignment.TOP_RIGHT);
 		}
+		
+		Category category = (Category) getEntityForItem(getTable().getItem(getTable().getValue()));
+		expertModal.setCaption("Claim expertise in \"" + category.getName() + "\"");
 		main.addWindow(expertModal);
 	}
 	
