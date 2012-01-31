@@ -1,11 +1,26 @@
 package fi.opendemocracy.web.ui;
 
+import java.util.Date;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.event.Action;
 import com.vaadin.spring.roo.addon.annotations.RooVaadinEntityView;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.Button.ClickEvent;
 
+import fi.opendemocracy.domain.Category;
+import fi.opendemocracy.domain.Expert;
+import fi.opendemocracy.domain.ODUser;
+import fi.opendemocracy.domain.PropositionOption;
 import fi.opendemocracy.web.AbstractEntityView;
 import fi.opendemocracy.web.EntityEditor;
 import fi.opendemocracy.web.ThemeConstants;
@@ -24,6 +39,10 @@ public class CategoryView extends
     static final Action[] ACTIONS_MENU = new Action[] { ACTION_NEW_CATEGORY, ACTION_OPEN_CATEGORY, ACTION_SUBSCRIBE, ACTION_VIEW_PROPOSITIONS,
             ACTION_VIEW_EXPERTS, ACTION_CLAIM_EXPERTISE };
 	
+	//Claim expertise modal
+	private VerticalLayout expertForm;
+	private Window expertModal; 
+    
 	public CategoryView(){
 		setCaption(ThemeConstants.TAB_CAPTION_CATEGORIES);
 		setIcon(ThemeConstants.TAB_ICON_CATEGORIES);
@@ -65,12 +84,67 @@ public class CategoryView extends
 	            	//TODO
 	            	getWindow().showNotification("TODO: Experts");
 	            } else if (ACTION_CLAIM_EXPERTISE == action) {
-	            	//TODO: Set expert on claim
-	            	getWindow().showNotification("TODO: Claim");
+	            	claimExpertise();
 	            }
 
 	        }
         });
+	}
+	
+	private void claimExpertise(){
+		final ODUser currentUser = (ODUser)getApplication().getUser();
+		final Category category = (Category) getEntityForItem(getTable().getItem(getTable().getValue()));
+		final Window main = getWindow();
+		
+		
+		if(currentUser == null){
+			main.showNotification("Not logged in.");
+			return;
+		}		
+		
+		if(expertForm == null){
+			expertForm = new VerticalLayout();
+				
+			expertForm.setMargin(true);
+			expertForm.setSpacing(true);
+			expertForm.setWidth("400px");
+			
+
+			final RichTextArea description = new RichTextArea("Please describe your expertise in a few words:");
+			expertForm.addComponent(new Label("Claim expertise in \"" + category.getName() + "\""));
+			expertForm.addComponent(description);
+			
+			expertModal = new Window("Claim expertise?", expertForm);
+			expertModal.setModal(true);
+			
+			Button cancel = new Button("Cancel", new Button.ClickListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					main.removeWindow(expertModal);
+				}
+			});
+			Button add = new Button("Claim", new Button.ClickListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					Expert newExpert = new Expert();
+					newExpert.setCategory(category);
+					newExpert.setOdUser(currentUser);
+					newExpert.setExpertise(description.getValue().toString());
+					newExpert.setTs(new Date());
+					newExpert.persist();
+					description.setValue("");
+					main.removeWindow(expertModal);
+					main.showNotification("You are now an expert in \"" + category.getName() + "\"");
+				}
+			});
+			HorizontalLayout buttons = new HorizontalLayout();
+			buttons.addComponent(cancel);
+			buttons.addComponent(add);
+			buttons.setSpacing(true);
+			expertForm.addComponent(buttons);
+			expertForm.setComponentAlignment(buttons, Alignment.TOP_RIGHT);
+		}
+		main.addWindow(expertModal);
 	}
 	
 	@Override

@@ -7,9 +7,12 @@ import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.event.ItemClickEvent;
+import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.spring.roo.addon.annotations.RooVaadinAbstractEntityView;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
@@ -139,6 +142,10 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
         }
 	}
 
+
+	public void setHelp(Component c){
+		navigator.setHelp(c);
+	}
 	/**
 	 * Adds listeners for the various buttons on the form and for table
 	 * selection change.
@@ -146,18 +153,17 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 	protected void addListeners() {
 		
 		//TODO: Click on selected tab to open
-		/*getTable().addListener(new ItemClickListener() {
+		getTable().addListener(new ItemClickListener() {
 			@Override
 			public void itemClick(ItemClickEvent event) {
 				Object value = event.getItemId();
 				if(getTable().getValue() == value && event.getButton() == ItemClickEvent.BUTTON_LEFT){
-					if (value != null) {
-						navigateToFragment("edit/" + String.valueOf(value).replaceAll("[^0-9]", ""));
-						getWindow().showNotification("TODO: Open instance view tab");
-					}
+					getWindow().showNotification("TODO: Open entity tabview");
+				}else if(getTable().getValue() != value){
+					getTable().setValue(value);
 				}
 			}
-		});*/
+		});
 		
 		//No use for this atm
 		/*getTable().addListener(new ValueChangeListener() {
