@@ -33,6 +33,10 @@ public class TabNavigator extends HorizontalLayout {
 	private HashMap<Class<? extends Component>, String> classToUri = new HashMap<Class<? extends Component>, String>();
 	private HashMap<Class<? extends Component>, View> classToView = new HashMap<Class<? extends Component>, View>();
 
+	private HashMap<String, View> uriToView = new HashMap<String, View>();
+	private HashMap<View, String> ViewToUri = new HashMap<View, String>();
+	
+	
 	private HashMap<String, Component> uriToTab = new HashMap<String, Component>();
 	private HashMap<Component, String> tabToUri = new HashMap<Component, String>();
 	private HashMap<Component, View> tabToView = new HashMap<Component, View>();
@@ -248,7 +252,6 @@ public class TabNavigator extends HorizontalLayout {
 		uri = getUri(currentView.getClass()).concat("/").concat(uri);
 		moveToTab(c, uri, false);
 		uriFragmentUtil.setFragment(uri, false);
-		// uriFragmentUtil.setFragment(uri);
 	}
 
 	private void showNotification(String message) {

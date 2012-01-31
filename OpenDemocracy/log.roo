@@ -62,3 +62,4 @@ vaadin setup --applicationPackage ~.web --baseName OpenDemocracyVoting --themeNa
 vaadin generate all --package ~.web.ui --visuallyComposable true
 // script --file d:\OpenDemocracy.roo
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-01-27 19:13:31
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-01-31 16:26:08

@@ -2,6 +2,7 @@ package fi.opendemocracy.web.ui;
 
 import com.vaadin.spring.roo.addon.annotations.RooVaadinEntityView;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.VerticalLayout;
 
 import fi.opendemocracy.web.AbstractEntityView;
 import fi.opendemocracy.web.EntityEditor;
@@ -14,6 +15,11 @@ public class ODUserView extends
 	protected EntityEditor createForm() {
 		return new ODUserForm();
 	}
+
+	@Override
+	protected VerticalLayout createView() {
+		return null;
+	} 
 
 	@Override
 	protected void configureTable(Table table) {

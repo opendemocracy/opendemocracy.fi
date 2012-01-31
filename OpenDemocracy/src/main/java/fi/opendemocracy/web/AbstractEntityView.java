@@ -29,6 +29,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
     private VerticalLayout mainLayout;
     private Table table;
     private EntityEditor form;
+    private VerticalLayout view;
     private TabNavigator navigator;
     private boolean dirty = false;
 
@@ -159,23 +160,12 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 				Object value = event.getItemId();
 				if(getTable().getValue() == value && event.getButton() == ItemClickEvent.BUTTON_LEFT){
 					getWindow().showNotification("TODO: Open entity tabview");
+					navigator.openChildTab(createView(), "view");
 				}else if(getTable().getValue() != value){
 					getTable().setValue(value);
 				}
 			}
 		});
-		
-		//No use for this atm
-		/*getTable().addListener(new ValueChangeListener() {
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				Object value = event.getProperty().getValue();
-				if (value != null) {
-					navigateToFragment("edit/"
-							+ String.valueOf(value).replaceAll("[^0-9]", ""));
-				}
-			}
-		});*/
 
 		getForm().addSaveActionListener(new ClickListener() {
 			@Override
@@ -243,6 +233,10 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 			form = createForm();
 		}
 		return form;
+	}
+
+	protected VerticalLayout getView() {
+		return createView();
 	}
 
 	/**
@@ -364,6 +358,8 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 	 * @return
 	 */
 	protected abstract EntityEditor createForm();
+
+	protected abstract VerticalLayout createView();
 
 	protected abstract void configureTable(Table table);
 

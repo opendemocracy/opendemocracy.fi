@@ -153,6 +153,11 @@ public class CategoryView extends
 	}
 
 	@Override
+	protected VerticalLayout createView() {
+		return new CategoryEntityView((Category) getEntityForItem(getTable().getItem(getTable().getValue())));
+	}
+
+	@Override
 	protected void configureTable(Table table) {
 		table.setContainerDataSource(getTableContainer());
 		table.setVisibleColumns(getTableColumns());
