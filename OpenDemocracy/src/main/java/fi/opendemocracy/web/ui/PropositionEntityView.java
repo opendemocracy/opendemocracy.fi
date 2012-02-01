@@ -19,6 +19,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Slider.ValueOutOfBoundsException;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 
@@ -32,7 +33,8 @@ import fi.opendemocracy.web.ThemeConstants;
 
 public class PropositionEntityView extends CustomComponent implements ValueChangeListener {
 	final HashMap<PropositionOption, VoteOptionSlider> votes = new HashMap<PropositionOption, VoteOptionSlider>();
-	Proposition p;
+	final HashMap<PropositionOption, TextField> comments = new HashMap<PropositionOption, TextField>();
+	private Proposition p;
 	private AbsoluteLayout mainLayout;
 	private Panel scrollPanel;
 	private VerticalLayout scrollContent;
@@ -78,14 +80,17 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 	private VerticalLayout buildScrollContent() {
 		VerticalLayout scrollContent = new VerticalLayout();
 		
-		Label propositionName = new Label("<h1>" + p.getName() + "</h1>");
-		Label propositionDescription = new Label("<p>" + p.getDescription() + "</p>");
-		
-		propositionName.setContentMode(Label.CONTENT_XHTML);
-		propositionDescription.setContentMode(Label.CONTENT_XHTML);
+		Label propositionName = new Label("<h1>" + p.getName() + "</h1>", Label.CONTENT_XHTML);
+		Label propositionDescription = new Label("<p>" + p.getDescription() + "</p>", Label.CONTENT_XHTML);
 
 		scrollContent.addComponent(propositionName);
 		scrollContent.addComponent(propositionDescription);
+
+		scrollContent.addComponent(new Label("Categories:", Label.CONTENT_XHTML));
+		
+		for (Category c : p.getCategories()) {
+			scrollContent.addComponent(new Label("<p>" + c.getName() + "</p>", Label.CONTENT_XHTML));
+		}
 		
 		Button vote = new Button("Vote", new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
@@ -101,20 +106,20 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 					v.setProposition(p);
 					v.setPropositionOption(e.getKey());
 					v.setSupport(BigDecimal.valueOf((Double)e.getValue().getValue()));
+					v.setComment((String) comments.get(e.getKey()).getValue());
 					v.setTs(new Date());
 					v.persist();
+	            	getWindow().showNotification("Vote stored");
 				}
-			}
-		});
-		
-		Button cancel = new Button("Close", new Button.ClickListener() {
-			public void buttonClick(ClickEvent event) {
 			}
 		});
 		
 		for (PropositionOption o : p.getPropositionOptions()) {
 			scrollContent.addComponent(new Label("<b>"+o.getName(), Label.CONTENT_XHTML));
 			scrollContent.addComponent(new Label(o.getDescription(), Label.CONTENT_XHTML));
+			TextField comment = new TextField("Comment:");
+			comments.put(o, comment);
+			scrollContent.addComponent(comment);
 			VoteOptionSlider oS = new VoteOptionSlider();
 			votes.put(o, oS);
 			scrollContent.addComponent(oS);
@@ -123,9 +128,12 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 		
 		HorizontalLayout footer = new HorizontalLayout();
 		footer.addComponent(vote);
-		footer.addComponent(cancel);
 		scrollContent.addComponent(footer);
-		
+		scrollContent.setComponentAlignment(footer, Alignment.BOTTOM_LEFT);
+
+		scrollContent.setMargin(true);
+		scrollContent.setSpacing(false);
+		scrollContent.setWidth("440px");
 		return scrollContent;
 	}
 	
@@ -146,6 +154,7 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 					if (v.getPropositionOption().getId() == o.getId()) {
 						try {
 							votes.get(o).setValue(v.getSupport().doubleValue());
+							comments.get(o).setValue(v.getComment());
 						} catch (ValueOutOfBoundsException e) {
 							// TODO Use the experts trusted by the user as representatives
 							e.printStackTrace();

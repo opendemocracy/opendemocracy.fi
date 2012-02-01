@@ -11,7 +11,7 @@ privileged aspect VoteFinders {
         if (odUser == null) throw new IllegalArgumentException("The odUser argument is required");
         if (proposition == null) throw new IllegalArgumentException("The proposition argument is required");
         EntityManager em = Vote.entityManager();
-        TypedQuery<Vote> q = em.createQuery("SELECT o FROM Vote AS o WHERE o.odUser = :odUser and o.proposition = :proposition ORDER BY o.ts", Vote.class);
+        TypedQuery<Vote> q = em.createQuery("SELECT o FROM Vote AS o WHERE o.odUser = :odUser and o.proposition = :proposition ORDER BY o.ts DESC", Vote.class);
         q.setParameter("odUser", odUser);
         q.setParameter("proposition", proposition);
         return q;
