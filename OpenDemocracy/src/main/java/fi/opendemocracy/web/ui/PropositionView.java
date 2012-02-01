@@ -5,6 +5,8 @@ import com.vaadin.spring.roo.addon.annotations.RooVaadinEntityView;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
+import fi.opendemocracy.domain.Category;
+import fi.opendemocracy.domain.Proposition;
 import fi.opendemocracy.web.AbstractEntityView;
 import fi.opendemocracy.web.EntityEditor;
 import fi.opendemocracy.web.ThemeConstants;
@@ -45,7 +47,7 @@ public class PropositionView extends
 
 	@Override
 	protected VerticalLayout createView() {
-		return null;
+		return new PropositionEntityView((Proposition) getEntityForItem(getTable().getItem(getTable().getValue())));
 	}
 
 
