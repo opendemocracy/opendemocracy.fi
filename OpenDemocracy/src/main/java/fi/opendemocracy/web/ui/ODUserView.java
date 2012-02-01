@@ -1,6 +1,7 @@
 package fi.opendemocracy.web.ui;
 
 import com.vaadin.spring.roo.addon.annotations.RooVaadinEntityView;
+import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
@@ -17,7 +18,7 @@ public class ODUserView extends
 	}
 
 	@Override
-	protected VerticalLayout createView() {
+	protected CustomComponent createView() {
 		return null;
 	} 
 

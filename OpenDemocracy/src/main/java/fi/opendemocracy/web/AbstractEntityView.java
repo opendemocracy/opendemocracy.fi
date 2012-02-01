@@ -235,7 +235,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 		return form;
 	}
 
-	protected VerticalLayout getView() {
+	protected CustomComponent getView() {
 		return createView();
 	}
 
@@ -359,7 +359,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 	 */
 	protected abstract EntityEditor createForm();
 
-	protected abstract VerticalLayout createView();
+	protected abstract CustomComponent createView();
 
 	protected abstract void configureTable(Table table);
 
