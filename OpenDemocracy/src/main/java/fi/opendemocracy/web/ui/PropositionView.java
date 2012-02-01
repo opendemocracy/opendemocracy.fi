@@ -2,6 +2,7 @@ package fi.opendemocracy.web.ui;
 
 import com.vaadin.event.Action;
 import com.vaadin.spring.roo.addon.annotations.RooVaadinEntityView;
+import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
@@ -46,7 +47,7 @@ public class PropositionView extends
 
 
 	@Override
-	protected VerticalLayout createView() {
+	protected CustomComponent createView() {
 		return new PropositionEntityView((Proposition) getEntityForItem(getTable().getItem(getTable().getValue())));
 	}
 

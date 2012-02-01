@@ -8,6 +8,7 @@ import com.vaadin.spring.roo.addon.annotations.RooVaadinEntityView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.RichTextArea;
@@ -153,7 +154,7 @@ public class CategoryView extends
 	}
 
 	@Override
-	protected VerticalLayout createView() {
+	protected CustomComponent createView() {
 		return new CategoryEntityView((Category) getEntityForItem(getTable().getItem(getTable().getValue())));
 	}
 
