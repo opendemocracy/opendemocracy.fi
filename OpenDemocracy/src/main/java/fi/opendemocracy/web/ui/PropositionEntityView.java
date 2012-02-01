@@ -11,10 +11,13 @@ import javax.persistence.TypedQuery;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.Slider.ValueOutOfBoundsException;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
@@ -27,14 +30,53 @@ import fi.opendemocracy.domain.Vote;
 import fi.opendemocracy.web.ThemeConstants;
 
 
-public class PropositionEntityView extends VerticalLayout implements ValueChangeListener {
+public class PropositionEntityView extends CustomComponent implements ValueChangeListener {
 	final HashMap<PropositionOption, VoteOptionSlider> votes = new HashMap<PropositionOption, VoteOptionSlider>();
 	Proposition p;
+	private AbsoluteLayout mainLayout;
+	private Panel scrollPanel;
+	private VerticalLayout scrollContent;
 	
 	public PropositionEntityView(final Proposition p){
 		this.p = p;
 		setCaption(p.getName());
 		setIcon(ThemeConstants.TAB_ICON_CATEGORIES);
+		buildMainLayout();
+		setCompositionRoot(mainLayout);
+	}
+
+	private AbsoluteLayout buildMainLayout() {
+		// common part: create layout
+		mainLayout = new AbsoluteLayout();
+
+		// top-level component properties
+		setWidth("100.0%");
+		setHeight("100.0%");
+
+		// scrollPanel
+		scrollPanel = buildScrollPanel();
+		mainLayout.addComponent(scrollPanel);
+
+		return mainLayout;
+	}
+
+
+	private Panel buildScrollPanel() {
+		// common part: create layout
+		scrollPanel = new Panel();
+		scrollPanel.setWidth("100.0%");
+		scrollPanel.setHeight("100.0%");
+		scrollPanel.setImmediate(false);
+
+		// scrollContent
+		scrollContent = buildScrollContent();
+		scrollPanel.setContent(scrollContent);
+
+		return scrollPanel;
+	}
+
+	private VerticalLayout buildScrollContent() {
+		VerticalLayout scrollContent = new VerticalLayout();
 		
 		Label propositionName = new Label("<h1>" + p.getName() + "</h1>");
 		Label propositionDescription = new Label("<p>" + p.getDescription() + "</p>");
@@ -42,8 +84,8 @@ public class PropositionEntityView extends VerticalLayout implements ValueChange
 		propositionName.setContentMode(Label.CONTENT_XHTML);
 		propositionDescription.setContentMode(Label.CONTENT_XHTML);
 
-		addComponent(propositionName);
-		addComponent(propositionDescription);
+		scrollContent.addComponent(propositionName);
+		scrollContent.addComponent(propositionDescription);
 		
 		Button vote = new Button("Vote", new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
@@ -71,24 +113,20 @@ public class PropositionEntityView extends VerticalLayout implements ValueChange
 		});
 		
 		for (PropositionOption o : p.getPropositionOptions()) {
-			addComponent(new Label("<b>"+o.getName()+"</b>"+o.getDescription(), Label.CONTENT_XHTML));
+			scrollContent.addComponent(new Label("<b>"+o.getName(), Label.CONTENT_XHTML));
+			scrollContent.addComponent(new Label(o.getDescription(), Label.CONTENT_XHTML));
 			VoteOptionSlider oS = new VoteOptionSlider();
 			votes.put(o, oS);
-			addComponent(oS);
+			scrollContent.addComponent(oS);
 			oS.addListener(this);
 		}
-		
-		setSizeFull();
-		setMargin(true);
-		setSpacing(false);
 		
 		HorizontalLayout footer = new HorizontalLayout();
 		footer.addComponent(vote);
 		footer.addComponent(cancel);
-		addComponent(footer);
-		setComponentAlignment(footer, Alignment.BOTTOM_LEFT);
+		scrollContent.addComponent(footer);
 		
-		setWidth("440px");
+		return scrollContent;
 	}
 	
 	@Override

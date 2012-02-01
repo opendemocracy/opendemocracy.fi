@@ -1,3 +1,0 @@
-package fi.opendemocracy.domain;
-
-

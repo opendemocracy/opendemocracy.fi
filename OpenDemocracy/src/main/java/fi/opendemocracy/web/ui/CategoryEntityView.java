@@ -23,6 +23,7 @@ public class CategoryEntityView extends CustomComponent {
 		setCaption(c.getName());
 		setIcon(ThemeConstants.TAB_ICON_CATEGORIES);
 		buildMainLayout();
+		setCompositionRoot(mainLayout);
 	}
 	
 	private AbsoluteLayout buildMainLayout() {
@@ -71,9 +72,9 @@ public class CategoryEntityView extends CustomComponent {
 		title.setContentMode(Label.CONTENT_XHTML);
 		description.setContentMode(Label.CONTENT_XHTML);
 
-		addComponent(title);
-		addComponent(description);
-		addComponent(toggleExpertise);
+		scrollContent.addComponent(title);
+		scrollContent.addComponent(description);
+		scrollContent.addComponent(toggleExpertise);
 		
 		return scrollContent;
 	}
