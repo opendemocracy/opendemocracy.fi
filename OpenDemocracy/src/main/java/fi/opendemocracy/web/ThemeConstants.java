@@ -36,6 +36,8 @@ public class ThemeConstants {
 			"icons/16/folder.png");
 	public static final ThemeResource TAB_ICON_LOGIN = new ThemeResource(
 			"icons/16/propositions.png");
+	public static final ThemeResource TAB_ICON_EXPERTS = new ThemeResource(
+			"icons/16/experts.png");
 
 	// Tab captions
 	public static final String TAB_CAPTION_CATEGORIES = "Categories";
@@ -43,5 +45,6 @@ public class ThemeConstants {
 	public static final String TAB_CAPTION_PROPOSITION = "Propositions";
 	public static final String TAB_CAPTION_NEW_CATEGORY = "New category";
 	public static final String TAB_CAPTION_LOGIN = "Login";
+	public static final String TAB_CAPTION_EXPERTS = "Experts";
 
 }

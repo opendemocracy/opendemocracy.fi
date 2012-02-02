@@ -6,7 +6,6 @@ public class VoteOptionSlider extends Slider{
 	//TODO: Colors, setMaxAllowed (Disable part > maxallowed) 
 
 	public VoteOptionSlider(){
-		//super("<b"+caption+"</b>");
 		super();
 		super.setMax(100);
 		super.setMin(-100);
@@ -17,6 +16,11 @@ public class VoteOptionSlider extends Slider{
         //TODO Paint slider red on negative side, green on positive, grey right of maxAllowed
 	}
 
+	public VoteOptionSlider(String caption){
+		this();
+		setCaption(caption);
+	}
+	
 	//TODO Lock slider to max value max
 	public void setMaxAllowed(double max) {
 

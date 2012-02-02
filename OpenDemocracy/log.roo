@@ -68,3 +68,4 @@ vaadin generate all --package ~.web.ui --visuallyComposable true
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-01 20:00:27
 finder list --class fi.opendemocracy.domain.Vote
 finder add --class fi.opendemocracy.domain.Vote --finderName findVotesByOdUser
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-02 02:48:34
