@@ -56,10 +56,14 @@
     
     <servlet>
         <servlet-name>OpenDemocracy Vaadin Application Servlet</servlet-name>
-        <servlet-class>com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>
+        <servlet-class>fi.opendemocracy.web.OpenDemocracyVotingApplicationServlet</servlet-class>
         <init-param>
             <param-name>application</param-name>
             <param-value>fi.opendemocracy.web.OpenDemocracyVotingApplication</param-value>
+        </init-param>
+    <init-param>
+            <param-name>widgetset</param-name>
+            <param-value>fi.opendemocracy.web.OpenDemocracyVotingWidgetset</param-value>
         </init-param>
     </servlet>
     

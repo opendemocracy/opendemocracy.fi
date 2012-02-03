@@ -1,13 +1,26 @@
 package fi.opendemocracy.web.ui;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map.Entry;
 
 import javax.persistence.TypedQuery;
 
+import com.invient.vaadin.charts.InvientCharts;
+import com.invient.vaadin.charts.InvientCharts.PointClickEvent;
+import com.invient.vaadin.charts.InvientChartsConfig;
+import com.invient.vaadin.charts.InvientCharts.DecimalPoint;
+import com.invient.vaadin.charts.InvientCharts.Series;
+import com.invient.vaadin.charts.InvientCharts.SeriesType;
+import com.invient.vaadin.charts.InvientCharts.XYSeries;
+import com.invient.vaadin.charts.InvientChartsConfig.CategoryAxis;
+import com.invient.vaadin.charts.InvientChartsConfig.Title;
+import com.invient.vaadin.charts.InvientChartsConfig.Tooltip;
+import com.invient.vaadin.charts.InvientChartsConfig.XAxis;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -92,6 +105,56 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 			scrollContent.addComponent(new Label("<p>" + c.getName() + "</p>", Label.CONTENT_XHTML));
 		}
 		
+		for (PropositionOption o : p.getPropositionOptions()) {
+			scrollContent.addComponent(new Label("<b>"+o.getName(), Label.CONTENT_XHTML));
+			scrollContent.addComponent(new Label(o.getDescription(), Label.CONTENT_XHTML));
+			TextField comment = new TextField("Comment:");
+			comments.put(o, comment);
+			scrollContent.addComponent(comment);
+			VoteOptionSlider oS = new VoteOptionSlider();
+			votes.put(o, oS);
+			scrollContent.addComponent(oS);
+			oS.addListener(this);
+		}
+
+        InvientChartsConfig chartConfig = new InvientChartsConfig();
+        chartConfig.getGeneralChartConfig().setType(SeriesType.COLUMN);
+        chartConfig.getTitle().setText("Column chart with negative values");
+        
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setCategories(Arrays.asList("Apples", "Oranges", "Pears",
+                "Grapes", "Bananas"));
+        LinkedHashSet<XAxis> xAxesSet = new LinkedHashSet<InvientChartsConfig.XAxis>();
+        xAxesSet.add(xAxis);
+        chartConfig.setXAxes(xAxesSet);
+        Tooltip tooltip = new Tooltip();
+        tooltip.setFormatterJsFunc("function() {"
+                + " return '' + this.series.name +': '+ this.y +''; " + "}");
+        chartConfig.setTooltip(tooltip);
+        chartConfig.getCredit().setEnabled(false);
+        InvientCharts invChart = new InvientCharts(chartConfig);
+        XYSeries seriesData = new XYSeries("John");
+        seriesData.setSeriesPoints(getPoints(seriesData, 5, 3, 4, 7, 2));
+        invChart.addSeries(seriesData);
+        
+        seriesData = new XYSeries("Jane");
+        seriesData.setSeriesPoints(getPoints(seriesData, 2, -2, -3, 2, 1));
+        invChart.addSeries(seriesData);
+
+        seriesData = new XYSeries("Joe");
+        seriesData.setSeriesPoints(getPoints(seriesData, 3, 4, 4, -2, 5));
+        invChart.addSeries(seriesData);
+        
+        invChart.addListener(new InvientCharts.PointClickListener() {
+
+            public void pointClick(PointClickEvent pointClickEvent) {
+                getApplication().getMainWindow().showNotification("PointX : " + (Double) pointClickEvent.getPoint().getX() + ", PointY : " + (Double) pointClickEvent.getPoint().getY());
+            }
+        });
+		Panel pa = new Panel();
+		pa.addComponent(invChart);
+		scrollContent.addComponent(pa);
+		
 		Button vote = new Button("Vote", new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				Object o = getApplication().getUser();
@@ -114,28 +177,24 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 			}
 		});
 		
-		for (PropositionOption o : p.getPropositionOptions()) {
-			scrollContent.addComponent(new Label("<b>"+o.getName(), Label.CONTENT_XHTML));
-			scrollContent.addComponent(new Label(o.getDescription(), Label.CONTENT_XHTML));
-			TextField comment = new TextField("Comment:");
-			comments.put(o, comment);
-			scrollContent.addComponent(comment);
-			VoteOptionSlider oS = new VoteOptionSlider();
-			votes.put(o, oS);
-			scrollContent.addComponent(oS);
-			oS.addListener(this);
-		}
-		
 		HorizontalLayout footer = new HorizontalLayout();
 		footer.addComponent(vote);
 		scrollContent.addComponent(footer);
 		scrollContent.setComponentAlignment(footer, Alignment.BOTTOM_LEFT);
-
 		scrollContent.setMargin(true);
 		scrollContent.setSpacing(false);
 		scrollContent.setWidth("440px");
 		return scrollContent;
 	}
+
+    private static LinkedHashSet<DecimalPoint> getPoints(Series series,
+            double... values) {
+        LinkedHashSet<DecimalPoint> points = new LinkedHashSet<DecimalPoint>();
+        for (double value : values) {
+            points.add(new DecimalPoint(series, value));
+        }
+        return points;
+    }
 	
 	@Override
 	public void attach() {
