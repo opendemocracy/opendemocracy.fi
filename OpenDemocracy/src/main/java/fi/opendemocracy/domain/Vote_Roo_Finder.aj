@@ -4,6 +4,8 @@
 package fi.opendemocracy.domain;
 
 import fi.opendemocracy.domain.ODUser;
+import fi.opendemocracy.domain.Proposition;
+import fi.opendemocracy.domain.PropositionOption;
 import fi.opendemocracy.domain.Vote;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -15,6 +17,16 @@ privileged aspect Vote_Roo_Finder {
         EntityManager em = Vote.entityManager();
         TypedQuery<Vote> q = em.createQuery("SELECT o FROM Vote AS o WHERE o.odUser = :odUser", Vote.class);
         q.setParameter("odUser", odUser);
+        return q;
+    }
+    
+    public static TypedQuery<Vote> Vote.findVotesByPropositionAndPropositionOption(Proposition proposition, PropositionOption propositionOption) {
+        if (proposition == null) throw new IllegalArgumentException("The proposition argument is required");
+        if (propositionOption == null) throw new IllegalArgumentException("The propositionOption argument is required");
+        EntityManager em = Vote.entityManager();
+        TypedQuery<Vote> q = em.createQuery("SELECT o FROM Vote AS o WHERE o.proposition = :proposition AND o.propositionOption = :propositionOption", Vote.class);
+        q.setParameter("proposition", proposition);
+        q.setParameter("propositionOption", propositionOption);
         return q;
     }
     

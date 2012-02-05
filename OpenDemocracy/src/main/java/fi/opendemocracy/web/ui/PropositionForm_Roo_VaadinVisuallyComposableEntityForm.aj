@@ -80,12 +80,9 @@ privileged aspect PropositionForm_Roo_VaadinVisuallyComposableEntityForm {
     }
     
     public void PropositionForm.configureFieldMap() {
-        fieldMap.put("author", authorField);
         fieldMap.put("name", nameField);
         fieldMap.put("description", descriptionField);
         fieldMap.put("categories", categoriesField);
-        fieldMap.put("propositionOptions", propositionOptionsField);
-        fieldMap.put("ts", tsField);
     }
     
     public void PropositionForm.configureFields() {

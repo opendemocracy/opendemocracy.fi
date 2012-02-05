@@ -51,6 +51,7 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 	private AbsoluteLayout mainLayout;
 	private Panel scrollPanel;
 	private VerticalLayout scrollContent;
+	private Panel resultsPanel;
 	
 	public PropositionEntityView(final Proposition p){
 		this.p = p;
@@ -91,7 +92,9 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 	}
 
 	private VerticalLayout buildScrollContent() {
+		VerticalLayout scrollContainer = new VerticalLayout();
 		VerticalLayout scrollContent = new VerticalLayout();
+		VerticalLayout resultsContent = new VerticalLayout();
 		
 		Label propositionName = new Label("<h1>" + p.getName() + "</h1>", Label.CONTENT_XHTML);
 		Label propositionDescription = new Label("<p>" + p.getDescription() + "</p>", Label.CONTENT_XHTML);
@@ -104,26 +107,13 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 		for (Category c : p.getCategories()) {
 			scrollContent.addComponent(new Label("<p>" + c.getName() + "</p>", Label.CONTENT_XHTML));
 		}
-		
-		for (PropositionOption o : p.getPropositionOptions()) {
-			scrollContent.addComponent(new Label("<b>"+o.getName(), Label.CONTENT_XHTML));
-			scrollContent.addComponent(new Label(o.getDescription(), Label.CONTENT_XHTML));
-			TextField comment = new TextField("Comment:");
-			comments.put(o, comment);
-			scrollContent.addComponent(comment);
-			VoteOptionSlider oS = new VoteOptionSlider();
-			votes.put(o, oS);
-			scrollContent.addComponent(oS);
-			oS.addListener(this);
-		}
 
         InvientChartsConfig chartConfig = new InvientChartsConfig();
         chartConfig.getGeneralChartConfig().setType(SeriesType.COLUMN);
-        chartConfig.getTitle().setText("Column chart with negative values");
+        chartConfig.getTitle().setText("Results");
         
         CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setCategories(Arrays.asList("Apples", "Oranges", "Pears",
-                "Grapes", "Bananas"));
+        xAxis.setCategories(Arrays.asList("Support","Unsure", "Dismiss"));
         LinkedHashSet<XAxis> xAxesSet = new LinkedHashSet<InvientChartsConfig.XAxis>();
         xAxesSet.add(xAxis);
         chartConfig.setXAxes(xAxesSet);
@@ -133,27 +123,66 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
         chartConfig.setTooltip(tooltip);
         chartConfig.getCredit().setEnabled(false);
         InvientCharts invChart = new InvientCharts(chartConfig);
-        XYSeries seriesData = new XYSeries("John");
-        seriesData.setSeriesPoints(getPoints(seriesData, 5, 3, 4, 7, 2));
-        invChart.addSeries(seriesData);
-        
-        seriesData = new XYSeries("Jane");
-        seriesData.setSeriesPoints(getPoints(seriesData, 2, -2, -3, 2, 1));
-        invChart.addSeries(seriesData);
 
-        seriesData = new XYSeries("Joe");
-        seriesData.setSeriesPoints(getPoints(seriesData, 3, 4, 4, -2, 5));
-        invChart.addSeries(seriesData);
+        XYSeries seriesData;
         
+		for (PropositionOption o : p.getPropositionOptions()) {
+			// Vote results
+			
+			Vote.findVotesByPropositionAndPropositionOption(p, o);
+			TypedQuery<Vote> voteQuery = Vote.findVotesByPropositionAndPropositionOption(p, o);
+			List<Vote> results = voteQuery.getResultList();
+			BigDecimal support = new BigDecimal(0);
+			BigDecimal dismiss = new BigDecimal(0);
+			BigDecimal zero = new BigDecimal(0);
+			int noVote = 0;
+			for (Vote v : results) {
+				int compare = v.getSupport().compareTo(zero);
+				if (compare == 0) {
+					noVote++;
+				} else if (compare>0) {
+					support = support.add(v.getSupport());
+				} else {
+					dismiss = dismiss.add(v.getSupport());
+				}
+			}
+	        seriesData = new XYSeries(o.getName());
+	        seriesData.setSeriesPoints(getPoints(seriesData, support.doubleValue(), noVote*100, dismiss.doubleValue()));
+	        invChart.addSeries(seriesData);
+			
+	        Panel optionPanel = new Panel();
+	        
+			// Name and description
+	        optionPanel.addComponent(new Label("<b>"+o.getName(), Label.CONTENT_XHTML));
+	        optionPanel.addComponent(new Label(o.getDescription(), Label.CONTENT_XHTML));
+
+			// Vote option slider
+			VoteOptionSlider oS = new VoteOptionSlider();
+			votes.put(o, oS);
+			optionPanel.addComponent(oS);
+			oS.addListener(this);
+			
+			// Vote option comment
+			HorizontalLayout commentContainer = new HorizontalLayout();
+			TextField comment = new TextField("Comment:");
+			comments.put(o, comment);
+			commentContainer.addComponent(comment);
+			optionPanel.addComponent(commentContainer);
+			
+			scrollContent.addComponent(optionPanel);
+		}
+		
         invChart.addListener(new InvientCharts.PointClickListener() {
 
             public void pointClick(PointClickEvent pointClickEvent) {
                 getApplication().getMainWindow().showNotification("PointX : " + (Double) pointClickEvent.getPoint().getX() + ", PointY : " + (Double) pointClickEvent.getPoint().getY());
             }
         });
-		Panel pa = new Panel();
-		pa.addComponent(invChart);
-		scrollContent.addComponent(pa);
+        
+		resultsPanel = new Panel();
+		resultsPanel.addComponent(invChart);
+		resultsPanel.setVisible(false);
+		resultsContent.addComponent(resultsPanel);
 		
 		Button vote = new Button("Vote", new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
@@ -177,14 +206,23 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 			}
 		});
 		
+		Button resultsButton = new Button("Show/Hide results", new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				resultsPanel.setVisible(!resultsPanel.isVisible());
+			}
+		});
+		
 		HorizontalLayout footer = new HorizontalLayout();
 		footer.addComponent(vote);
+		footer.addComponent(resultsButton);
 		scrollContent.addComponent(footer);
 		scrollContent.setComponentAlignment(footer, Alignment.BOTTOM_LEFT);
 		scrollContent.setMargin(true);
 		scrollContent.setSpacing(false);
 		scrollContent.setWidth("440px");
-		return scrollContent;
+		scrollContainer.addComponent(scrollContent);
+		scrollContainer.addComponent(resultsContent);
+		return scrollContainer;
 	}
 
     private static LinkedHashSet<DecimalPoint> getPoints(Series series,

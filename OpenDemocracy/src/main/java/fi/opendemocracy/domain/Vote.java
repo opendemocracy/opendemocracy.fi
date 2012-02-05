@@ -13,7 +13,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooEntity(finders = { "findVotesByOdUser" })
+@RooEntity(finders = { "findVotesByOdUser", "findVotesByPropositionAndPropositionOption" })
 public class Vote {
 
     @NotNull

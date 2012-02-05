@@ -55,10 +55,12 @@ TabNavigator.View {
 	private final BeanItemContainer<Expert> expertContainer;
 	private final BeanItemContainer<Proposition> propositionContainer;
 	private VerticalLayout trustExpertForm;
-	private Window wDialog; 
+	private Window wDialog;
+	private ModalClaimExpertise claimExpertiseModal;
 	
 	public CategoryEntityView(Category c){
 		sourceCategory = c;
+		claimExpertiseModal = new ModalClaimExpertise(sourceCategory);
 		final Set<Category> finderSet = new HashSet<Category>(Arrays.asList(sourceCategory));
 		final List<Expert> expertList = Expert.findExpertsByCategory(sourceCategory).getResultList();
 		final List<Proposition> propositionList = Proposition.findPropositionsByCategories(finderSet).getResultList();
@@ -117,7 +119,7 @@ TabNavigator.View {
 		Button toggleExpertise = new Button("Claim expertise", new Button.ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-				getWindow().showNotification("CLCICKCKK!");
+				getWindow().addWindow(claimExpertiseModal);
 			}
 		});
 		
@@ -177,7 +179,6 @@ TabNavigator.View {
 			getWindow().showNotification("TODO: View (no trusting) if logged out. LOGIN!");
 			return;
 		}
-		//TODO: Singleton
 		//if(trustExpertForm == null){
 			trustExpertForm = new VerticalLayout();
 			trustExpertForm.setMargin(true);
@@ -246,7 +247,6 @@ TabNavigator.View {
 	        	BigDecimal rep = new BigDecimal(0L);
 	        	for(Representation r : representationList){
 	        		rep = rep.add(r.getTrust());
-	        		System.out.println(rep);
 	        	}
 	        	return new Label(rep.toPlainString());
         	}else if (column == "username"){
@@ -297,6 +297,5 @@ TabNavigator.View {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 	
 }
