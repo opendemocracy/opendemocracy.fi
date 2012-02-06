@@ -2,22 +2,41 @@ package fi.opendemocracy.web;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
+import fi.opendemocracy.web.mongo.DbFactoryBean;
+
+import fi.opendemocracy.web.ui.MongoDemoScreen;
+import com.mongodb.DB;
 import com.vaadin.Application;
+import com.vaadin.terminal.gwt.server.HttpServletRequestListener;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
 import fi.opendemocracy.domain.ODUser;
 
-public class OpenDemocracyVotingApplication extends Application {
+@Component(value = "applicationBean")
+@Scope("prototype")
+public class OpenDemocracyVotingApplication extends Application implements HttpServletRequestListener {
 
 	public WebApplicationContext appContext;
-
+    private HttpServletResponse response;
+    private HttpServletRequest request;
+	
+	@Autowired
+	DbFactoryBean factory;
+	public DB db;
+    
 	@Override
 	public void init() {
 		Window window = createNewWindow();
@@ -84,4 +103,30 @@ public class OpenDemocracyVotingApplication extends Application {
 		this.appContext = appContext;
 	}
 
+    @Override
+    public void onRequestStart(HttpServletRequest request,
+                               HttpServletResponse response)
+    {
+        this.response = response;
+        this.request = request;
+
+		try
+		{
+			this.db = factory.getObject();
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
+    @Override
+    public void onRequestEnd(HttpServletRequest request,
+                             HttpServletResponse response)
+    {
+        this.response = null;
+        this.request = null;
+		this.db = null;
+    }
 }

@@ -33,6 +33,12 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+
+	<listener>
+	  <!-- To allow session-scoped beans -->
+	  <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+    
     <servlet>
     	<servlet-name>login</servlet-name>
     	<jsp-file>/jsp/login.jsp</jsp-file>
@@ -58,8 +64,9 @@
         <servlet-name>OpenDemocracy Vaadin Application Servlet</servlet-name>
         <servlet-class>fi.opendemocracy.web.OpenDemocracyVotingApplicationServlet</servlet-class>
         <init-param>
-            <param-name>application</param-name>
-            <param-value>fi.opendemocracy.web.OpenDemocracyVotingApplication</param-value>
+		    <param-name>applicationBean</param-name>
+		    <!-- Named defined by annotation in VaadinApp class -->
+		    <param-value>applicationBean</param-value>
         </init-param>
     <init-param>
             <param-name>widgetset</param-name>

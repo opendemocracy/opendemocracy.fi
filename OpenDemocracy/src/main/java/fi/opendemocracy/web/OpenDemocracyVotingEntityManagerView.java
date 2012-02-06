@@ -23,6 +23,7 @@ import com.vaadin.ui.themes.Reindeer;
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.UserRole;
 import fi.opendemocracy.web.ui.CategoryView;
+import fi.opendemocracy.web.ui.MongoDemoScreen;
 import fi.opendemocracy.web.ui.PropositionView;
 
 /**
@@ -248,6 +249,8 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 				} else {
 					loginMsg.setValue(loginTxt);
 				}
+				MongoDemoScreen mong = new MongoDemoScreen((OpenDemocracyVotingApplication) application);
+				addComponent(mong);
 			}
 		}
 
