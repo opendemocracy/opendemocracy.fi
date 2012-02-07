@@ -159,8 +159,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 			public void itemClick(ItemClickEvent event) {
 				Object value = event.getItemId();
 				if(getTable().getValue() == value && event.getButton() == ItemClickEvent.BUTTON_LEFT){
-					getWindow().showNotification("TODO: Open entity tabview");
-					navigator.openChildTab(createView(), "view");
+					navigator.openChildTab(createView(), "view/" + value.toString());
 				}else if(getTable().getValue() != value){
 					getTable().setValue(value);
 				}

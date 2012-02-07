@@ -1,4 +1,4 @@
-package fi.opendemocracy.web.ui;
+package fi.opendemocracy.web.ui.dialogs;
 
 import java.util.Date;
 import java.util.List;
@@ -21,8 +21,6 @@ import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.PropositionOption;
 import fi.opendemocracy.domain.Vote;
 
-
-//TODO: Link to application ??!
 public class ModalClaimExpertise extends Window{
 	
 	private VerticalLayout expertForm;
@@ -35,13 +33,15 @@ public class ModalClaimExpertise extends Window{
 	private Button.ClickListener addButtonClickListener;
 	
 	public ModalClaimExpertise(Category c){
+		setWidth("400px");
+		
 		sourceCategory = c;
 		expertForm = new VerticalLayout();
-			
+
 		expertForm.setMargin(true);
 		expertForm.setSpacing(true);
-		expertForm.setWidth("400px");
-					
+		expertForm.setWidth("100%");
+
 		addComponent(expertForm);
 		setModal(true);
 		
@@ -59,13 +59,13 @@ public class ModalClaimExpertise extends Window{
 		cancel.addListener(new Button.ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-				main.removeWindow(ModalClaimExpertise.this);
+				ModalClaimExpertise.this.close();
 			}
 		});
 		add.addListener(addButtonClickListener);		
 	}
 	
-	private void setCategory(Category c){
+	public void setCategory(Category c){
 		sourceCategory = c;
 		setCaption("Claim expertise in \"" + sourceCategory.getName() + "\"");
 		addButtonClickListener = new Button.ClickListener() {
@@ -79,8 +79,7 @@ public class ModalClaimExpertise extends Window{
 				newExpert.setTs(new Date());
 				newExpert.persist();
 				description.setValue("");
-				main.removeWindow(ModalClaimExpertise.this);
-				main.showNotification("You have claimed expertise in \"" + sourceCategory.getName() + "\"");
+				ModalClaimExpertise.this.close();
 			}
 		};
 	}
@@ -88,14 +87,13 @@ public class ModalClaimExpertise extends Window{
 	@Override
 	public void attach() {
 		super.attach();
+		if((currentUser = (ODUser) getApplication().getUser()) == null){
+			this.close();
+			//TODO: Display login message?
+		}
 		main = getWindow();
-		currentUser = (ODUser) getApplication().getUser();
 		setCategory(sourceCategory);
 		addListeners();
-		if(currentUser == null){
-			this.close();
-			//TODO: Login msg
-		}
 	}
 	
 	

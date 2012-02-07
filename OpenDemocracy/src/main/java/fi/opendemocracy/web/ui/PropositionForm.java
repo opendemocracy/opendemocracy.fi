@@ -148,21 +148,41 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 			Button add = new Button("Continue", new Button.ClickListener() {
 				@Override
 				public void buttonClick(ClickEvent event) {
-					PropositionOption newOption = new PropositionOption();
+					final PropositionOption newOption = new PropositionOption();
 					newOption.setDescription(description.getValue().toString());
 					newOption.setName(name.getValue().toString());
 					newOption.setTs(new Date());
 					propositionOptions.add(newOption);
+					
+					final VerticalLayout optionContainer = new VerticalLayout();
+					optionsLayout.addComponent(optionContainer);
+					HorizontalLayout titleContainer = new HorizontalLayout();
 					Label labelName = new Label("<h2>" + name.getValue().toString() + "</h2>");
+					titleContainer.addComponent(labelName);
+					
 					labelName.setContentMode(Label.CONTENT_XHTML);
 					Label labelDescription = new Label(description.getValue().toString());
-					labelDescription.setContentMode(Label.CONTENT_XHTML);			
-					optionsLayout.addComponent(labelName);
-					optionsLayout.addComponent(labelDescription);
+					labelDescription.setContentMode(Label.CONTENT_XHTML);		
+
+
+					Button removeOption = new Button("Remove", new Button.ClickListener() {
+						@Override
+						public void buttonClick(ClickEvent event) {
+							propositionOptions.remove(newOption);
+							optionsLayout.removeComponent(optionContainer);
+						}
+					});
+					
+					titleContainer.addComponent(removeOption);
+					
+					optionContainer.addComponent(titleContainer);
+					optionContainer.addComponent(labelDescription);
+					
+
+					
 					name.setValue(null);
 					description.setValue(null);
 					main.removeWindow(wDialog);
-					main.showNotification("TODO: Save propositionOptions along with proposition");
 				}
 
 			});
