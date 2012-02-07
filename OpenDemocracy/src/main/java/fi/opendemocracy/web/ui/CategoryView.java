@@ -25,6 +25,7 @@ import fi.opendemocracy.domain.PropositionOption;
 import fi.opendemocracy.web.AbstractEntityView;
 import fi.opendemocracy.web.EntityEditor;
 import fi.opendemocracy.web.ThemeConstants;
+import fi.opendemocracy.web.ui.dialogs.ModalClaimExpertise;
 
 @RooVaadinEntityView(formBackingObject = fi.opendemocracy.domain.Category.class)
 public class CategoryView extends
@@ -41,8 +42,7 @@ public class CategoryView extends
             ACTION_VIEW_EXPERTS, ACTION_CLAIM_EXPERTISE };
 	
 	//Claim expertise modal
-	private VerticalLayout expertForm;
-	private Window expertModal; 
+	private ModalClaimExpertise expertModal; 
     
 	public CategoryView(){
 		setCaption(ThemeConstants.TAB_CAPTION_CATEGORIES);
@@ -57,12 +57,11 @@ public class CategoryView extends
 		// create custom columns
         ColumnCountGenerator columnPropositionCount = new ColumnCountGenerator("propositions");
         ColumnCountGenerator columnExpertCount = new ColumnCountGenerator("experts");
-        ColumnCountGenerator columnSubscriberCount = new ColumnCountGenerator("subscribers");
         
         getTable().addGeneratedColumn("Propositions", columnPropositionCount);
-        getTable().addGeneratedColumn("Subscribers", columnSubscriberCount);
         getTable().addGeneratedColumn("Experts", columnExpertCount);
-        
+       
+        //getWindow().showNotification(getTable().getVisibleColumns().toString());
         // add right-click menu
         getTable().addActionHandler(new Action.Handler() {
 	        public Action[] getActions(Object target, Object sender) {
@@ -71,13 +70,10 @@ public class CategoryView extends
 
 	        public void handleAction(Action action, Object sender, Object target) {
 	            if (ACTION_OPEN_CATEGORY == action) {
-	            	getWindow().showNotification("TODO: Open");
+	            	createView();
 	            } else if (ACTION_NEW_CATEGORY == action){
 	            	navigateTo("new");
 	            	getWindow().showNotification("TODO: Create");
-	            }else if (ACTION_SUBSCRIBE == action){
-	            	//TODO
-	            	getWindow().showNotification("TODO: Subscribe");
 	            } else if (ACTION_VIEW_PROPOSITIONS == action) {
 	            	//TODO
 	            	getWindow().showNotification("TODO: Propositions");
@@ -85,69 +81,19 @@ public class CategoryView extends
 	            	//TODO
 	            	getWindow().showNotification("TODO: Experts");
 	            } else if (ACTION_CLAIM_EXPERTISE == action) {
-	            	claimExpertise();
+	            	Category c = (Category) getEntityForItem(getTable().getItem(getTable().getValue()));
+	            	if(expertModal == null){
+	            		expertModal = new ModalClaimExpertise(c);
+	            	}else{
+	            		expertModal.setCategory(c);
+	            	}
+	        		getWindow().addWindow(expertModal);
 	            }
 
 	        }
         });
 	}
-	
-	private void claimExpertise(){
-		final ODUser currentUser = (ODUser)getApplication().getUser();
-		final Window main = getWindow();
-		final RichTextArea description = new RichTextArea("Please describe your expertise in a few words:");
 		
-		if(currentUser == null){
-			main.showNotification("Not logged in.");
-			return;
-		}		
-		
-		if(expertForm == null){
-			expertForm = new VerticalLayout();
-				
-			expertForm.setMargin(true);
-			expertForm.setSpacing(true);
-			expertForm.setWidth("400px");
-						
-			expertModal = new Window(null, expertForm);
-			expertModal.setModal(true);
-			
-			Button cancel = new Button("Cancel", new Button.ClickListener() {
-				@Override
-				public void buttonClick(ClickEvent event) {
-					main.removeWindow(expertModal);
-				}
-			});
-			Button add = new Button("Claim", new Button.ClickListener() {
-				@Override
-				public void buttonClick(ClickEvent event) {
-					Category category = (Category) getEntityForItem(getTable().getItem(getTable().getValue()));
-					Expert newExpert = new Expert();
-					newExpert.setCategory(category);
-					newExpert.setOdUser(currentUser);
-					newExpert.setExpertise(description.getValue().toString());
-					newExpert.setTs(new Date());
-					newExpert.persist();
-					description.setValue("");
-					main.removeWindow(expertModal);
-					main.showNotification("You are now an expert in \"" + category.getName() + "\"");
-				}
-			});
-			HorizontalLayout buttons = new HorizontalLayout();
-			buttons.addComponent(cancel);
-			buttons.addComponent(add);
-			buttons.setSpacing(true);
-			
-			expertForm.addComponent(description);
-			expertForm.addComponent(buttons);
-			expertForm.setComponentAlignment(buttons, Alignment.TOP_RIGHT);
-		}
-		
-		Category category = (Category) getEntityForItem(getTable().getItem(getTable().getValue()));
-		expertModal.setCaption("Claim expertise in \"" + category.getName() + "\"");
-		main.addWindow(expertModal);
-	}
-	
 	@Override
 	protected EntityEditor createForm() {
 		return new CategoryForm();
@@ -161,8 +107,8 @@ public class CategoryView extends
 	@Override
 	protected void configureTable(Table table) {
 		table.setContainerDataSource(getTableContainer());
-		table.setVisibleColumns(getTableColumns());
 		setupGeneratedColumns(table);
+		getTable().setVisibleColumns(new Object[] {"name", "description", "Propositions", "Experts"});
 	}
 
     // column generator for data linked to category
@@ -172,15 +118,16 @@ public class CategoryView extends
         public ColumnCountGenerator(String type) {
             sumType = type;
         }
-
+        
         public Component generateCell(Table source, Object itemId, Object columnId) {
         	//TODO: Count associated items and return sum
+        	Category c = (Category) getEntityForItem(getTable().getItem(itemId));
         	if(sumType.equals("propositions")){
-                return new Label("0");
+        		long count = Category.getPropositionCount(c);
+                return new Label(Long.toString(count));
         	}else if(sumType.equals("experts")){
-                return new Label("0");
-        	}else if(sumType.equals("subscribers")){
-                return new Label("0");
+        		long count = Category.getExpertCount(c);
+                return new Label(Long.toString(count));
         	}
         	return null;
         }

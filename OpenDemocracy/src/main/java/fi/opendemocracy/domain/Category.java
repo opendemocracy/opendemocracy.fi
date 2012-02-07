@@ -14,7 +14,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooEntity
+@RooEntity(finders = { "getRepresentation" })
 public class Category {
 
 	@NotNull

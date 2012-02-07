@@ -111,6 +111,8 @@ public class TabNavigator extends HorizontalLayout {
 				}
 			}
 		});
+		
+		
 		helpToggle.addListener(new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -124,10 +126,16 @@ public class TabNavigator extends HorizontalLayout {
 			@Override
 			public void onTabClose(TabSheet tabsheet, Component tabContent) {
 				// TODO: Clear view on close
-				View v = tabToView.get(tabContent);
-				tabToUri.remove(tabContent);
-				tabToView.remove(tabContent);
-				tabSheet.removeComponent(tabContent);
+				String warn = currentView == null ? null : currentView
+						.getWarningForNavigatingFrom();
+				if (warn != null && warn.length() > 0) {
+					confirmCloseTab(tabContent, warn);
+				}else{
+					View v = tabToView.get(tabContent);
+					tabToUri.remove(tabContent);
+					tabToView.remove(tabContent);
+					tabSheet.removeComponent(tabContent);
+				}
 			}
 		});
 	}
@@ -143,22 +151,13 @@ public class TabNavigator extends HorizontalLayout {
 				: newFragment.substring(i + 1);
 		if (uriToClass.containsKey(uri)) {
 			final View newView = getOrCreateView(uri);
-
-			String warn = currentView == null ? null : currentView
-					.getWarningForNavigatingFrom();
-			if (warn != null && warn.length() > 0) {
-				confirmedMoveToNewView(requestedDataId, newView, warn);
-			} else {
-				moveTo(newView, requestedDataId, false);
-			}
-
+			moveTo(newView, requestedDataId, false);			
 		} else {
 			uriFragmentUtil.setFragment(currentFragment, false);
 		}
 	}
 
-	private void confirmedMoveToNewView(final String requestedDataId,
-			final View newView, String warn) {
+	private void confirmCloseTab(final Component tabContent, String warn) {
 		VerticalLayout lo = new VerticalLayout();
 		lo.setMargin(true);
 		lo.setSpacing(true);
@@ -171,10 +170,10 @@ public class TabNavigator extends HorizontalLayout {
 		lo.addComponent(new Label(
 				"If you do not want to navigate away from the current screen, press Cancel."));
 		Button cancel = new Button("Cancel", new Button.ClickListener() {
-
 			@Override
 			public void buttonClick(ClickEvent event) {
 				uriFragmentUtil.setFragment(currentFragment, false);
+				tabSheet.setSelectedTab(tabContent);
 				main.removeWindow(wDialog);
 			}
 		});
@@ -183,7 +182,7 @@ public class TabNavigator extends HorizontalLayout {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				main.removeWindow(wDialog);
-				moveTo(newView, requestedDataId, false);
+				tabSheet.removeComponent(tabContent);
 			}
 
 		});

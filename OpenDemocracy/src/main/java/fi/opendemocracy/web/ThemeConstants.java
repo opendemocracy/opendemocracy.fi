@@ -18,7 +18,7 @@ public class ThemeConstants {
 	public static final ThemeResource TOOLBAR_ICON_PROPOSITION = new ThemeResource(
 			"icons/32/propositions.png");
 	public static final ThemeResource TOOLBAR_ICON_LOGIN = new ThemeResource(
-			"icons/32/propositions.png");
+			"icons/32/user.png");
 
 	// Toolbar captions
 	public static final String TOOLBAR_CAPTION_CATEGORIES = "Categories";
