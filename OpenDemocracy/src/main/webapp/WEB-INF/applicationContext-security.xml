@@ -8,7 +8,17 @@
 	<http auto-config='true'>
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<form-login login-page='/jsp/login' authentication-failure-url="/jsp/login_error" />
-        <openid-login authentication-failure-url="/jsp/login_error" user-service-ref="openIdUserService" />
+        <openid-login 	authentication-failure-handler-ref="openIDAuthenticationFailureHandler"                     
+                  		user-service-ref="userOpenIdDetailsService" >
+			<attribute-exchange>
+	            <openid-attribute name="axContactEmail" type="http://axschema.org/contact/email" required="true"/>
+	            <openid-attribute name="oiContactEmail" type="http://schema.openid.net/contact/email" required="true"/>
+	            <openid-attribute name="axNamePersonFullname" type="http://axschema.org/namePerson" required="true"/>
+	            <openid-attribute name="axNamePersonFriendlyName" type="http://axschema.org/namePerson/friendly" required="true"/>
+	            <openid-attribute name="axNamePersonFirstName" type="http://axschema.org/namePerson/first" required="true"/>
+	            <openid-attribute name="axNamePersonLastName" type="http://axschema.org/namePerson/last" required="true"/>
+	        </attribute-exchange>
+		</openid-login>
 		<logout logout-url="/resources/j_spring_security_logout" invalidate-session="true"/>
 	</http>
 
@@ -21,8 +31,36 @@
 		</authentication-provider>
 	</authentication-manager>
 
-    <beans:bean id="openIdUserService" class="fi.opendemocracy.web.OpenIdUserDetailsService" />
-
+<beans:bean id="userOpenIdDetailsService" name="userOpenIdAuthenticationProvider" class="fi.opendemocracy.web.AuthenticationWithOpenIdUserDetailsGetter">
+    <beans:constructor-arg index="0" ref="normalizedOpenIdAttributesBuilder"/>
+</beans:bean>
+<beans:bean id="openIDAuthenticationFailureHandler" class="fi.opendemocracy.web.OpenIDAuthenticationFailureHandler">
+    <beans:constructor-arg index="0" ref="normalizedOpenIdAttributesBuilder"/>
+</beans:bean>
+<beans:bean id="normalizedOpenIdAttributesBuilder" class="fi.opendemocracy.web.NormalizedOpenIdAttributesBuilder">
+    <beans:property name="emailAddressAttributeNames">
+        <beans:set value-type="java.lang.String">
+            <beans:value type="java.lang.String">axContactEmail</beans:value>
+            <beans:value type="java.lang.String">oiContactEmail</beans:value>
+        </beans:set>
+    </beans:property>
+    <beans:property name="firstNameAttributeNames">
+        <beans:set value-type="java.lang.String">
+            <beans:value type="java.lang.String">axNamePersonFirstName</beans:value>
+        </beans:set>
+    </beans:property>
+    <beans:property name="lastNameAttributeNames">
+        <beans:set value-type="java.lang.String">
+            <beans:value type="java.lang.String">axNamePersonLastName</beans:value>
+        </beans:set>
+    </beans:property>
+    <beans:property name="fullNameAttributeNames">
+        <beans:set value-type="java.lang.String">
+            <beans:value type="java.lang.String">axNamePersonFullname</beans:value>
+            <beans:value type="java.lang.String">axNamePersonFriendlyName</beans:value>
+        </beans:set>
+    </beans:property>
+</beans:bean>
 	<global-method-security pre-post-annotations="enabled" />
 
 </beans:beans>

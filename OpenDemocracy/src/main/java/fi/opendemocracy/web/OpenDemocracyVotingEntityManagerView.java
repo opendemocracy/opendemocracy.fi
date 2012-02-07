@@ -1,5 +1,7 @@
 package fi.opendemocracy.web;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.vaadin.navigator.Navigator;
 
 import com.vaadin.Application;
@@ -241,14 +243,6 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 			Application application = getApplication();
 			if (application != null) {
 				application.addListener(this);
-				Object user = application.getUser();
-				if (user != null && user instanceof ODUser) {
-					ODUser oduser = (ODUser) user;
-
-					loginMsg.setValue(loginTxt + "<br /><br />Logged in as: " + oduser.getOpenIdIdentifier());
-				} else {
-					loginMsg.setValue(loginTxt);
-				}
 				MongoDemoScreen mong = new MongoDemoScreen((OpenDemocracyVotingApplication) application);
 				addComponent(mong);
 			}
@@ -260,7 +254,20 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 			if (user != null && user instanceof ODUser) {
 				ODUser oduser = (ODUser) user;
 
-				loginMsg.setValue(loginTxt + "<br /><br />Logged in as: " + oduser.getOpenIdIdentifier());
+				OpenIDAuthenticationToken token = (OpenIDAuthenticationToken)SecurityContextHolder.getContext().getAuthentication();
+		        if (token != null) {
+		        	NormalizedOpenIdAttributesBuilder normalizedOpenIdAttributesBuilder = new NormalizedOpenIdAttributesBuilder();
+					NormalizedOpenIdAttributes attrs = normalizedOpenIdAttributesBuilder.build(token);
+					oduser.setEmailAddress(attrs.getEmailAddress());
+					oduser.setUsername(attrs.getFullName());
+					oduser.setDescription(attrs.getUserLocalIdentifier());
+		        }
+				loginMsg.setValue(loginTxt
+						+ "<br /><br />Logged in as: " + oduser.getOpenIdIdentifier()
+						+ "<br /><br />Mail: " + oduser.getEmailAddress()
+						+ "<br /><br />Username: " + oduser.getUsername()
+						+ "<br /><br />Description: " + oduser.getDescription()
+						);
 			} else {
 				loginMsg.setValue(loginTxt);
 			}
