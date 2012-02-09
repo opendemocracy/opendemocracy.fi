@@ -10,6 +10,7 @@ import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
 import fi.opendemocracy.domain.Category;
+import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.web.AbstractEntityView;
 import fi.opendemocracy.web.EntityEditor;
 import fi.opendemocracy.web.ThemeConstants;
@@ -58,6 +59,12 @@ public class CategoryView extends
 	            if (ACTION_OPEN_CATEGORY == action) {
 	            	createView();
 	            } else if (ACTION_NEW_CATEGORY == action){
+
+	        		Object o = getApplication().getUser();
+	        		if (o == null || !(o instanceof ODUser)) {
+	        			getWindow().showNotification("You need to login to vote");
+	        			return;
+	        		}
 	            	if(createCategoryModal == null){
 	            		createCategoryModal = new ModalCategoryForm();
 	            		createCategoryModal.addListener(new CloseListener(){
@@ -74,6 +81,11 @@ public class CategoryView extends
 	            	//TODO
 	            	getWindow().showNotification("TODO: Experts");
 	            } else if (ACTION_CLAIM_EXPERTISE == action) {
+	        		Object o = getApplication().getUser();
+	        		if (o == null || !(o instanceof ODUser)) {
+	        			getWindow().showNotification("You need to login to vote");
+	        			return;
+	        		}
 	            	Category c = (Category) getEntityForItem(getTable().getItem(getTable().getValue()));
 	            	if(expertModal == null){
 	            		expertModal = new ModalClaimExpertise(c);

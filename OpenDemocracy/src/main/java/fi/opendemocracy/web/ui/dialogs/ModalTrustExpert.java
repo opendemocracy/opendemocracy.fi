@@ -27,7 +27,7 @@ public class ModalTrustExpert extends Window {
 	private Expert sourceExpert;
 	private Button.ClickListener addButtonClickListener;
 	private final VoteOptionSlider trust = new VoteOptionSlider("Trust");
-	private final Label expertise;
+	private Label expertise;
 	
 	public ModalTrustExpert(final Expert e){
 		setWidth("400px");
@@ -37,9 +37,10 @@ public class ModalTrustExpert extends Window {
 		trustExpertForm.setSpacing(true);
 		trustExpertForm.setWidth("100%");
 			
+
 		expertise = new Label();
 		expertise.setContentMode(Label.CONTENT_XHTML);
-		
+
 		trustExpertForm.addComponent(expertise);
 		trustExpertForm.addComponent(trust);
 		
@@ -57,7 +58,9 @@ public class ModalTrustExpert extends Window {
 	public void setExpert(Expert e){
 		sourceExpert = e;
 		setCaption(sourceExpert.getCategory().getName() + " > Experts > " + sourceExpert.getOdUser().getUsername());
-		expertise.setCaption(sourceExpert.getExpertise());
+		trustExpertForm.removeComponent(expertise);
+		expertise = new Label(sourceExpert.getExpertise(), Label.CONTENT_XHTML);
+		trustExpertForm.addComponent(expertise, 0);
 		addButtonClickListener = new Button.ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -86,9 +89,11 @@ public class ModalTrustExpert extends Window {
 	@Override
 	public void attach() {
 		super.attach();
-		if((currentUser = (ODUser) getApplication().getUser()) == null){
+		Object o = getApplication().getUser();
+		if (o == null || !(o instanceof ODUser)) {
 			this.close();
-			//TODO: Display login message?
+			getApplication().getMainWindow().showNotification("You need to login");
+			return;
 		}
 		main = getWindow();
 		setExpert(sourceExpert);

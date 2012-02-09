@@ -57,7 +57,6 @@ public class CategoryEntityView extends CustomComponent {
 	public CategoryEntityView(Category c, TabNavigator navigator){
 		this.navigator = navigator;
 		sourceCategory = c;
-		claimExpertiseModal = new ModalClaimExpertise(sourceCategory);
 
 		expertContainer = new JPAContainer<Expert>(Expert.class);
 		expertContainer.setEntityProvider(EntityProviderUtil.get().getEntityProvider(Expert.class));
@@ -233,22 +232,20 @@ public class CategoryEntityView extends CustomComponent {
 		getWindow().addWindow(trustExpertModal);
 	}
 	
-	//Trust expert modal
+	// Claim expertise modal
 	private void claimExpertise() {
 		if(getApplication().getUser() == null){
 			getWindow().showNotification("Login to see/trust experts");
 			return;
 		}
-		if(claimExpertiseModal == null){
-			claimExpertiseModal = new ModalClaimExpertise(sourceCategory);
-			claimExpertiseModal.addListener(new CloseListener() {
-				@Override
-				public void windowClose(CloseEvent ev) {
-					//Refresh table superhack
-					expertTable.setEditable(false);
-				}
-			});
-		}
+		claimExpertiseModal = new ModalClaimExpertise(sourceCategory);
+		claimExpertiseModal.addListener(new CloseListener() {
+			@Override
+			public void windowClose(CloseEvent ev) {
+				//Refresh table superhack
+				expertTable.setEditable(false);
+			}
+		});
 		getWindow().addWindow(claimExpertiseModal);
 	}
 	

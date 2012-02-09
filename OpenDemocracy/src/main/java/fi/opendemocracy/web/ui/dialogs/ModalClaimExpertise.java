@@ -23,7 +23,7 @@ public class ModalClaimExpertise extends Window{
 	private final RichTextArea description = new RichTextArea("Please describe your expertise in a few words:");
 	private Category sourceCategory;
 	private Button.ClickListener addButtonClickListener;
-	
+	private Expert newExpert;
 	public ModalClaimExpertise(Category c){
 		setWidth("400px");
 		
@@ -44,6 +44,7 @@ public class ModalClaimExpertise extends Window{
 		expertForm.addComponent(description);
 		expertForm.addComponent(buttons);
 		expertForm.setComponentAlignment(buttons, Alignment.TOP_RIGHT);
+	
 	}
 	
 	private void addListeners(){
@@ -63,12 +64,16 @@ public class ModalClaimExpertise extends Window{
 			@Override
 			public void buttonClick(ClickEvent event) {
 				//TODO: Update if expertise exists
-				Expert newExpert = new Expert();
 				newExpert.setCategory(sourceCategory);
 				newExpert.setOdUser(currentUser);
 				newExpert.setExpertise(description.getValue().toString());
 				newExpert.setTs(new Date());
-				newExpert.persist();
+				
+				if(newExpert.getId() == null){
+					newExpert.persist();	
+				}else{
+					newExpert.merge();
+				}
 				description.setValue("");
 				ModalClaimExpertise.this.close();
 			}
@@ -78,9 +83,17 @@ public class ModalClaimExpertise extends Window{
 	@Override
 	public void attach() {
 		super.attach();
-		if((currentUser = (ODUser) getApplication().getUser()) == null){
+		Object o = getApplication().getUser();
+		if (o == null || !(o instanceof ODUser)) {
 			this.close();
-			//TODO: Display login message?
+			return;
+		}
+		currentUser = (ODUser) o;
+
+		if((newExpert = Expert.findExpertByOdUserAndCategory(currentUser, sourceCategory)) != null){
+			description.setValue(newExpert.getExpertise());
+		}else{
+			newExpert = new Expert();
 		}
 		setCategory(sourceCategory);
 		addListeners();

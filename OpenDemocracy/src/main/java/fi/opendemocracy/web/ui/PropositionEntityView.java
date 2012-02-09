@@ -26,13 +26,19 @@ import com.invient.vaadin.charts.InvientChartsConfig.XAxis;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.event.FieldEvents.BlurEvent;
+import com.vaadin.event.FieldEvents.FocusEvent;
+import com.vaadin.event.FieldEvents.BlurListener;
+import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.Slider.ValueOutOfBoundsException;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -141,14 +147,31 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 			oS.addListener(this);
 			
 			// Vote option comment
-			HorizontalLayout commentContainer = new HorizontalLayout();
-			commentContainer.setSizeFull();
-			commentContainer.addComponent(new Label("Comment: "));
-			TextField comment = new TextField();
-			comments.put(o, comment);
-			commentContainer.addComponent(comment);
-			optionPanel.addComponent(commentContainer);
 			
+			TextField comment = new TextField();
+			comment.addListener(new FocusListener() {
+				
+				@Override
+				public void focus(FocusEvent event) {
+					if (((TextField)event.getSource()).getValue() == null) {
+						((TextField)event.getSource()).setValue("");
+					}
+				}
+			});
+			comment.addListener(new BlurListener() {
+				
+				@Override
+				public void blur(BlurEvent event) {
+					if (((TextField)event.getSource()).getValue() == "") {
+						((TextField)event.getSource()).setValue(null);
+					}
+				}
+			});
+			comment.setNullRepresentation("Comment");
+			comment.setValue(null);
+			comment.setWidth("100%");
+			comments.put(o, comment);
+			optionPanel.addComponent(comment);
 			scrollContent.addComponent(optionPanel);
 		}
 		
@@ -159,10 +182,32 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
             }
         });
         
-		invChart.setSeries(getResults());
-		invChart.setVisible(false);
-		VerticalLayout resultsContent = new VerticalLayout();
+
+        final PopupDateField maxdate = new PopupDateField();
+        maxdate.setValue(new java.util.Date());
+        maxdate.setResolution(PopupDateField.RESOLUTION_DAY);
+
+        maxdate.addListener(new ValueChangeListener(){
+		    public void valueChange(ValueChangeEvent event) {
+		        Object value = event.getProperty().getValue();
+		        if (value == null || !(value instanceof Date)) {
+		            getWindow().showNotification("Invalid date entered");
+		        } else {
+					invChart.setSeries(getResults((Date) maxdate.getValue()));
+		        }
+		    }
+        });
+        maxdate.setImmediate(true);
+		invChart.setSeries(getResults((Date) maxdate.getValue()));
+		final VerticalLayout resultsContent = new VerticalLayout();
+        HorizontalLayout timelimit = new HorizontalLayout();
+        timelimit.addComponent(new Label("Choose upper timelimit for vote results:&nbsp;&nbsp;", Label.CONTENT_XHTML));
+        timelimit.addComponent(maxdate);
+		resultsContent.addComponent(timelimit);
 		resultsContent.addComponent(invChart);
+		resultsContent.setMargin(true);
+		resultsContent.setSpacing(false);
+		resultsContent.setVisible(false);
 		
 		Button vote = new Button("Vote", new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
@@ -183,13 +228,14 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 					v.persist();
 				}
             	getWindow().showNotification("Vote stored");
-				invChart.setSeries(getResults());
+            	maxdate.setValue(new Date());
+				invChart.setSeries(getResults((Date) maxdate.getValue()));
 			}
 		});
 		
 		Button resultsButton = new Button("Show/Hide results", new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
-				invChart.setVisible(!invChart.isVisible());
+				resultsContent.setVisible(!resultsContent.isVisible());
 			}
 		});
 		
@@ -206,11 +252,11 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 		return scrollContainer;
 	}
 
-	private LinkedHashSet<Series> getResults() {
+	private LinkedHashSet<Series> getResults(Date timelimit) {
 		LinkedHashSet<Series> list = new LinkedHashSet<InvientCharts.Series>();
         
 		for (PropositionOption o : p.getPropositionOptions()) {
-			List<Vote> results = Vote.findVotesByPropositionAndPropositionOptionLatest(p, o).getResultList();
+			List<Vote> results = Vote.findVotesByPropositionAndPropositionOptionLatestBefore(p, o, timelimit).getResultList();
 			
 			BigDecimal support = new BigDecimal(0);
 			BigDecimal dismiss = new BigDecimal(0);

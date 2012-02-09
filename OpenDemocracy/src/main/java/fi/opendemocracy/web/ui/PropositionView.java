@@ -26,7 +26,7 @@ public class PropositionView extends
     // right-click actions
     static final Action ACTION_NEW_PROPOSITION = new Action("Create new");
     static final Action ACTION_OPEN_PROPOSITION = new Action("Open");
-    static final Action[] ACTIONS_MENU = new Action[] { ACTION_NEW_PROPOSITION, ACTION_OPEN_PROPOSITION };
+    static final Action[] ACTIONS_MENU = new Action[] { ACTION_NEW_PROPOSITION };
 	
     public PropositionView(){
 		setCaption(ThemeConstants.TAB_CAPTION_PROPOSITION);
@@ -42,7 +42,6 @@ public class PropositionView extends
 	            	getWindow().showNotification("TODO: Open");
 	            } else if (ACTION_NEW_PROPOSITION == action){
 	            	navigateTo("new");
-	            	getWindow().showNotification("TODO: Create");
 	            }
 	        }
         });
@@ -57,25 +56,6 @@ public class PropositionView extends
 	@Override
 	protected CustomComponent createView() {
 		return new PropositionEntityView((Proposition) getEntityForItem(getTable().getItem(getTable().getValue())));
-	}
-
-
-	@Override
-	protected Table createTable() {
-		return new Table(){
-		    @Override
-		    protected String formatPropertyValue(Object rowId,
-		            Object colId, Property property) {
-		        // Format by property type
-		        if (property.getType() == ODUser.class) {
-		        	ODUser user = (ODUser)property.getValue();
-		        	String name = user.getUsername();
-		        	return (name == null || name.isEmpty()) ? user.getId().toString() : name;
-		        }
-
-		        return super.formatPropertyValue(rowId, colId, property);
-		    }
-		};
 	}
 	
 	@Override

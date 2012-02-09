@@ -13,6 +13,8 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
 
 import fi.opendemocracy.domain.Category;
+import fi.opendemocracy.domain.Expert;
+import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.web.ThemeConstants;
 
 public class ModalCategoryForm extends Window   {
@@ -148,6 +150,17 @@ public class ModalCategoryForm extends Window   {
 				ModalCategoryForm.this.close();
 			}
 		});
+	}
+	
+	@Override
+	public void attach() {
+		super.attach();
+		Object o = getApplication().getUser();
+		if (o == null || !(o instanceof ODUser)) {
+			this.close(); 
+			getWindow().showNotification("You need to login");
+			return;
+		}
 	}
 
 }
