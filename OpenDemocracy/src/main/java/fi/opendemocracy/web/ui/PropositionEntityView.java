@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.persistence.TypedQuery;
 
@@ -37,9 +39,11 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 
 import fi.opendemocracy.domain.Category;
+import fi.opendemocracy.domain.Expert;
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.Proposition;
 import fi.opendemocracy.domain.PropositionOption;
+import fi.opendemocracy.domain.Representation;
 import fi.opendemocracy.domain.Vote;
 import fi.opendemocracy.web.ThemeConstants;
 
@@ -113,7 +117,7 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
         chartConfig.getTitle().setText("Results");
         
         CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setCategories(Arrays.asList("Support","Unsure", "Dismiss"));
+        xAxis.setCategories(Arrays.asList("Support","Unsure", "Dismiss","Sum"));
         LinkedHashSet<XAxis> xAxesSet = new LinkedHashSet<InvientChartsConfig.XAxis>();
         xAxesSet.add(xAxis);
         chartConfig.setXAxes(xAxesSet);
@@ -132,6 +136,8 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 			Vote.findVotesByPropositionAndPropositionOption(p, o);
 			TypedQuery<Vote> voteQuery = Vote.findVotesByPropositionAndPropositionOption(p, o);
 			List<Vote> results = voteQuery.getResultList();
+			
+			//HashMap<Vote, Double> weights = getVoteWeigths(results); 
 			BigDecimal support = new BigDecimal(0);
 			BigDecimal dismiss = new BigDecimal(0);
 			BigDecimal zero = new BigDecimal(0);
@@ -146,8 +152,9 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 					dismiss = dismiss.add(v.getSupport());
 				}
 			}
+			BigDecimal sum = new BigDecimal(0).add(support).add(dismiss);
 	        seriesData = new XYSeries(o.getName());
-	        seriesData.setSeriesPoints(getPoints(seriesData, support.doubleValue(), noVote*100, dismiss.doubleValue()));
+	        seriesData.setSeriesPoints(getPoints(seriesData, support.doubleValue(), noVote*100, dismiss.doubleValue(), sum.doubleValue()));
 	        invChart.addSeries(seriesData);
 			
 	        Panel optionPanel = new Panel();
@@ -225,7 +232,102 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 		return scrollContainer;
 	}
 
-    private static LinkedHashSet<DecimalPoint> getPoints(Series series,
+	/** Calculate suggested vote using current users trusted experts
+	 */
+	private HashMap<PropositionOption, BigDecimal> getSuggestedWeigths(List<Vote> results) {
+    	HashMap<PropositionOption, BigDecimal> map = new HashMap<PropositionOption, BigDecimal>(p.getPropositionOptions().size());
+		List<Representation> representations = Representation.findRepresentationsByOdUserAndTrustGreaterThan((ODUser) getApplication().getUser(), BigDecimal.ZERO).getResultList();
+    	Set<ODUser> voters = new HashSet<ODUser>();
+    	for (Vote v : results) {
+    		voters.add(v.getOdUser());
+    	}
+    	for (Representation r : representations) {
+    		if (voters.contains(r.getExpert()) && p.getCategories().contains(r.getExpert().getCategory())) {
+    			
+    		}
+    	}
+    	for (PropositionOption po : p.getPropositionOptions()) {
+    		map.put(po, BigDecimal.ZERO);
+    	}
+    	
+		return map;
+	}
+
+	/** Calculate vote power in a proposition
+	 */
+    private HashMap<Vote, Double> getVoteWeigths(List<Vote> results) {
+    	HashMap<Vote, Double> map = new HashMap<Vote, Double>(results.size());
+    	Set<ODUser> voters = new HashSet<ODUser>();
+    	for (Vote v : results) {
+    		voters.add(v.getOdUser());
+    	}
+    	for (Vote v : results) {
+    		map.put(v, getVoteWeigth(v.getOdUser(), voters));
+    	}
+		return map;
+	}
+
+	private Double getVoteWeigth(ODUser odUser, Set<ODUser> voters) {
+		if (voters.contains(odUser)) {
+			// If you vote yourself, you do not delegate your voting power
+			return new Double(0);
+		}
+		List<Expert> experts = Expert.findExpertsByOdUser(odUser).getResultList();
+		if (experts.size() == 0) {
+			// If not an expert use unit weight, as no one has given your vote/trust any delegation power
+			return new Double(1);
+		}
+		Double w = new Double(0); // Sum the given trust
+		for (Category c : p.getCategories()) {
+			// Calculate for each category the proposition has and the voter claims to be an expert in
+			for (Expert e : experts) {
+    			if (e.getCategory().getId().equals(c.getId())) {
+    				List<Representation> representations = Representation.findRepresentationsByExpertAndTrustGreaterThan(e, BigDecimal.ZERO).getResultList();
+    				// Add each non-voting user that trusts the voter up to n=2 levels
+    				int n = 2;
+    				for (Representation r : representations) {
+    					w += getVoteWeigth(r.getOdUser(), voters, c, n, e);
+    				}
+    			}
+			}
+		}
+		return w;
+	}
+
+	private Double getVoteWeigth(ODUser odUser, Set<ODUser> voters, Category c, int n, Expert expert) {
+		// Add each non-voting user that has a chain of trust
+		if (voters.contains(odUser) || n < 1) {
+			return new Double(0);
+		}
+		List<Expert> experts = Expert.findExpertsByOdUser(odUser).getResultList();
+		if (experts.size() == 0) {
+			// If user is not an expert, calculate amount of active trust given to this expert
+			return getVoteDelegationPower(odUser, voters, c, n, expert);
+		}
+		Double w = new Double(0); // Sum the given trust in this category
+		for (Expert e : experts) {
+			if (e.getCategory().getId().equals(c.getId())) {
+				List<Representation> representations = Representation.findRepresentationsByExpertAndTrustGreaterThan(e, BigDecimal.ZERO).getResultList();
+				for (Representation r : representations) {
+					w += getVoteWeigth(r.getOdUser(), voters, c, n - 1, e);
+				}
+			}
+		}
+		return w;
+	}
+
+	private Double getVoteDelegationPower(ODUser odUser, Set<ODUser> voters,
+			Category c, int n, Expert expert) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Double getVoteDelegationPower(ODUser odUser, Set<ODUser> voters, int n) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private static LinkedHashSet<DecimalPoint> getPoints(Series series,
             double... values) {
         LinkedHashSet<DecimalPoint> points = new LinkedHashSet<DecimalPoint>();
         for (double value : values) {

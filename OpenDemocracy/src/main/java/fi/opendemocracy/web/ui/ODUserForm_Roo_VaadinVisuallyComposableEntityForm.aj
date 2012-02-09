@@ -70,14 +70,11 @@ privileged aspect ODUserForm_Roo_VaadinVisuallyComposableEntityForm {
     }
     
     public void ODUserForm.configureFieldMap() {
-        fieldMap.put("userRole", userRoleField);
-        fieldMap.put("openIdIdentifier", openIdIdentifierField);
         fieldMap.put("username", usernameField);
         fieldMap.put("emailAddress", emailAddressField);
         fieldMap.put("description", descriptionField);
         fieldMap.put("firstName", firstNameField);
         fieldMap.put("lastName", lastNameField);
-        fieldMap.put("ts", tsField);
     }
     
     public void ODUserForm.configureFields() {

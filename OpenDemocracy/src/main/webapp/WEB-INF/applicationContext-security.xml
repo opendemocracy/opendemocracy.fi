@@ -9,7 +9,8 @@
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<form-login login-page='/jsp/login' authentication-failure-url="/jsp/login_error" />
         <openid-login 	authentication-failure-handler-ref="openIDAuthenticationFailureHandler"                     
-                  		user-service-ref="userOpenIdDetailsService" >
+                  		user-service-ref="userOpenIdDetailsService" 
+                  		authentication-success-handler-ref="openIDAuthenticationSucessHandler">
 			<attribute-exchange>
 	            <openid-attribute name="axContactEmail" type="http://axschema.org/contact/email" required="true"/>
 	            <openid-attribute name="oiContactEmail" type="http://schema.openid.net/contact/email" required="true"/>
@@ -36,6 +37,8 @@
 </beans:bean>
 <beans:bean id="openIDAuthenticationFailureHandler" class="fi.opendemocracy.web.OpenIDAuthenticationFailureHandler">
     <beans:constructor-arg index="0" ref="normalizedOpenIdAttributesBuilder"/>
+</beans:bean>
+<beans:bean id="openIDAuthenticationSucessHandler" class="fi.opendemocracy.web.OpenIDAuthenticationSucessHandler">
 </beans:bean>
 <beans:bean id="normalizedOpenIdAttributesBuilder" class="fi.opendemocracy.web.NormalizedOpenIdAttributesBuilder">
     <beans:property name="emailAddressAttributeNames">

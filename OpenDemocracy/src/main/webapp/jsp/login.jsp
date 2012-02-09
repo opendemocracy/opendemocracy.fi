@@ -11,7 +11,7 @@
 <body>
 <div align="center">
 <h2>Login</h2>
-<form class="openid" method="post" action="/OpenDemocracy/j_spring_openid_security_check"> 
+<form class="openid" method="post" action="/OpenDemocracy/j_spring_openid_security_check" target="_top"> 
   <fieldset> 
   <label for="openid_username">Enter your <span>Provider user name</span> or choose your provider</label> 
   <div><span></span><input type="text" name="openid_username" /><span></span> 
@@ -133,7 +133,7 @@
 	</div>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="/OpenDemocracy/VAADIN/jquery.openid.js"></script>
-<script type="text/javascript">  $(function() { $("form.openid:eq(0)").openid(); });</script>
+<script type="text/javascript">  $(function() { $("form.openid:eq(0)").openid();$("form.openid:eq(0)").setAttribute("target", "_top"); });</script>
 	
 </body>
 </html>

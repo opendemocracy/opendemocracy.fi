@@ -12,7 +12,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooEntity(finders = { "findExpertsByCategory" })
+@RooEntity(finders = { "findExpertsByCategory", "findExpertsByOdUser" })
 public class Expert {
 
     @NotNull

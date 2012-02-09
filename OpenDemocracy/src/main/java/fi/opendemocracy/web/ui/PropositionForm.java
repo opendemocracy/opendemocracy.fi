@@ -89,6 +89,8 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 	// data item being edited
 	private Item item;
 
+	private Label loginMsg;
+	
 	public PropositionForm() {
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
@@ -111,15 +113,7 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 	public void attach() {
 		// TODO Auto-generated method stub
 		super.attach();
-
-		if (getApplication().getUser() == null) {
-
-			Label loginMsg = new Label();
-			loginMsg.setStyleName("errormessage");
-			loginMsg.setImmediate(false);
-			loginMsg.setValue("You need to be logged in to make propositions");
-			scrollContent.addComponent(loginMsg, 0);
-		}
+		loginMsg.setVisible(getApplication().getUser() == null);
 	}
 	
 	private void addNewOptionForm() {
@@ -320,6 +314,13 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		// scrollContent
 		scrollContent = buildScrollContent();
 		scrollPanel.setContent(scrollContent);
+		
+		loginMsg = new Label();
+		loginMsg.setStyleName("errormessage");
+		loginMsg.setImmediate(false);
+		loginMsg.setValue("You need to be logged in to make propositions");
+		loginMsg.setVisible(false);
+		scrollContent.addComponent(loginMsg, 0);
 		
 		return scrollPanel;
 	}

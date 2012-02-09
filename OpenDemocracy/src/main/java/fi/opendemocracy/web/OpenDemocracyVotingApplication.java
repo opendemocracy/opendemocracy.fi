@@ -15,7 +15,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import fi.opendemocracy.web.mongo.DbFactoryBean;
 
-import fi.opendemocracy.web.ui.MongoDemoScreen;
 import com.mongodb.DB;
 import com.vaadin.Application;
 import com.vaadin.terminal.gwt.server.HttpServletRequestListener;
@@ -33,10 +32,6 @@ public class OpenDemocracyVotingApplication extends Application implements HttpS
     private HttpServletResponse response;
     private HttpServletRequest request;
 	
-	@Autowired
-	DbFactoryBean factory;
-	public DB db;
-    
 	@Override
 	public void init() {
 		Window window = createNewWindow();
@@ -110,15 +105,6 @@ public class OpenDemocracyVotingApplication extends Application implements HttpS
         this.response = response;
         this.request = request;
 
-		try
-		{
-			this.db = factory.getObject();
-		}
-		catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
 
     @Override
@@ -127,6 +113,5 @@ public class OpenDemocracyVotingApplication extends Application implements HttpS
     {
         this.response = null;
         this.request = null;
-		this.db = null;
     }
 }

@@ -1,5 +1,6 @@
 package fi.opendemocracy.web;
 
+import org.apache.commons.logging.Log;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.vaadin.navigator.Navigator;
@@ -25,7 +26,8 @@ import com.vaadin.ui.themes.Reindeer;
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.UserRole;
 import fi.opendemocracy.web.ui.CategoryView;
-import fi.opendemocracy.web.ui.MongoDemoScreen;
+import fi.opendemocracy.web.ui.ODUserForm;
+import fi.opendemocracy.web.ui.ODUserView;
 import fi.opendemocracy.web.ui.PropositionView;
 
 /**
@@ -63,6 +65,7 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 	private Button btnPropositions;
 	private Button btnCategories;
 	private Button btnLogout;
+	private Button btnUser;
 	private Button btnLogin;
 	private TabNavigator navigator;
 
@@ -103,8 +106,10 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 		btnPropositions = new Button("Propositions");
 		btnCategories = new Button("Categories");
 		btnLogout = new Button("Logout");
-		btnLogout.setVisible(false);
 		btnLogin = new Button("Login");
+		btnUser = new Button("User");
+		btnLogout.setVisible(false);
+		btnUser.setVisible(false);
 		btnPropositions.setIcon(ThemeConstants.TOOLBAR_ICON_PROPOSITION);
 		btnCategories.setIcon(ThemeConstants.TOOLBAR_ICON_CATEGORIES);
 		btnLogout.setIcon(ThemeConstants.TOOLBAR_ICON_LOGIN);
@@ -113,6 +118,7 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 		toolbar.addComponent(btnPropositions);
 		toolbar.addComponent(btnCategories);
 		toolbar.addComponent(btnLogout);
+		toolbar.addComponent(btnUser);
 		toolbar.addComponent(btnLogin);
 		toolbar.addComponent(logo);
 		// properties
@@ -139,6 +145,7 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 		navigator.addView("home", HomeView.class);
 		navigator.addView("category", CategoryView.class);
 		navigator.addView("proposition", PropositionView.class);
+		navigator.addView("user", ODUserView.class);
 
 		return navigator;
 	}
@@ -155,10 +162,25 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 				navigator.navigateTo("proposition");
 			}
 		});
+		btnUser.addListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				Object user = getApplication().getUser();
+				if (user != null && user instanceof ODUser) {
+					navigator.navigateTo("user/edit/" + ((ODUser)user).getId());
+				} else {
+					System.err.println("Should not happen");
+				}
+			}
+		});
 		btnLogin.addListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
-				getWindow().open(
-						new ExternalResource("/OpenDemocracy/jsp/login"));
+				Embedded jsp = new Embedded();
+				jsp.setSizeFull();
+				jsp.setType(Embedded.TYPE_BROWSER);
+				jsp.setCaption(ThemeConstants.TAB_CAPTION_LOGIN);
+				jsp.setIcon(ThemeConstants.TAB_ICON_LOGIN);
+				jsp.setSource(new ExternalResource("/OpenDemocracy/jsp/login"));
+				navigator.openChildTab(jsp, "login");
 			}
 		});
 		btnLogout.addListener(new Button.ClickListener() {
@@ -189,6 +211,7 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 									UserRole.ROLE_ADMIN.name(),
 									UserRole.ROLE_VERIFIED_USER.name())) {
 						btnLogout.setVisible(true);
+						btnUser.setVisible(true);
 						btnLogin.setVisible(false);
 					}
 				}
@@ -198,6 +221,7 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 							UserRole.ROLE_ADMIN.name(),
 							UserRole.ROLE_VERIFIED_USER.name())) {
 				btnLogout.setVisible(true);
+				btnUser.setVisible(true);
 				btnLogin.setVisible(false);
 			}
 		}
@@ -243,8 +267,6 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 			Application application = getApplication();
 			if (application != null) {
 				application.addListener(this);
-				MongoDemoScreen mong = new MongoDemoScreen((OpenDemocracyVotingApplication) application);
-				addComponent(mong);
 			}
 		}
 
@@ -261,12 +283,12 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 					oduser.setEmailAddress(attrs.getEmailAddress());
 					oduser.setUsername(attrs.getFullName());
 					oduser.setDescription(attrs.getUserLocalIdentifier());
+					oduser.merge();
 		        }
 				loginMsg.setValue(loginTxt
 						+ "<br /><br />Logged in as: " + oduser.getOpenIdIdentifier()
 						+ "<br /><br />Mail: " + oduser.getEmailAddress()
 						+ "<br /><br />Username: " + oduser.getUsername()
-						+ "<br /><br />Description: " + oduser.getDescription()
 						);
 			} else {
 				loginMsg.setValue(loginTxt);

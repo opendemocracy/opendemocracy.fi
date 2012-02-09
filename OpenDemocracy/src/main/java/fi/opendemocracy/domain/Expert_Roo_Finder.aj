@@ -5,6 +5,7 @@ package fi.opendemocracy.domain;
 
 import fi.opendemocracy.domain.Category;
 import fi.opendemocracy.domain.Expert;
+import fi.opendemocracy.domain.ODUser;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
@@ -15,6 +16,14 @@ privileged aspect Expert_Roo_Finder {
         EntityManager em = Expert.entityManager();
         TypedQuery<Expert> q = em.createQuery("SELECT o FROM Expert AS o WHERE o.category = :category", Expert.class);
         q.setParameter("category", category);
+        return q;
+    }
+    
+    public static TypedQuery<Expert> Expert.findExpertsByOdUser(ODUser odUser) {
+        if (odUser == null) throw new IllegalArgumentException("The odUser argument is required");
+        EntityManager em = Expert.entityManager();
+        TypedQuery<Expert> q = em.createQuery("SELECT o FROM Expert AS o WHERE o.odUser = :odUser", Expert.class);
+        q.setParameter("odUser", odUser);
         return q;
     }
     

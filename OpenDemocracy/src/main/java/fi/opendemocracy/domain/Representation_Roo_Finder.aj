@@ -4,6 +4,7 @@
 package fi.opendemocracy.domain;
 
 import fi.opendemocracy.domain.Expert;
+import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.Representation;
 import java.math.BigDecimal;
 import javax.persistence.EntityManager;
@@ -17,6 +18,16 @@ privileged aspect Representation_Roo_Finder {
         EntityManager em = Representation.entityManager();
         TypedQuery<Representation> q = em.createQuery("SELECT o FROM Representation AS o WHERE o.expert = :expert AND o.trust > :trust", Representation.class);
         q.setParameter("expert", expert);
+        q.setParameter("trust", trust);
+        return q;
+    }
+    
+    public static TypedQuery<Representation> Representation.findRepresentationsByOdUserAndTrustGreaterThan(ODUser odUser, BigDecimal trust) {
+        if (odUser == null) throw new IllegalArgumentException("The odUser argument is required");
+        if (trust == null) throw new IllegalArgumentException("The trust argument is required");
+        EntityManager em = Representation.entityManager();
+        TypedQuery<Representation> q = em.createQuery("SELECT o FROM Representation AS o WHERE o.odUser = :odUser AND o.trust > :trust", Representation.class);
+        q.setParameter("odUser", odUser);
         q.setParameter("trust", trust);
         return q;
     }

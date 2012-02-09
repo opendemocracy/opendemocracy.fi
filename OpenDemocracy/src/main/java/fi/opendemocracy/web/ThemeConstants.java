@@ -24,6 +24,7 @@ public class ThemeConstants {
 	public static final String TOOLBAR_CAPTION_CATEGORIES = "Categories";
 	public static final String TOOLBAR_CAPTION_PROPOSITION = "Propositions";
 	public static final String TOOLBAR_CAPTION_LOGIN = "Login";
+	public static final String TOOLBAR_CAPTION_USER = "User";
 
 	// Tab icons
 	public static final ThemeResource TAB_ICON_CATEGORIES = new ThemeResource(
@@ -45,6 +46,7 @@ public class ThemeConstants {
 	public static final String TAB_CAPTION_PROPOSITION = "Propositions";
 	public static final String TAB_CAPTION_NEW_CATEGORY = "New category";
 	public static final String TAB_CAPTION_LOGIN = "Login";
+	public static final String TAB_CAPTION_USER = "User";
 	public static final String TAB_CAPTION_EXPERTS = "Experts";
 
 }

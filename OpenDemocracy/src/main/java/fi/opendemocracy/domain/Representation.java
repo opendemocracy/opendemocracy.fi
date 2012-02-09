@@ -13,7 +13,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooEntity(finders = { "findRepresentationsByExpertAndTrustGreaterThan" })
+@RooEntity(finders = { "findRepresentationsByExpertAndTrustGreaterThan", "findRepresentationsByOdUserAndTrustGreaterThan" })
 public class Representation {
 
     @NotNull
