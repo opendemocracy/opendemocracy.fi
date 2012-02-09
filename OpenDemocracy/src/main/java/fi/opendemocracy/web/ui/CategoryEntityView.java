@@ -145,14 +145,13 @@ public class CategoryEntityView extends CustomComponent {
 		    }
 
 			expertTable.setContainerDataSource(expertContainer);
-			expertTable.setImmediate(false);
+			expertTable.setImmediate(true);
 			expertTable.setVisibleColumns(new Object[] {"Username", "Average Trust", "Supporters", "Average Distrust", "Opposers"});
 			expertTable.addListener(new ItemClickListener() {
 				@Override
 				public void itemClick(ItemClickEvent event) {
 					Object value = event.getItemId();
 					if(expertTable.getValue() == value && event.getButton() == ItemClickEvent.BUTTON_LEFT){
-						//TODO: Cleanup following line ;)
 						final Expert e = expertContainer.getItem(value).getEntity();
 						trustExpert(e);
 					}
@@ -191,7 +190,7 @@ public class CategoryEntityView extends CustomComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				if(getApplication().getUser() != null){
-					getWindow().addWindow(claimExpertiseModal);
+					claimExpertise();
 				}else{
 					getWindow().showNotification("Not logged in");
 				}
@@ -223,7 +222,8 @@ public class CategoryEntityView extends CustomComponent {
 			closeTrustExpertModal = new CloseListener() {
 				@Override
 				public void windowClose(CloseEvent ev) {
-					//TODO: Refresh table
+					//Refresh table superhack
+					expertTable.setEditable(false);
 				}
 			};
 			trustExpertModal.addListener(closeTrustExpertModal);
@@ -231,6 +231,25 @@ public class CategoryEntityView extends CustomComponent {
 			trustExpertModal.setExpert(e);
 		}
 		getWindow().addWindow(trustExpertModal);
+	}
+	
+	//Trust expert modal
+	private void claimExpertise() {
+		if(getApplication().getUser() == null){
+			getWindow().showNotification("Login to see/trust experts");
+			return;
+		}
+		if(claimExpertiseModal == null){
+			claimExpertiseModal = new ModalClaimExpertise(sourceCategory);
+			claimExpertiseModal.addListener(new CloseListener() {
+				@Override
+				public void windowClose(CloseEvent ev) {
+					//Refresh table superhack
+					expertTable.setEditable(false);
+				}
+			});
+		}
+		getWindow().addWindow(claimExpertiseModal);
 	}
 	
 	//Column generators for custom tables

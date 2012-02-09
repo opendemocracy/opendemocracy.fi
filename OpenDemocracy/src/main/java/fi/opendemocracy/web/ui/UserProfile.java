@@ -25,7 +25,7 @@ public class UserProfile extends CustomComponent {
 		setCompositionRoot(mainLayout);
 		String name = user.getUsername();
 		setCaption("User: " + (name == null || name.isEmpty() ? user.getId() : name));
-		setIcon(ThemeConstants.TAB_ICON_CATEGORIES);
+		setIcon(ThemeConstants.TAB_ICON_USER);
 	}
 	
 	private AbsoluteLayout buildMainLayout() {

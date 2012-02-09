@@ -107,18 +107,19 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 		btnCategories = new Button("Categories");
 		btnLogout = new Button("Logout");
 		btnLogin = new Button("Login");
-		btnUser = new Button("User");
+		btnUser = new Button("Users");
 		btnLogout.setVisible(false);
 		btnUser.setVisible(false);
 		btnPropositions.setIcon(ThemeConstants.TOOLBAR_ICON_PROPOSITION);
 		btnCategories.setIcon(ThemeConstants.TOOLBAR_ICON_CATEGORIES);
 		btnLogout.setIcon(ThemeConstants.TOOLBAR_ICON_LOGIN);
 		btnLogin.setIcon(ThemeConstants.TOOLBAR_ICON_LOGIN);
+		btnUser.setIcon(ThemeConstants.TOOLBAR_ICON_USER);
 		// add components
 		toolbar.addComponent(btnPropositions);
 		toolbar.addComponent(btnCategories);
-		toolbar.addComponent(btnLogout);
 		toolbar.addComponent(btnUser);
+		toolbar.addComponent(btnLogout);
 		toolbar.addComponent(btnLogin);
 		toolbar.addComponent(logo);
 		// properties

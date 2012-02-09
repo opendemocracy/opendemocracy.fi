@@ -1,5 +1,11 @@
 package fi.opendemocracy.web.ui;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Property;
+import com.vaadin.data.util.PropertyFormatter;
 import com.vaadin.event.Action;
 import com.vaadin.spring.roo.addon.annotations.RooVaadinEntityView;
 import com.vaadin.ui.CustomComponent;
@@ -7,9 +13,11 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
 import fi.opendemocracy.domain.Category;
+import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.Proposition;
 import fi.opendemocracy.web.AbstractEntityView;
 import fi.opendemocracy.web.EntityEditor;
+import fi.opendemocracy.web.EntityProviderUtil;
 import fi.opendemocracy.web.ThemeConstants;
 
 @RooVaadinEntityView(formBackingObject = fi.opendemocracy.domain.Proposition.class)
@@ -53,12 +61,29 @@ public class PropositionView extends
 
 
 	@Override
-	protected void configureTable(Table table) {
-		table.setContainerDataSource(getTableContainer());
-		table.setVisibleColumns(getTableColumns());
+	protected Table createTable() {
+		return new Table(){
+		    @Override
+		    protected String formatPropertyValue(Object rowId,
+		            Object colId, Property property) {
+		        // Format by property type
+		        if (property.getType() == ODUser.class) {
+		        	ODUser user = (ODUser)property.getValue();
+		        	String name = user.getUsername();
+		        	return (name == null || name.isEmpty()) ? user.getId().toString() : name;
+		        }
 
-		setupGeneratedColumns(table);
+		        return super.formatPropertyValue(rowId, colId, property);
+		    }
+		};
 	}
 	
-
+	@Override
+	protected void configureTable(Table table) {
+		table.setContainerDataSource(getTableContainer());
+		table.setVisibleColumns(new Object[]{"name","description","categories","propositionOptions","author","ts"});
+		table.setColumnHeader("propositionOptions", "Options");
+		table.setColumnHeader("ts", "Created");
+		setupGeneratedColumns(table);
+	}
 }

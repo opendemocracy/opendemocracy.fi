@@ -55,7 +55,6 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 	private AbsoluteLayout mainLayout;
 	private Panel scrollPanel;
 	private VerticalLayout scrollContent;
-	private Panel resultsPanel;
 	
 	public PropositionEntityView(final Proposition p){
 		this.p = p;
@@ -76,7 +75,6 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 		// scrollPanel
 		scrollPanel = buildScrollPanel();
 		mainLayout.addComponent(scrollPanel);
-
 		return mainLayout;
 	}
 
@@ -91,14 +89,13 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 		// scrollContent
 		scrollContent = buildScrollContent();
 		scrollPanel.setContent(scrollContent);
-
+		scrollPanel.setStyle(Panel.STYLE_LIGHT);
 		return scrollPanel;
 	}
 
 	private VerticalLayout buildScrollContent() {
 		VerticalLayout scrollContainer = new VerticalLayout();
 		VerticalLayout scrollContent = new VerticalLayout();
-		VerticalLayout resultsContent = new VerticalLayout();
 		
 		Label propositionName = new Label("<h1>" + p.getName() + "</h1>", Label.CONTENT_XHTML);
 		Label propositionDescription = new Label("<p>" + p.getDescription() + "</p>", Label.CONTENT_XHTML);
@@ -126,37 +123,10 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
                 + " return '' + this.series.name +': '+ this.y +''; " + "}");
         chartConfig.setTooltip(tooltip);
         chartConfig.getCredit().setEnabled(false);
-        InvientCharts invChart = new InvientCharts(chartConfig);
-
-        XYSeries seriesData;
+        final InvientCharts invChart = new InvientCharts(chartConfig);
+        invChart.setWidth("-1px");
         
 		for (PropositionOption o : p.getPropositionOptions()) {
-			// Vote results
-			
-			Vote.findVotesByPropositionAndPropositionOption(p, o);
-			TypedQuery<Vote> voteQuery = Vote.findVotesByPropositionAndPropositionOption(p, o);
-			List<Vote> results = voteQuery.getResultList();
-			
-			//HashMap<Vote, Double> weights = getVoteWeigths(results); 
-			BigDecimal support = new BigDecimal(0);
-			BigDecimal dismiss = new BigDecimal(0);
-			BigDecimal zero = new BigDecimal(0);
-			int noVote = 0;
-			for (Vote v : results) {
-				int compare = v.getSupport().compareTo(zero);
-				if (compare == 0) {
-					noVote++;
-				} else if (compare>0) {
-					support = support.add(v.getSupport());
-				} else {
-					dismiss = dismiss.add(v.getSupport());
-				}
-			}
-			BigDecimal sum = new BigDecimal(0).add(support).add(dismiss);
-	        seriesData = new XYSeries(o.getName());
-	        seriesData.setSeriesPoints(getPoints(seriesData, support.doubleValue(), noVote*100, dismiss.doubleValue(), sum.doubleValue()));
-	        invChart.addSeries(seriesData);
-			
 	        Panel optionPanel = new Panel();
 	        
 			// Name and description
@@ -167,11 +137,14 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 			VoteOptionSlider oS = new VoteOptionSlider();
 			votes.put(o, oS);
 			optionPanel.addComponent(oS);
+			optionPanel.setWidth("440px");
 			oS.addListener(this);
 			
 			// Vote option comment
 			HorizontalLayout commentContainer = new HorizontalLayout();
-			TextField comment = new TextField("Comment:");
+			commentContainer.setSizeFull();
+			commentContainer.addComponent(new Label("Comment: "));
+			TextField comment = new TextField();
 			comments.put(o, comment);
 			commentContainer.addComponent(comment);
 			optionPanel.addComponent(commentContainer);
@@ -186,10 +159,10 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
             }
         });
         
-		resultsPanel = new Panel();
-		resultsPanel.addComponent(invChart);
-		resultsPanel.setVisible(false);
-		resultsContent.addComponent(resultsPanel);
+		invChart.setSeries(getResults());
+		invChart.setVisible(false);
+		VerticalLayout resultsContent = new VerticalLayout();
+		resultsContent.addComponent(invChart);
 		
 		Button vote = new Button("Vote", new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
@@ -208,28 +181,58 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 					v.setComment((String) comments.get(e.getKey()).getValue());
 					v.setTs(new Date());
 					v.persist();
-	            	getWindow().showNotification("Vote stored");
 				}
+            	getWindow().showNotification("Vote stored");
+				invChart.setSeries(getResults());
 			}
 		});
 		
 		Button resultsButton = new Button("Show/Hide results", new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
-				resultsPanel.setVisible(!resultsPanel.isVisible());
+				invChart.setVisible(!invChart.isVisible());
 			}
 		});
 		
 		HorizontalLayout footer = new HorizontalLayout();
 		footer.addComponent(vote);
+		footer.setMargin(true);
+		footer.setSpacing(true);
 		footer.addComponent(resultsButton);
 		scrollContent.addComponent(footer);
-		scrollContent.setComponentAlignment(footer, Alignment.BOTTOM_LEFT);
 		scrollContent.setMargin(true);
 		scrollContent.setSpacing(false);
-		scrollContent.setWidth("440px");
 		scrollContainer.addComponent(scrollContent);
 		scrollContainer.addComponent(resultsContent);
 		return scrollContainer;
+	}
+
+	private LinkedHashSet<Series> getResults() {
+		LinkedHashSet<Series> list = new LinkedHashSet<InvientCharts.Series>();
+        
+		for (PropositionOption o : p.getPropositionOptions()) {
+			List<Vote> results = Vote.findVotesByPropositionAndPropositionOptionLatest(p, o).getResultList();
+			
+			BigDecimal support = new BigDecimal(0);
+			BigDecimal dismiss = new BigDecimal(0);
+			BigDecimal zero = new BigDecimal(0);
+			int noVote = 0;
+			for (Vote v : results) {
+				int compare = v.getSupport().compareTo(zero);
+				if (compare == 0) {
+					noVote++;
+				} else if (compare>0) {
+					support = support.add(v.getSupport());
+				} else {
+					dismiss = dismiss.add(v.getSupport());
+				}
+			}
+			BigDecimal sum = new BigDecimal(0).add(support).add(dismiss);
+
+	        XYSeries seriesData = new XYSeries(o.getName());
+	        seriesData.setSeriesPoints(getPoints(seriesData, support.doubleValue(), noVote*100, dismiss.doubleValue(), sum.doubleValue()));
+	        list.add(seriesData);
+		}
+		return list;
 	}
 
 	/** Calculate suggested vote using current users trusted experts
@@ -344,7 +347,7 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 			
 		Object user = getApplication().getUser();
 		if (user != null && user instanceof ODUser) {
-			TypedQuery<Vote> voteQuery = Vote.findVotesByOdUserAndProposition((ODUser) user, p);
+			TypedQuery<Vote> voteQuery = Vote.findVotesByOdUserAndPropositionLatest((ODUser) user, p);
 			currentVotes = voteQuery.getResultList();
 		}
 		if (currentVotes != null) {

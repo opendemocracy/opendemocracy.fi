@@ -87,7 +87,7 @@ public class ODUserForm extends CustomComponent implements EntityEditor {
 		configure();
 
 		setCaption("User profile");
-		setIcon(ThemeConstants.TAB_ICON_CATEGORIES);
+		setIcon(ThemeConstants.TAB_ICON_USER);
 		// make saving the form the default action on Enter keypress
 		saveButton.setClickShortcut(KeyCode.ENTER);
 

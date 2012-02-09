@@ -19,7 +19,6 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @RooJavaBean
-@RooToString
 @RooEntity(finders = { "findODUsersByOpenIdIdentifier" })
 public class ODUser implements UserDetails {
 
@@ -74,5 +73,10 @@ public class ODUser implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public String toString() {
+    	return (username == null || username.isEmpty()) ? getId().toString() : username;
 	}
 }

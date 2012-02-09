@@ -18,8 +18,8 @@ public class ODUserView extends
 	public ODUserView() {
 		super();
 
-		setCaption(ThemeConstants.TAB_CAPTION_PROPOSITION);
-		setIcon(ThemeConstants.TAB_ICON_PROPOSITION);
+		setCaption(ThemeConstants.TAB_CAPTION_USER);
+		setIcon(ThemeConstants.TAB_ICON_USERS);
 	}
 
 	@Override
@@ -40,7 +40,9 @@ public class ODUserView extends
 	@Override
 	protected void configureTable(Table table) {
 		table.setContainerDataSource(getTableContainer());
-		table.setVisibleColumns(getTableColumns());
+		table.setVisibleColumns(new Object[]{"id", "username", "firstName", "lastName"});
+		table.setColumnHeader("firstName", "first name");
+		table.setColumnHeader("lastName", "last name");
 
 		setupGeneratedColumns(table);
 	}

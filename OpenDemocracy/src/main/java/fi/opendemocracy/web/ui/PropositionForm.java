@@ -97,7 +97,7 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 	private Label loginMsg;
 	
 	public PropositionForm() {
-		setIcon(ThemeConstants.TAB_ICON_PROPOSITION);
+		setIcon(ThemeConstants.TAB_ICON_NEW_PROPOSITION);
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
 
@@ -386,24 +386,23 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		// nameField
 		nameField = new TextField();
 		nameField.setCaption("Name");
-		nameField.setValue("");
-		nameField.setImmediate(true);
+		nameField.setImmediate(false);
 		nameField.setWidth("100.0%");
 		nameField.setHeight("-1px");
 		fieldLayout.addComponent(nameField);
 		
 		// descriptionField
 		descriptionField = new RichTextArea();
-		descriptionField.setValue("");
+		descriptionField.setNullRepresentation("");
 		descriptionField.setCaption("Description");
-		descriptionField.setImmediate(true);
+		descriptionField.setImmediate(false);
 		descriptionField.setDescription("Describe your proposition");
 		descriptionField.setWidth("100.0%");
 		descriptionField.setHeight("-1px");
 		fieldLayout.addComponent(descriptionField);
 				
 		categoriesField = new TwinColSelect();
-		categoriesField.setImmediate(true);
+		categoriesField.setImmediate(false);
 		categoriesField.setWidth("100.0%");
 		categoriesField.setHeight("-1px");
 		

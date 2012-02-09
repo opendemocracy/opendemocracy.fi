@@ -25,7 +25,7 @@ public class ModalCategoryForm extends Window   {
 	private TextField nameField;
 	private RichTextArea descriptionField;
 
-	private Category newCategory = new Category();
+	private Category newCategory;
 	
 	public ModalCategoryForm() {
 		addComponent(buildMainLayout());
@@ -127,6 +127,7 @@ public class ModalCategoryForm extends Window   {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				//TODO: Update if expertise exists
+				newCategory = new Category();
 				newCategory.setName(nameField.getValue().toString());
 				newCategory.setDescription(descriptionField.getValue().toString());
 				newCategory.setTs(new Date());

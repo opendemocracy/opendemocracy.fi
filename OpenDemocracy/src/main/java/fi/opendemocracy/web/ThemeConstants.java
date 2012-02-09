@@ -22,6 +22,8 @@ public class ThemeConstants {
 	public static final ThemeResource TOOLBAR_ICON_PROPOSITION = new ThemeResource(
 			"icons/32/propositions.png");
 	public static final ThemeResource TOOLBAR_ICON_LOGIN = new ThemeResource(
+			"icons/32/lock.png");
+	public static final ThemeResource TOOLBAR_ICON_USER = new ThemeResource(
 			"icons/32/user.png");
 
 	// Toolbar captions
@@ -37,10 +39,16 @@ public class ThemeConstants {
 			"icons/16/propositions.png");
 	public static final ThemeResource TAB_ICON_PROPOSITION = new ThemeResource(
 			"icons/16/propositions.png");
+	public static final ThemeResource TAB_ICON_NEW_PROPOSITION = new ThemeResource(
+			"icons/16/document-add.png");
 	public static final ThemeResource TAB_ICON_NEW_CATEGORY = new ThemeResource(
-			"icons/16/folder.png");
+			"icons/16/document-add.png");
 	public static final ThemeResource TAB_ICON_LOGIN = new ThemeResource(
 			"icons/16/propositions.png");
+	public static final ThemeResource TAB_ICON_USER = new ThemeResource(
+			"icons/16/user.png");
+	public static final ThemeResource TAB_ICON_USERS = new ThemeResource(
+			"icons/16/users.png");
 	public static final ThemeResource TAB_ICON_EXPERTS = new ThemeResource(
 			"icons/16/experts.png");
 	
@@ -50,7 +58,7 @@ public class ThemeConstants {
 	public static final String TAB_CAPTION_PROPOSITION = "Propositions";
 	public static final String TAB_CAPTION_NEW_CATEGORY = "New category";
 	public static final String TAB_CAPTION_LOGIN = "Login";
-	public static final String TAB_CAPTION_USER = "User";
+	public static final String TAB_CAPTION_USER = "Users";
 	public static final String TAB_CAPTION_EXPERTS = "Experts";
 
 	

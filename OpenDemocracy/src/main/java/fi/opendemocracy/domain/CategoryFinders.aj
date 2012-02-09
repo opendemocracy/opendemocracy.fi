@@ -44,7 +44,7 @@ privileged aspect CategoryFinders {
         }
     	return bd;
     }
-    //TODO: Check exception handling, use timestamp
+    
     public static long Category.getSupporters(Expert e){
         if (e == null) throw new IllegalArgumentException("The Expert argument is required");
         EntityManager em = Category.entityManager();

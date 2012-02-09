@@ -62,7 +62,7 @@ public class CategoryView extends
 	            		createCategoryModal = new ModalCategoryForm();
 	            		createCategoryModal.addListener(new CloseListener(){
 							public void windowClose(CloseEvent e) {
-								navigator.navigateTo(CategoryView.class);
+								getTable().setEditable(false);
 							}
 	            		});
 	            	}
