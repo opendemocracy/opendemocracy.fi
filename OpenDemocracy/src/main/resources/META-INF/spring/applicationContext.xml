@@ -98,4 +98,5 @@ xsi:schemaLocation="http://www.springframework.org/schema/aop
         <property name="persistenceUnitName" value="persistenceUnit"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    
 </beans>
