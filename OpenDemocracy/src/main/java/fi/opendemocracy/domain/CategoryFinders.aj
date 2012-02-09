@@ -9,7 +9,12 @@ privileged aspect CategoryFinders {
     public static BigDecimal Category.getRepresentation(Expert e){
         if (e == null) throw new IllegalArgumentException("The Expert argument is required");
         EntityManager em = Category.entityManager();
-        TypedQuery<BigDecimal> q = em.createQuery("SELECT SUM(r.trust) FROM Representation r WHERE r.expert = :e AND r.trust > 0", BigDecimal.class);
+        final String query = "SELECT (SUM(activeRep.trust) / NULLIF(COUNT(activeRep.trust),0)) FROM Representation activeRep WHERE " +
+			          		 "activeRep.expert = :e AND activeRep.trust > 0  AND " +
+			          		 "activeRep.ts = " +
+			          			"(SELECT MAX(mostRecent.ts) FROM Representation mostRecent WHERE " +
+			          			"mostRecent.expert = :e AND mostRecent.odUser = activeRep.odUser)";
+        TypedQuery<BigDecimal> q = em.createQuery(query, BigDecimal.class);
         q.setParameter("e", e);
         BigDecimal bd;
         try {
@@ -24,7 +29,12 @@ privileged aspect CategoryFinders {
     public static BigDecimal Category.getDistrust(Expert e){
         if (e == null) throw new IllegalArgumentException("The Expert argument is required");
         EntityManager em = Category.entityManager();
-        TypedQuery<BigDecimal> q = em.createQuery("SELECT SUM(r.trust) FROM Representation r WHERE r.expert = :e AND r.trust < 0", BigDecimal.class);
+        final String query = "SELECT (SUM(activeRep.trust) / NULLIF(COUNT(activeRep.trust),0)) FROM Representation activeRep WHERE " +
+				       		 "activeRep.expert = :e AND activeRep.trust < 0  AND " +
+				       		 "activeRep.ts = " +
+				       			"(SELECT MAX(mostRecent.ts) FROM Representation mostRecent WHERE " +
+				       			"mostRecent.expert = :e AND mostRecent.odUser = activeRep.odUser)";
+        TypedQuery<BigDecimal> q = em.createQuery(query, BigDecimal.class);
         q.setParameter("e", e);
         BigDecimal bd;
         try {
@@ -34,11 +44,48 @@ privileged aspect CategoryFinders {
         }
     	return bd;
     }
-
+    //TODO: Check exception handling, use timestamp
+    public static long Category.getSupporters(Expert e){
+        if (e == null) throw new IllegalArgumentException("The Expert argument is required");
+        EntityManager em = Category.entityManager();
+        final String query = "SELECT COUNT(activeRep.trust) FROM Representation activeRep WHERE " +
+				       		 "activeRep.expert = :e AND activeRep.trust > 0  AND " +
+				       		 "activeRep.ts = " +
+				       			"(SELECT MAX(mostRecent.ts) FROM Representation mostRecent WHERE " +
+				       			"mostRecent.expert = :e AND mostRecent.odUser = activeRep.odUser)";
+        TypedQuery<Long> q = em.createQuery(query, Long.class);
+        q.setParameter("e", e);
+        long l;
+        try {
+        	l = q.getSingleResult();
+        }catch (NullPointerException ex){
+        	l = 0L;
+        }
+    	return l;
+    }
+    //TODO: Check exception handling, use timestamp
+    public static long Category.getOpposers(Expert e){
+        if (e == null) throw new IllegalArgumentException("The Expert argument is required");
+        EntityManager em = Category.entityManager();
+        final String query = "SELECT COUNT(activeRep.trust) FROM Representation activeRep WHERE " +
+			        		 "activeRep.expert = :e AND activeRep.trust < 0  AND " +
+			        		 "activeRep.ts = " +
+			        			"(SELECT MAX(mostRecent.ts) FROM Representation mostRecent WHERE " +
+			        			"mostRecent.expert = :e AND mostRecent.odUser = activeRep.odUser)";
+        TypedQuery<Long> q = em.createQuery(query, Long.class);
+        q.setParameter("e", e);
+        long l;
+        try {
+        	l = q.getSingleResult();
+        }catch (NullPointerException ex){
+        	l = 0L;
+        }
+    	return l;
+    }
     //TODO: Check exception handling
     public static long Category.getExpertCount(Category c){
         if (c == null) throw new IllegalArgumentException("The Category argument is required");
-        EntityManager em = Category.entityManager();
+        EntityManager em = Category.entityManager();        
         TypedQuery<Long> q = em.createQuery("SELECT COUNT(e) FROM Expert e WHERE e.category = :c", Long.class);
         q.setParameter("c", c);
         long i;

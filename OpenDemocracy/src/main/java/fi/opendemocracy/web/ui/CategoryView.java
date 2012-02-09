@@ -1,30 +1,19 @@
 package fi.opendemocracy.web.ui;
 
-import java.util.Date;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.event.Action;
 import com.vaadin.spring.roo.addon.annotations.RooVaadinEntityView;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Window.CloseEvent;
+import com.vaadin.ui.Window.CloseListener;
 
 import fi.opendemocracy.domain.Category;
-import fi.opendemocracy.domain.Expert;
-import fi.opendemocracy.domain.ODUser;
-import fi.opendemocracy.domain.PropositionOption;
 import fi.opendemocracy.web.AbstractEntityView;
 import fi.opendemocracy.web.EntityEditor;
 import fi.opendemocracy.web.ThemeConstants;
+import fi.opendemocracy.web.ui.dialogs.ModalCategoryForm;
 import fi.opendemocracy.web.ui.dialogs.ModalClaimExpertise;
 
 @RooVaadinEntityView(formBackingObject = fi.opendemocracy.domain.Category.class)
@@ -38,30 +27,27 @@ public class CategoryView extends
     static final Action ACTION_VIEW_PROPOSITIONS = new Action("View Propositions");
     static final Action ACTION_VIEW_EXPERTS = new Action("View Experts");
     static final Action ACTION_CLAIM_EXPERTISE = new Action("Claim Expertise");
-    static final Action[] ACTIONS_MENU = new Action[] { ACTION_NEW_CATEGORY, ACTION_OPEN_CATEGORY, ACTION_SUBSCRIBE, ACTION_VIEW_PROPOSITIONS,
-            ACTION_VIEW_EXPERTS, ACTION_CLAIM_EXPERTISE };
+    static final Action[] ACTIONS_MENU = new Action[] { ACTION_NEW_CATEGORY, ACTION_CLAIM_EXPERTISE };
 	
 	//Claim expertise modal
 	private ModalClaimExpertise expertModal; 
-    
+    private ModalCategoryForm createCategoryModal;
 	public CategoryView(){
 		setCaption(ThemeConstants.TAB_CAPTION_CATEGORIES);
 		setIcon(ThemeConstants.TAB_ICON_CATEGORIES);
 		constructTable();
 	}
 	
-	//TODO: This does not work yet for some reason
 	private void constructTable(){
         getTable().setNullSelectionAllowed(false);
-        
+       
 		// create custom columns
         ColumnCountGenerator columnPropositionCount = new ColumnCountGenerator("propositions");
         ColumnCountGenerator columnExpertCount = new ColumnCountGenerator("experts");
         
         getTable().addGeneratedColumn("Propositions", columnPropositionCount);
         getTable().addGeneratedColumn("Experts", columnExpertCount);
-       
-        //getWindow().showNotification(getTable().getVisibleColumns().toString());
+    	
         // add right-click menu
         getTable().addActionHandler(new Action.Handler() {
 	        public Action[] getActions(Object target, Object sender) {
@@ -72,8 +58,15 @@ public class CategoryView extends
 	            if (ACTION_OPEN_CATEGORY == action) {
 	            	createView();
 	            } else if (ACTION_NEW_CATEGORY == action){
-	            	navigateTo("new");
-	            	getWindow().showNotification("TODO: Create");
+	            	if(createCategoryModal == null){
+	            		createCategoryModal = new ModalCategoryForm();
+	            		createCategoryModal.addListener(new CloseListener(){
+							public void windowClose(CloseEvent e) {
+								navigator.navigateTo(CategoryView.class);
+							}
+	            		});
+	            	}
+	            	getWindow().addWindow(createCategoryModal);
 	            } else if (ACTION_VIEW_PROPOSITIONS == action) {
 	            	//TODO
 	            	getWindow().showNotification("TODO: Propositions");
@@ -101,14 +94,14 @@ public class CategoryView extends
 
 	@Override
 	protected CustomComponent createView() {
-		return new CategoryEntityView((Category) getEntityForItem(getTable().getItem(getTable().getValue())));
+		return new CategoryEntityView((Category) getEntityForItem(getTable().getItem(getTable().getValue())), navigator);
 	}
 
 	@Override
 	protected void configureTable(Table table) {
 		table.setContainerDataSource(getTableContainer());
 		setupGeneratedColumns(table);
-		getTable().setVisibleColumns(new Object[] {"name", "description", "Propositions", "Experts"});
+		getTable().setVisibleColumns(new Object[] {"name", "Propositions", "Experts"});
 	}
 
     // column generator for data linked to category
@@ -132,4 +125,5 @@ public class CategoryView extends
         	return null;
         }
     }
+    
 }
