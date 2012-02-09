@@ -1,5 +1,6 @@
 package fi.opendemocracy.web;
 
+import com.vaadin.terminal.Resource;
 import com.vaadin.terminal.ThemeResource;
 
 /* Constants used throughout application */
@@ -11,6 +12,9 @@ public class ThemeConstants {
 	public static final ThemeResource LOGO = new ThemeResource("img/logo.png");
 	public static final ThemeResource HELP_ICON = new ThemeResource(
 			"icons/16/help.png");
+
+	public static final ThemeResource BUTTON_ICON_REMOVE = new ThemeResource(
+			"icons/16/experts.png");
 
 	// Toolbar images
 	public static final ThemeResource TOOLBAR_ICON_CATEGORIES = new ThemeResource(
@@ -38,7 +42,7 @@ public class ThemeConstants {
 			"icons/16/propositions.png");
 	public static final ThemeResource TAB_ICON_EXPERTS = new ThemeResource(
 			"icons/16/experts.png");
-
+	
 	// Tab captions
 	public static final String TAB_CAPTION_CATEGORIES = "Categories";
 	public static final String TAB_CAPTION_HOME = "Home";
@@ -46,5 +50,7 @@ public class ThemeConstants {
 	public static final String TAB_CAPTION_NEW_CATEGORY = "New category";
 	public static final String TAB_CAPTION_LOGIN = "Login";
 	public static final String TAB_CAPTION_EXPERTS = "Experts";
+
+	
 
 }

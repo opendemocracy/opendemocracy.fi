@@ -1,32 +1,24 @@
 package fi.opendemocracy.web.ui.dialogs;
 
 import java.util.Date;
-import java.util.List;
-
-import javax.persistence.TypedQuery;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Slider.ValueOutOfBoundsException;
 
 import fi.opendemocracy.domain.Category;
 import fi.opendemocracy.domain.Expert;
 import fi.opendemocracy.domain.ODUser;
-import fi.opendemocracy.domain.PropositionOption;
-import fi.opendemocracy.domain.Vote;
 
 public class ModalClaimExpertise extends Window{
 	
 	private VerticalLayout expertForm;
 	private final Button add = new Button("Claim");
 	private final Button cancel = new Button("Cancel");
-	private Window main;
 	private ODUser currentUser;
 	private final RichTextArea description = new RichTextArea("Please describe your expertise in a few words:");
 	private Category sourceCategory;
@@ -37,9 +29,6 @@ public class ModalClaimExpertise extends Window{
 		
 		sourceCategory = c;
 		expertForm = new VerticalLayout();
-
-		expertForm.setMargin(true);
-		expertForm.setSpacing(true);
 		expertForm.setWidth("100%");
 
 		addComponent(expertForm);
@@ -49,6 +38,8 @@ public class ModalClaimExpertise extends Window{
 		buttons.addComponent(cancel);
 		buttons.addComponent(add);
 		buttons.setSpacing(true);
+		
+		description.setWidth("100%");
 		
 		expertForm.addComponent(description);
 		expertForm.addComponent(buttons);
@@ -91,7 +82,6 @@ public class ModalClaimExpertise extends Window{
 			this.close();
 			//TODO: Display login message?
 		}
-		main = getWindow();
 		setCategory(sourceCategory);
 		addListeners();
 	}

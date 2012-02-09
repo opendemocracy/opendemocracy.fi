@@ -30,7 +30,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
     private Table table;
     private EntityEditor form;
     private VerticalLayout view;
-    private TabNavigator navigator;
+    protected TabNavigator navigator;
     private boolean dirty = false;
 
 	/**
