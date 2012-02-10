@@ -95,7 +95,6 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 		// scrollContent
 		scrollContent = buildScrollContent();
 		scrollPanel.setContent(scrollContent);
-		scrollPanel.setStyle(Panel.STYLE_LIGHT);
 		return scrollPanel;
 	}
 
@@ -109,17 +108,19 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 		scrollContent.addComponent(propositionName);
 		scrollContent.addComponent(propositionDescription);
 
-		scrollContent.addComponent(new Label("Categories:", Label.CONTENT_XHTML));
 		
+		HorizontalLayout categoryLayout = new HorizontalLayout();
+		categoryLayout.addComponent(new Label("<p><b>Categories:</b></p>", Label.CONTENT_XHTML));
+		categoryLayout.setSpacing(true);
 		for (Category c : p.getCategories()) {
-			scrollContent.addComponent(new Label("<p>" + c.getName() + "</p>", Label.CONTENT_XHTML));
+			categoryLayout.addComponent(new Label("<p>" + c.getName() + "</p>", Label.CONTENT_XHTML));
 		}
         
 		for (PropositionOption o : p.getPropositionOptions()) {
 	        Panel optionPanel = new Panel();
-	        
-			// Name and description
-	        optionPanel.addComponent(new Label("<b>"+o.getName(), Label.CONTENT_XHTML));
+	        optionPanel.addStyleName("option-panel");
+	        // Name and description
+	        optionPanel.addComponent(new Label("<h3>"+o.getName()+"</h3>", Label.CONTENT_XHTML));
 	        optionPanel.addComponent(new Label(o.getDescription(), Label.CONTENT_XHTML));
 
 			// Vote option slider
