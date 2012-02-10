@@ -155,12 +155,6 @@ public class ModalCategoryForm extends Window   {
 	@Override
 	public void attach() {
 		super.attach();
-		Object o = getApplication().getUser();
-		if (o == null || !(o instanceof ODUser)) {
-			this.close(); 
-			getWindow().showNotification("You need to login");
-			return;
-		}
 	}
 
 }

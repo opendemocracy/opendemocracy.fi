@@ -21,9 +21,7 @@ public class ModalTrustExpert extends Window {
 	private VerticalLayout trustExpertForm;
 	private final Button add = new Button("Assign trust");
 	private final Button cancel = new Button("Cancel");
-	private Window main;
 	private ODUser currentUser;
-	private final RichTextArea description = new RichTextArea("Please describe your expertise in a few words:");
 	private Expert sourceExpert;
 	private Button.ClickListener addButtonClickListener;
 	private final VoteOptionSlider trust = new VoteOptionSlider("Trust");
@@ -36,7 +34,6 @@ public class ModalTrustExpert extends Window {
 		trustExpertForm.setMargin(true);
 		trustExpertForm.setSpacing(true);
 		trustExpertForm.setWidth("100%");
-			
 
 		expertise = new Label();
 		expertise.setContentMode(Label.CONTENT_XHTML);
@@ -95,7 +92,8 @@ public class ModalTrustExpert extends Window {
 			getApplication().getMainWindow().showNotification("You need to login");
 			return;
 		}
-		main = getWindow();
+
+		currentUser = (ODUser) o;
 		setExpert(sourceExpert);
 		addListeners();
 	}

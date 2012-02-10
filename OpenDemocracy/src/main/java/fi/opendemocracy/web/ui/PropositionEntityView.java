@@ -114,23 +114,6 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 		for (Category c : p.getCategories()) {
 			scrollContent.addComponent(new Label("<p>" + c.getName() + "</p>", Label.CONTENT_XHTML));
 		}
-
-        InvientChartsConfig chartConfig = new InvientChartsConfig();
-        chartConfig.getGeneralChartConfig().setType(SeriesType.COLUMN);
-        chartConfig.getTitle().setText("Results");
-        
-        CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setCategories(Arrays.asList("Support","Unsure", "Dismiss","Sum"));
-        LinkedHashSet<XAxis> xAxesSet = new LinkedHashSet<InvientChartsConfig.XAxis>();
-        xAxesSet.add(xAxis);
-        chartConfig.setXAxes(xAxesSet);
-        Tooltip tooltip = new Tooltip();
-        tooltip.setFormatterJsFunc("function() {"
-                + " return '' + this.series.name +': '+ this.y +''; " + "}");
-        chartConfig.setTooltip(tooltip);
-        chartConfig.getCredit().setEnabled(false);
-        final InvientCharts invChart = new InvientCharts(chartConfig);
-        invChart.setWidth("-1px");
         
 		for (PropositionOption o : p.getPropositionOptions()) {
 	        Panel optionPanel = new Panel();
@@ -174,19 +157,13 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 			optionPanel.addComponent(comment);
 			scrollContent.addComponent(optionPanel);
 		}
-		
-        invChart.addListener(new InvientCharts.PointClickListener() {
 
-            public void pointClick(PointClickEvent pointClickEvent) {
-                getApplication().getMainWindow().showNotification("PointX : " + (Double) pointClickEvent.getPoint().getX() + ", PointY : " + (Double) pointClickEvent.getPoint().getY());
-            }
-        });
+        final InvientCharts invChart = createChart("Results", Arrays.asList("Support","Unsure", "Dismiss","Sum"));
+        final InvientCharts invChart2 = createChart("Suggested results", Arrays.asList("Sum"));
         
-
         final PopupDateField maxdate = new PopupDateField();
         maxdate.setValue(new java.util.Date());
         maxdate.setResolution(PopupDateField.RESOLUTION_DAY);
-
         maxdate.addListener(new ValueChangeListener(){
 		    public void valueChange(ValueChangeEvent event) {
 		        Object value = event.getProperty().getValue();
@@ -194,17 +171,21 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 		            getWindow().showNotification("Invalid date entered");
 		        } else {
 					invChart.setSeries(getResults((Date) maxdate.getValue()));
+					invChart2.setSeries(getSuggestedWeigths((Date) maxdate.getValue()));
 		        }
 		    }
         });
         maxdate.setImmediate(true);
 		invChart.setSeries(getResults((Date) maxdate.getValue()));
+		invChart2.setSeries(getSuggestedWeigths((Date) maxdate.getValue()));
+		
 		final VerticalLayout resultsContent = new VerticalLayout();
         HorizontalLayout timelimit = new HorizontalLayout();
         timelimit.addComponent(new Label("Choose upper timelimit for vote results:&nbsp;&nbsp;", Label.CONTENT_XHTML));
         timelimit.addComponent(maxdate);
 		resultsContent.addComponent(timelimit);
 		resultsContent.addComponent(invChart);
+		resultsContent.addComponent(invChart2);
 		resultsContent.setMargin(true);
 		resultsContent.setSpacing(false);
 		resultsContent.setVisible(false);
@@ -252,6 +233,32 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 		return scrollContainer;
 	}
 
+	private InvientCharts createChart(String string, List<String> categories) {
+        InvientChartsConfig chartConfig = new InvientChartsConfig();
+        chartConfig.getGeneralChartConfig().setType(SeriesType.COLUMN);
+        chartConfig.getTitle().setText(string);
+        
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setCategories(categories);
+        LinkedHashSet<XAxis> xAxesSet = new LinkedHashSet<InvientChartsConfig.XAxis>();
+        xAxesSet.add(xAxis);
+        chartConfig.setXAxes(xAxesSet);
+        Tooltip tooltip = new Tooltip();
+        tooltip.setFormatterJsFunc("function() {"
+                + " return '' + this.series.name +': '+ this.y +''; " + "}");
+        chartConfig.setTooltip(tooltip);
+        chartConfig.getCredit().setEnabled(false);
+        InvientCharts invChart = new InvientCharts(chartConfig);
+        invChart.setWidth("-1px");
+        invChart.addListener(new InvientCharts.PointClickListener() {
+
+            public void pointClick(PointClickEvent pointClickEvent) {
+                getApplication().getMainWindow().showNotification("PointX : " + (Double) pointClickEvent.getPoint().getX() + ", PointY : " + (Double) pointClickEvent.getPoint().getY());
+            }
+        });
+		return invChart;
+	}
+
 	private LinkedHashSet<Series> getResults(Date timelimit) {
 		LinkedHashSet<Series> list = new LinkedHashSet<InvientCharts.Series>();
         
@@ -283,23 +290,41 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 
 	/** Calculate suggested vote using current users trusted experts
 	 */
-	private HashMap<PropositionOption, BigDecimal> getSuggestedWeigths(List<Vote> results) {
+	private LinkedHashSet<Series> getSuggestedWeigths(Date timeline) {
+		LinkedHashSet<Series> list = new LinkedHashSet<InvientCharts.Series>();
+        
     	HashMap<PropositionOption, BigDecimal> map = new HashMap<PropositionOption, BigDecimal>(p.getPropositionOptions().size());
-		List<Representation> representations = Representation.findRepresentationsByOdUserAndTrustGreaterThan((ODUser) getApplication().getUser(), BigDecimal.ZERO).getResultList();
-    	Set<ODUser> voters = new HashSet<ODUser>();
-    	for (Vote v : results) {
-    		voters.add(v.getOdUser());
-    	}
-    	for (Representation r : representations) {
-    		if (voters.contains(r.getExpert()) && p.getCategories().contains(r.getExpert().getCategory())) {
-    			
-    		}
-    	}
+
     	for (PropositionOption po : p.getPropositionOptions()) {
     		map.put(po, BigDecimal.ZERO);
     	}
     	
-		return map;
+    	Set<ODUser> voters = new HashSet<ODUser>();
+		List<Vote> results = Vote.findVotesByPropositionLatestBefore(p, timeline).getResultList();
+    	for (Vote v : results) {
+    		voters.add(v.getOdUser());
+    	}
+    	List<ODUser> nonVoters = ODUser.findAllODUsers();
+    	nonVoters.removeAll(voters);
+    	for (ODUser nonVoter : nonVoters) {
+    		List<Representation> representations = Representation.findRepresentationsByOdUserAndTrustGreaterThanLatestBefore(nonVoter, BigDecimal.ZERO, timeline).getResultList();
+    		for (Representation r : representations) {
+        		if (voters.contains(r.getExpert()) && p.getCategories().contains(r.getExpert().getCategory())) {
+        			for (Vote v : results) {
+			    		if (v.getOdUser().getId().equals(r.getExpert().getOdUser().getId())){
+			    			BigDecimal support = map.get(v.getPropositionOption()).add(v.getSupport().multiply(r.getTrust()));
+			    			map.put(v.getPropositionOption(), support);
+			    		}
+			    	}
+        		}
+        	}
+    	}
+		for (PropositionOption o : map.keySet()) {
+	        XYSeries seriesData = new XYSeries(o.getName());
+	        seriesData.setSeriesPoints(getPoints(seriesData, map.get(o).doubleValue()));
+	        list.add(seriesData);
+		}
+		return list;
 	}
 
 	/** Calculate vote power in a proposition

@@ -28,7 +28,7 @@ public class CategoryView extends
     static final Action ACTION_VIEW_PROPOSITIONS = new Action("View Propositions");
     static final Action ACTION_VIEW_EXPERTS = new Action("View Experts");
     static final Action ACTION_CLAIM_EXPERTISE = new Action("Claim Expertise");
-    static final Action[] ACTIONS_MENU = new Action[] { ACTION_NEW_CATEGORY, ACTION_CLAIM_EXPERTISE };
+    static final Action[] ACTIONS_MENU = new Action[] { ACTION_NEW_CATEGORY };
 	
 	//Claim expertise modal
 	private ModalClaimExpertise expertModal; 
@@ -58,13 +58,7 @@ public class CategoryView extends
 	        public void handleAction(Action action, Object sender, Object target) {
 	            if (ACTION_OPEN_CATEGORY == action) {
 	            	createView();
-	            } else if (ACTION_NEW_CATEGORY == action){
-
-	        		Object o = getApplication().getUser();
-	        		if (o == null || !(o instanceof ODUser)) {
-	        			getWindow().showNotification("You need to login to vote");
-	        			return;
-	        		}
+	            } else if (ACTION_NEW_CATEGORY == action && log()){
 	            	if(createCategoryModal == null){
 	            		createCategoryModal = new ModalCategoryForm();
 	            		createCategoryModal.addListener(new CloseListener(){
@@ -80,12 +74,7 @@ public class CategoryView extends
 	            } else if (ACTION_VIEW_EXPERTS == action) {
 	            	//TODO
 	            	getWindow().showNotification("TODO: Experts");
-	            } else if (ACTION_CLAIM_EXPERTISE == action) {
-	        		Object o = getApplication().getUser();
-	        		if (o == null || !(o instanceof ODUser)) {
-	        			getWindow().showNotification("You need to login to vote");
-	        			return;
-	        		}
+	            } else if (ACTION_CLAIM_EXPERTISE == action && log()) {
 	            	Category c = (Category) getEntityForItem(getTable().getItem(getTable().getValue()));
 	            	if(expertModal == null){
 	            		expertModal = new ModalClaimExpertise(c);

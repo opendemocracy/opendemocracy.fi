@@ -262,6 +262,7 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 			}
 			commitFields();
 			propositionOptions.clear();
+			optionsLayout.removeAllComponents();
 		}
 	}
     

@@ -276,16 +276,6 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 			Object user = event.getNewUser();
 			if (user != null && user instanceof ODUser) {
 				ODUser oduser = (ODUser) user;
-
-				OpenIDAuthenticationToken token = (OpenIDAuthenticationToken)SecurityContextHolder.getContext().getAuthentication();
-		        if (token != null) {
-		        	NormalizedOpenIdAttributesBuilder normalizedOpenIdAttributesBuilder = new NormalizedOpenIdAttributesBuilder();
-					NormalizedOpenIdAttributes attrs = normalizedOpenIdAttributesBuilder.build(token);
-					oduser.setEmailAddress(attrs.getEmailAddress());
-					oduser.setUsername(attrs.getFullName());
-					oduser.setDescription(attrs.getUserLocalIdentifier());
-					oduser.merge();
-		        }
 				loginMsg.setValue(loginTxt
 						+ "<br /><br />Logged in as: " + oduser.getOpenIdIdentifier()
 						+ "<br /><br />Mail: " + oduser.getEmailAddress()

@@ -33,6 +33,13 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
     protected TabNavigator navigator;
     private boolean dirty = false;
 
+    /**
+     * Helper function to check that user is logged in, or notify that it is needed
+     * @return true if logged in
+     */
+    protected boolean log() {
+    	return ((OpenDemocracyVotingApplication) getApplication()).loginNotify();
+    }
 	/**
 	 * Constructor for an abstract entity view.
 	 * 

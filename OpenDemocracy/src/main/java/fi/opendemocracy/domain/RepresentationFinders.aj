@@ -17,7 +17,7 @@ privileged aspect RepresentationFinders {
         EntityManager em = Representation.entityManager();
         TypedQuery<Representation> q = em.createQuery("SELECT o FROM Representation AS o WHERE o.expert = :expert AND o.trust > :trust AND o.ts = " +
 			        			"(SELECT MAX(mostRecent.ts) FROM Representation AS mostRecent WHERE " +
-			        			"mostRecent.expert = :expert AND mostRecent.trust  > :trust AND mostRecent.odUser = o.odUser AND mostRecent.ts <= :timelimit", Representation.class);
+			        			"mostRecent.expert = :expert AND mostRecent.trust  > :trust AND mostRecent.odUser = o.odUser AND mostRecent.ts <= :timelimit)", Representation.class);
         q.setParameter("expert", expert);
         q.setParameter("trust", trust);
         q.setParameter("timelimit", timelimit);
@@ -31,7 +31,7 @@ privileged aspect RepresentationFinders {
         EntityManager em = Representation.entityManager();
         TypedQuery<Representation> q = em.createQuery("SELECT o FROM Representation AS o WHERE o.odUser = :odUser AND o.trust > :trust AND o.ts = " +
 			        			"(SELECT MAX(mostRecent.ts) FROM Representation AS mostRecent WHERE " +
-			        			"mostRecent.odUser = :odUser AND mostRecent.trust > :trust AND mostRecent.ts <= :timelimit", Representation.class);
+			        			"mostRecent.odUser = :odUser AND mostRecent.trust > :trust AND mostRecent.ts <= :timelimit)", Representation.class);
         q.setParameter("odUser", odUser);
         q.setParameter("trust", trust);
         q.setParameter("timelimit", timelimit);

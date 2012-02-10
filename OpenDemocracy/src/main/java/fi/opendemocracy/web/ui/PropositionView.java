@@ -18,6 +18,7 @@ import fi.opendemocracy.domain.Proposition;
 import fi.opendemocracy.web.AbstractEntityView;
 import fi.opendemocracy.web.EntityEditor;
 import fi.opendemocracy.web.EntityProviderUtil;
+import fi.opendemocracy.web.OpenDemocracyVotingApplication;
 import fi.opendemocracy.web.ThemeConstants;
 
 @RooVaadinEntityView(formBackingObject = fi.opendemocracy.domain.Proposition.class)
@@ -40,8 +41,8 @@ public class PropositionView extends
 	        public void handleAction(Action action, Object sender, Object target) {
 	            if (ACTION_OPEN_PROPOSITION == action) {
 	            	getWindow().showNotification("TODO: Open");
-	            } else if (ACTION_NEW_PROPOSITION == action){
-	            	navigateTo("new");
+	            } else if (ACTION_NEW_PROPOSITION == action && log()){
+            		navigateTo("new");
 	            }
 	        }
         });

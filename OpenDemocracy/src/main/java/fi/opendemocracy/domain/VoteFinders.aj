@@ -54,6 +54,18 @@ privileged aspect VoteFinders {
         q.setParameter("timelimit", timelimit);
         return q;
     }
+    public static TypedQuery<Vote> Vote.findVotesByPropositionLatestBefore(Proposition proposition, Date timelimit) {
+        if (proposition == null) throw new IllegalArgumentException("The proposition argument is required");
+        if (timelimit == null) throw new IllegalArgumentException("The timelimit argument is required");
+        EntityManager em = Vote.entityManager();
+        TypedQuery<Vote> q = em.createQuery("SELECT o FROM Vote AS o WHERE o.proposition = :proposition AND o.ts = " +
+			        			"(SELECT MAX(mostRecent.ts) FROM Vote AS mostRecent WHERE " +
+			        			"mostRecent.proposition = :proposition AND mostRecent.odUser = o.odUser AND mostRecent.ts <= :timelimit)", Vote.class);
+
+        q.setParameter("proposition", proposition);
+        q.setParameter("timelimit", timelimit);
+        return q;
+    }
 
 }
 
