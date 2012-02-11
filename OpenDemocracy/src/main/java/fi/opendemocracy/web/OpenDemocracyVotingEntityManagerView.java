@@ -180,7 +180,7 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 				jsp.setType(Embedded.TYPE_BROWSER);
 				jsp.setCaption(ThemeConstants.TAB_CAPTION_LOGIN);
 				jsp.setIcon(ThemeConstants.TAB_ICON_LOGIN);
-				jsp.setSource(new ExternalResource("/OpenDemocracy/jsp/login"));
+				jsp.setSource(new ExternalResource("/jsp/login"));
 				navigator.openChildTab(jsp, "login");
 			}
 		});

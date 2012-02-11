@@ -115,6 +115,7 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 		for (Category c : p.getCategories()) {
 			categoryLayout.addComponent(new Label("<p>" + c.getName() + "</p>", Label.CONTENT_XHTML));
 		}
+		scrollContent.addComponent(categoryLayout);
         
 		for (PropositionOption o : p.getPropositionOptions()) {
 	        Panel optionPanel = new Panel();
