@@ -100,14 +100,12 @@ public class TabNavigator extends HorizontalLayout {
 			public void selectedTabChange(SelectedTabChangeEvent event) {
 				Component tab = tabSheet.getSelectedTab();
 				String uri = getUri(tab.getClass());
-				String s;
-
-				if ((s = tabToUri.get(tab)) != null) {
-					uri += s;
-				}
-
+			
 				if (uri != null) {
 					navigateTo(uri);
+				}else if(tabToUri.containsKey(tab)){
+					uri = tabToUri.get(tab);
+					uriFragmentUtil.setFragment(uri, false);
 				}
 			}
 		});
