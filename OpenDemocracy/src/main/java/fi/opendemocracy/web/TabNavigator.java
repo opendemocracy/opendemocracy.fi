@@ -245,6 +245,20 @@ public class TabNavigator extends HorizontalLayout {
 			tabToView.put(t.getComponent(), (isView) ? (View) c : currentView);
 		}
 		tabSheet.setSelectedTab(c);
+		
+//		Tab t = tabSheet.getTab(c);
+//		if(uriToTab.containsKey(uri)){
+//			t = tabSheet.getTab(uriToTab.get(uri));
+//			c = t.getComponent();
+//		}
+//		if (t == null) {
+//			t = tabSheet.addTab(c, c.getCaption(), c.getIcon());
+//			t.setClosable(!c.isReadOnly());
+//			tabToUri.put(t.getComponent(), uri);
+//			uriToTab.put(uri, t.getComponent());
+//			tabToView.put(t.getComponent(), (isView) ? (View) c : currentView);
+//		}
+//		tabSheet.setSelectedTab(c);
 	}
 
 	public void openChildTab(Component c, String uri) {

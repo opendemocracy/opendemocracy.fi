@@ -1,6 +1,7 @@
 package fi.opendemocracy.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.vaadin.Application;
 import com.vaadin.data.Container;
@@ -165,10 +166,8 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 			@Override
 			public void itemClick(ItemClickEvent event) {
 				Object value = event.getItemId();
-				if(getTable().getValue() == value && event.getButton() == ItemClickEvent.BUTTON_LEFT){
-					navigator.openChildTab(createView(), "view/" + value.toString());
-				}else if(getTable().getValue() != value){
-					getTable().setValue(value);
+				if(getTable().getValue() == value && !event.isDoubleClick() && event.getButton() == ItemClickEvent.BUTTON_LEFT){
+					navigator.openChildTab(getView("view/" + value.toString()), "view/" + value.toString());
 				}
 			}
 		});
@@ -198,7 +197,6 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 			}
 		});
 	}
-
 	/**
 	 * Set the current entity to display on the form and to edit.
 	 * 
@@ -369,4 +367,11 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 
 	protected abstract void configureTable(Table table);
 
+	HashMap<String, Component> uriToView = new HashMap<String, Component>();
+	protected Component getView(String string) {
+		if (!uriToView.containsKey(string)) {
+			uriToView.put(string, createView());
+		}
+		return uriToView.get(string);
+	}
 }

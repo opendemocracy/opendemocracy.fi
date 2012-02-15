@@ -172,12 +172,19 @@ public class CategoryEntityView extends CustomComponent {
 			propositionTable.setFooterVisible(true);
 			propositionTable.setColumnFooter("name", propositionTable.size() + " propositions");
 			propositionTable.addListener(new ItemClickListener() {
+				HashMap<String, Component> uriToView = new HashMap<String, Component>();
+				protected Component getView(Proposition p, String string) {
+					if (!uriToView.containsKey(string)) {
+						uriToView.put(string, new PropositionEntityView(p));
+					}
+					return uriToView.get(string);
+				}
 				@Override
 				public void itemClick(ItemClickEvent event) {
 					Object value = event.getItemId();
 					if(propositionTable.getValue() == value && event.getButton() == ItemClickEvent.BUTTON_LEFT){
 						final Proposition p = propositionContainer.getItem(value).getEntity();
-						navigator.openChildTab(new PropositionEntityView(p), "proposition/view/" + p.getId().toString());
+						navigator.openChildTab(getView(p, "proposition/view/" + p.getId().toString()), "proposition/view/" + p.getId().toString());
 					}
 				}
 			});
@@ -229,7 +236,9 @@ public class CategoryEntityView extends CustomComponent {
 		}else{
 			trustExpertModal.setExpert(e);
 		}
-		getWindow().addWindow(trustExpertModal);
+		if (trustExpertModal.getApplication() == null) {
+			getWindow().addWindow(trustExpertModal);
+		}
 	}
 	
 	// Claim expertise modal

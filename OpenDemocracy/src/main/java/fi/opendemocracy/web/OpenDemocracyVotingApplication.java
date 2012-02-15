@@ -1,5 +1,6 @@
 package fi.opendemocracy.web;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -112,7 +113,6 @@ public class OpenDemocracyVotingApplication extends Application implements HttpS
     {
         this.response = response;
         this.request = request;
-
     }
 
     @Override
