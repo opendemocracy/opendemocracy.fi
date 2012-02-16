@@ -92,15 +92,24 @@ public class OpenDemocracyVotingApplication extends Application implements HttpS
 		}
 		return false;
 	}
-	
 
-	public boolean loginNotify() {
+	/** Notifies the user to log in or returns true
+	 * @return
+	 */
+	public boolean isLoggedInNotify() {
+		return getLoggedInUser() != null;
+	}
+
+	/** Gets the logged in user or notifies to login and returns null
+	 * @return ODUser or null
+	 */
+	public ODUser getLoggedInUser() {
 		Object o = getUser();
 		if (o == null || !(o instanceof ODUser)) {
 			getMainWindow().showNotification("You need to login");
-			return false;
+			return null;
 		}
-		return true;
+		return (ODUser)o;
 	}
 
 	public void setWebApplicationContext(WebApplicationContext appContext) {

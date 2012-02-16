@@ -156,6 +156,17 @@ public class CategoryEntityView extends CustomComponent {
 					}
 				}
 			});
+
+			trustExpertModal = new ModalTrustExpert();
+			closeTrustExpertModal = new CloseListener() {
+				@Override
+				public void windowClose(CloseEvent ev) {
+					//Refresh table superhack
+					expertTable.setEditable(false);
+				}
+			};
+			trustExpertModal.addListener(closeTrustExpertModal);
+			
 			expertTable.setFooterVisible(true);
 			expertTable.setColumnFooter("Username", expertTable.size() + " experts");
 			tables.addComponent(expertTable);
@@ -177,8 +188,6 @@ public class CategoryEntityView extends CustomComponent {
 					Object value = event.getItemId();
 					if(propositionTable.getValue() == value && event.getButton() == ItemClickEvent.BUTTON_LEFT){
 						navigator.navigateTo("proposition/view/" + value);
-					} else {
-						propositionTable.setValue(value);
 					}
 				}
 			});
@@ -208,6 +217,7 @@ public class CategoryEntityView extends CustomComponent {
 		table.setCaption(title);
 		table.setIcon(icon);
         table.addStyleName(Reindeer.TABLE_STRONG);
+        table.setImmediate(true);
 		return table;
 	}
 	
@@ -217,22 +227,8 @@ public class CategoryEntityView extends CustomComponent {
 			getWindow().showNotification("Login to see/trust experts");
 			return;
 		}
-		if(trustExpertModal == null){
-			trustExpertModal = new ModalTrustExpert(e);
-			closeTrustExpertModal = new CloseListener() {
-				@Override
-				public void windowClose(CloseEvent ev) {
-					//Refresh table superhack
-					expertTable.setEditable(false);
-				}
-			};
-			trustExpertModal.addListener(closeTrustExpertModal);
-		}else{
-			trustExpertModal.setExpert(e);
-		}
-		if (trustExpertModal.getApplication() == null) {
-			getWindow().addWindow(trustExpertModal);
-		}
+		trustExpertModal.setExpert(e);
+		getWindow().addWindow(trustExpertModal);
 	}
 	
 	// Claim expertise modal
@@ -295,7 +291,7 @@ public class CategoryEntityView extends CustomComponent {
 						Expert e = expertContainer.getItem(itemId).getEntity();
 						trustExpert(e);
 					}else{
-						source.select(itemId);
+						source.setValue(itemId);
 					}
                 }
             });

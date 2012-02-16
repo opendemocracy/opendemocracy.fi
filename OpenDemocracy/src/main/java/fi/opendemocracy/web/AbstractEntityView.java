@@ -39,7 +39,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
      * @return true if logged in
      */
     protected boolean log() {
-    	return ((OpenDemocracyVotingApplication) getApplication()).loginNotify();
+    	return ((OpenDemocracyVotingApplication) getApplication()).isLoggedInNotify();
     }
 	/**
 	 * Constructor for an abstract entity view.
