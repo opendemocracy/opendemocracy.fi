@@ -11,6 +11,7 @@ import com.vaadin.ui.Window.CloseListener;
 
 import fi.opendemocracy.domain.Category;
 import fi.opendemocracy.domain.ODUser;
+import fi.opendemocracy.domain.Proposition;
 import fi.opendemocracy.web.AbstractEntityView;
 import fi.opendemocracy.web.EntityEditor;
 import fi.opendemocracy.web.ThemeConstants;
@@ -57,7 +58,7 @@ public class CategoryView extends
 
 	        public void handleAction(Action action, Object sender, Object target) {
 	            if (ACTION_OPEN_CATEGORY == action) {
-	            	createView();
+	            	createView(null);
 	            } else if (ACTION_NEW_CATEGORY == action && log()){
 	            	if(createCategoryModal == null){
 	            		createCategoryModal = new ModalCategoryForm();
@@ -94,8 +95,20 @@ public class CategoryView extends
 	}
 
 	@Override
-	protected CustomComponent createView() {
+	protected CustomComponent createView(String uri) {
+		if (uri != null) { 
+			// TODO fix handling of URI
+			try {
+				int i = uri.indexOf("/");
+				String lon = uri.substring(i+1);
+				Long id = Long.decode(lon);
+				return new CategoryEntityView((Category) getEntityForItem(getTable().getItem(id)), navigator);
+			} catch (NumberFormatException e) {
+				
+			}
+		}
 		return new CategoryEntityView((Category) getEntityForItem(getTable().getItem(getTable().getValue())), navigator);
+
 	}
 
 	@Override

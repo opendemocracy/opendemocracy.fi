@@ -17,7 +17,7 @@ public class VoteView extends AbstractEntityView<fi.opendemocracy.domain.Vote> {
 	}
 
 	@Override
-	protected CustomComponent createView() {
+	protected CustomComponent createView(String uri) {
 		return null;
 	}
 

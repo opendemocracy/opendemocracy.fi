@@ -106,6 +106,9 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 				navigateToFragment(null);
 				return;
 			}
+		} else if (requestedDataId.startsWith("view/")) {
+			navigator.openChildTab(getView(requestedDataId), requestedDataId);
+			return;
 		}
 
 		setCurrentEntity(null);
@@ -240,7 +243,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 	}
 
 	protected CustomComponent getView() {
-		return createView();
+		return createView(null);
 	}
 
 	/**
@@ -363,15 +366,28 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 	 */
 	protected abstract EntityEditor createForm();
 
-	protected abstract CustomComponent createView();
+	/**
+	 * Create the component used for viewing an entity.
+	 * 
+	 * Concrete subclasses must implement this method.
+	 * 
+	 * @return
+	 */
+	protected abstract CustomComponent createView(String uri);
 
 	protected abstract void configureTable(Table table);
 
 	HashMap<String, Component> uriToView = new HashMap<String, Component>();
-	protected Component getView(String string) {
-		if (!uriToView.containsKey(string)) {
-			uriToView.put(string, createView());
+
+	/**
+	 * Get view corresponding to a URI.
+	 * 
+	 * @return
+	 */
+	protected Component getView(String uri) {
+		if (!uriToView.containsKey(uri)) {
+			uriToView.put(uri, createView(uri));
 		}
-		return uriToView.get(string);
+		return uriToView.get(uri);
 	}
 }

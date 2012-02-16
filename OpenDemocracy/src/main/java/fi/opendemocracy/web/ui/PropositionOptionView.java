@@ -18,7 +18,7 @@ public class PropositionOptionView extends
 	}
 
 	@Override
-	protected CustomComponent createView() {
+	protected CustomComponent createView(String uri) {
 		return null;
 	}
 

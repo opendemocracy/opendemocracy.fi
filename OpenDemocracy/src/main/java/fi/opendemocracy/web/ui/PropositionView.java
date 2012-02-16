@@ -55,7 +55,18 @@ public class PropositionView extends
 
 
 	@Override
-	protected CustomComponent createView() {
+	protected CustomComponent createView(String uri) {
+		if (uri != null) { 
+			// TODO fix handling of URI
+			try {
+				int i = uri.indexOf("/");
+				String lon = uri.substring(i+1);
+				Long id = Long.decode(lon);
+				return new PropositionEntityView((Proposition) getEntityForItem(getTable().getItem(id)));
+			} catch (NumberFormatException e) {
+				
+			}
+		}
 		return new PropositionEntityView((Proposition) getEntityForItem(getTable().getItem(getTable().getValue())));
 	}
 	

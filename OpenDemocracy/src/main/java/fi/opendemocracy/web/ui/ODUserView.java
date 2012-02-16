@@ -5,6 +5,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
+import fi.opendemocracy.domain.Category;
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.Proposition;
 import fi.opendemocracy.web.AbstractEntityView;
@@ -28,8 +29,22 @@ public class ODUserView extends
 	}
 
 	@Override
-	protected CustomComponent createView() {
-		ODUser entity = (ODUser) getEntityForItem(getTable().getItem(getTable().getValue()));
+	protected CustomComponent createView(String uri) {
+		ODUser entity = null;
+		if (uri != null) { 
+			// TODO fix handling of URI
+			try {
+				int i = uri.indexOf("/");
+				String lon = uri.substring(i+1);
+				Long id = Long.decode(lon);
+				entity = (ODUser) getEntityForItem(getTable().getItem(id));
+			} catch (NumberFormatException e) {
+				
+			}
+		}
+		if (entity == null) {
+			entity = (ODUser) getEntityForItem(getTable().getItem(getTable().getValue()));
+		}
 		Object user = getApplication().getUser();
 		if (user != null && user instanceof ODUser && ((ODUser)user).getId().equals(entity.getId())) {
 			return (CustomComponent) getForm();

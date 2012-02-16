@@ -223,7 +223,7 @@ public class TabNavigator extends HorizontalLayout {
 		}
 		changeView(v);
 		v.navigateTo(requestedDataId);
-		moveToTab(v, requestedDataId, true);
+		moveToTab(v, currentFragment, true);
 	}
 
 	private void changeView(View newView) {
@@ -233,16 +233,20 @@ public class TabNavigator extends HorizontalLayout {
 			l.navigatorViewChange(previousView, currentView);
 		}
 	}
-
+	
 	private void moveToTab(Component c, String uri, boolean isView) {
-		Tab t = tabSheet.getTab(c);
+		Component child = uriToTab.get(uri);
+		Tab t = tabSheet.getTab((uri == null || child == null) ? c : child);
 		if (t == null) {
 			t = tabSheet.addTab(c, c.getCaption(), c.getIcon());
 			t.setClosable(!c.isReadOnly());
 			tabToUri.put(t.getComponent(), uri);
+			if (uri != null) {
+				uriToTab.put(uri, c);
+			}
 			tabToView.put(t.getComponent(), (isView) ? (View) c : currentView);
 		}
-		tabSheet.setSelectedTab(c);
+		tabSheet.setSelectedTab(t.getComponent());
 		
 //		Tab t = tabSheet.getTab(c);
 //		if(uriToTab.containsKey(uri)){
