@@ -16,6 +16,7 @@ privileged aspect VoteFinders {
         q.setParameter("proposition", proposition);
         return q;
     }
+    
     public static TypedQuery<Vote> Vote.findVotesByOdUserAndPropositionLatest(ODUser odUser, Proposition proposition) {
         if (odUser == null) throw new IllegalArgumentException("The odUser argument is required");
         if (proposition == null) throw new IllegalArgumentException("The proposition argument is required");
@@ -28,6 +29,7 @@ privileged aspect VoteFinders {
         q.setParameter("proposition", proposition);
         return q;
     }
+    
     public static TypedQuery<Vote> Vote.findVotesByPropositionAndPropositionOptionLatest(Proposition proposition, PropositionOption propositionOption) {
         if (proposition == null) throw new IllegalArgumentException("The proposition argument is required");
         if (propositionOption == null) throw new IllegalArgumentException("The propositionOption argument is required");
@@ -66,5 +68,13 @@ privileged aspect VoteFinders {
         return q;
     }
 
+    public static TypedQuery<Proposition> Proposition.findPropositionsByExpertAndExpertHasVoted(Expert e) {
+        if (e == null) throw new IllegalArgumentException("The expert argument is required");
+        EntityManager em = Proposition.entityManager();
+        TypedQuery<Proposition> q = em.createQuery("SELECT o FROM Proposition AS o WHERE (:c MEMBER OF o.categories)", Proposition.class);//TODO: AND o IN (SELECT v.proposition FROM Vote AS v WHERE v.odUser = :u)", Proposition.class);
+        //q.setParameter("u", e.getOdUser());
+        q.setParameter("c", e.getCategory());
+        return q;
+    }
 }
 
