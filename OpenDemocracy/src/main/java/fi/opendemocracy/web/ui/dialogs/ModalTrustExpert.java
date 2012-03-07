@@ -100,6 +100,16 @@ public class ModalTrustExpert extends Window {
 		currentUser = ((OpenDemocracyVotingApplication)getApplication()).getLoggedInUser();
 		if (currentUser == null) {
 			this.close();
+			return;
+		}
+
+		try {
+			Representation l = Representation.findRepresentationsByExpertAndOdUserLatest(sourceExpert, currentUser).getSingleResult();
+			trust.setValue(l.getTrust().doubleValue());
+        } catch (NullPointerException ex){
+        	
+        } catch (ValueOutOfBoundsException e) {
+			
 		}
 	}
 }

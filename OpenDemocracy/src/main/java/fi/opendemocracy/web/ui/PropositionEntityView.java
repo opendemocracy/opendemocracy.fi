@@ -1,6 +1,7 @@
 package fi.opendemocracy.web.ui;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -293,37 +294,62 @@ public class PropositionEntityView extends CustomComponent implements ValueChang
 	/** Calculate suggested vote using current users trusted experts
 	 */
 	private LinkedHashSet<Series> getSuggestedWeigths(Date timeline) {
-		LinkedHashSet<Series> list = new LinkedHashSet<InvientCharts.Series>();
         
-    	HashMap<PropositionOption, BigDecimal> map = new HashMap<PropositionOption, BigDecimal>(p.getPropositionOptions().size());
-
+    	HashMap<Long, BigDecimal> zeromap = new HashMap<Long, BigDecimal>(p.getPropositionOptions().size());
     	for (PropositionOption po : p.getPropositionOptions()) {
-    		map.put(po, BigDecimal.ZERO);
+    		zeromap.put(po.getId(), BigDecimal.ZERO);
+    	}
+
+    	HashMap<Long, BigDecimal> nonVoterMap = new HashMap<Long, BigDecimal>();
+    	HashMap<Long, BigDecimal> map = new HashMap<Long, BigDecimal>();
+    	map.putAll(zeromap);
+    	
+		ArrayList<Long> categoryIds = new ArrayList<Long>();
+    	for (Category c : p.getCategories()) {
+    		categoryIds.add(c.getId());
     	}
     	
     	Set<ODUser> voters = new HashSet<ODUser>();
 		List<Vote> results = Vote.findVotesByPropositionLatestBefore(p, timeline).getResultList();
+		
     	for (Vote v : results) {
     		voters.add(v.getOdUser());
     	}
+    	
     	List<ODUser> nonVoters = ODUser.findAllODUsers();
     	nonVoters.removeAll(voters);
+    	
     	for (ODUser nonVoter : nonVoters) {
+    		nonVoterMap.clear();
+        	nonVoterMap.putAll(zeromap);
+        	BigDecimal trustSum = BigDecimal.ZERO;
+        	
     		List<Representation> representations = Representation.findRepresentationsByOdUserAndTrustGreaterThanLatestBefore(nonVoter, BigDecimal.ZERO, timeline).getResultList();
     		for (Representation r : representations) {
-        		if (voters.contains(r.getExpert()) && p.getCategories().contains(r.getExpert().getCategory())) {
-        			for (Vote v : results) {
-			    		if (v.getOdUser().getId().equals(r.getExpert().getOdUser().getId())){
-			    			BigDecimal support = map.get(v.getPropositionOption()).add(v.getSupport().multiply(r.getTrust()));
-			    			map.put(v.getPropositionOption(), support);
-			    		}
-			    	}
+        		if (categoryIds.contains(r.getExpert().getCategory().getId())) {
+        			List<Vote> expertVotes = Vote.findVotesByOdUserAndPropositionLatest(r.getExpert().getOdUser(), p).getResultList();
+        			if (!expertVotes.isEmpty()) {
+	        			trustSum = trustSum.add(r.getTrust());
+	        			for (Vote v : expertVotes) {
+			    			BigDecimal supportSum = nonVoterMap.get(v.getPropositionOption().getId()).add(v.getSupport().multiply(r.getTrust()));
+			    			nonVoterMap.put(v.getPropositionOption().getId(), supportSum);
+				    	}
+        			}
         		}
         	}
+    		
+    		if (trustSum.compareTo(BigDecimal.ZERO) > 0) {
+	    		for (Long optionId : map.keySet()) {
+	    			BigDecimal supportSum = map.get(optionId).add(nonVoterMap.get(optionId).divide(trustSum));
+	    			map.put(optionId, supportSum);
+	    		}
+    		}
     	}
-		for (PropositionOption o : map.keySet()) {
-	        XYSeries seriesData = new XYSeries(o.getName());
-	        seriesData.setSeriesPoints(getPoints(seriesData, map.get(o).doubleValue()));
+    	
+		LinkedHashSet<Series> list = new LinkedHashSet<InvientCharts.Series>();
+    	for (PropositionOption po : p.getPropositionOptions()) {
+	        XYSeries seriesData = new XYSeries(po.getName());
+	        seriesData.setSeriesPoints(getPoints(seriesData, map.get(po.getId()).doubleValue()));
 	        list.add(seriesData);
 		}
 		return list;

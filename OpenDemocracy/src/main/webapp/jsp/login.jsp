@@ -11,6 +11,10 @@
 <body>
 <div align="center">
 <h2>Login</h2>
+<!-- <p>
+Currently openID login doesn't work if the user name that your provider gives us contains international characters.
+This is because of a minor server configuration problem with this cloud service. A fix is under way.
+</p> -->
 <form class="openid" method="post" action="/j_spring_openid_security_check" target="_top"> 
   <fieldset> 
   <label for="openid_username">Enter your <span>Provider user name</span> or choose your provider</label> 

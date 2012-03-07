@@ -23,6 +23,18 @@ privileged aspect RepresentationFinders {
         q.setParameter("timelimit", timelimit);
         return q;
     }
+
+    public static TypedQuery<Representation> Representation.findRepresentationsByExpertAndOdUserLatest(Expert expert, ODUser odUser) {
+        if (expert == null) throw new IllegalArgumentException("The expert argument is required");
+        if (odUser == null) throw new IllegalArgumentException("The odUser argument is required");
+        EntityManager em = Representation.entityManager();
+        TypedQuery<Representation> q = em.createQuery("SELECT o FROM Representation AS o WHERE o.expert = :expert AND o.odUser = :odUser AND o.ts = " +
+			        			"(SELECT MAX(mostRecent.ts) FROM Representation AS mostRecent WHERE " +
+			        			"mostRecent.expert = :expert AND mostRecent.odUser = :odUser)", Representation.class);
+        q.setParameter("expert", expert);
+        q.setParameter("odUser", odUser);
+        return q;
+    }
     
     public static TypedQuery<Representation> Representation.findRepresentationsByOdUserAndTrustGreaterThanLatestBefore(ODUser odUser, BigDecimal trust, Date timelimit) {
         if (odUser == null) throw new IllegalArgumentException("The odUser argument is required");

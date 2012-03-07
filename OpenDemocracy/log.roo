@@ -69,3 +69,41 @@ vaadin generate all --package ~.web.ui --visuallyComposable true
 finder list --class fi.opendemocracy.domain.Vote
 finder add --class fi.opendemocracy.domain.Vote --finderName findVotesByOdUser
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-02 02:48:34
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-03 15:17:36
+vaadin addon install --artifactId invient-charts
+vaadin widgetset create 
+vaadin widgetset create 
+vaadin widgetset create 
+vaadin widgetset create 
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-02-05 15:04:45
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-05 21:28:03
+// [failed] focus --class fi.opendemocracy.domain.Vote
+finder list 
+finder list --filter Proposition,Option --depth 2
+finder list --filter Proposition,PropositionOption --depth 2
+finder list --filter PropositionAndPropositionOption --depth 2
+finder list --filter PropositionAndPropositionOption --depth 3
+finder list --filter PropositionAndPropositionOption --depth 2
+// [failed] finder add --finderName findVotesByPropositionAndPropositionOption
+finder add --finderName findVotesByPropositionAndPropositionOption
+system properties
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-02-07 21:45:50
+// [failed] focus --class fi.opendemocracy.domain.Representation
+finder add findRepresentationsByODUserAndTrustGreaterThan
+focus --class fi.opendemocracy.domain.Expert
+finder list
+finder add findExpertsByOdUser
+focus --class fi.opendemocracy.domain.Representation
+finder add findRepresentationsByOdUserAndTrustGreaterThan
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-03-07 15:31:03
+perform package
+perform clean
+perform package
+perform package
+perform package
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-03-07 15:43:53
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-03-07 16:22:24
+perform clean
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-03-07 16:27:45
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-03-07 16:27:57
+perform tests

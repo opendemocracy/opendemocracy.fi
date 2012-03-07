@@ -11,14 +11,14 @@
         <openid-login 	authentication-failure-handler-ref="openIDAuthenticationFailureHandler"                     
                   		user-service-ref="userOpenIdDetailsService" 
                   		authentication-success-handler-ref="openIDAuthenticationSucessHandler">
-			<attribute-exchange>
-	            <openid-attribute name="axContactEmail" type="http://axschema.org/contact/email" required="true"/>
-	            <openid-attribute name="oiContactEmail" type="http://schema.openid.net/contact/email" required="true"/>
-	            <openid-attribute name="axNamePersonFullname" type="http://axschema.org/namePerson" required="true"/>
-	            <openid-attribute name="axNamePersonFriendlyName" type="http://axschema.org/namePerson/friendly" required="true"/>
-	            <openid-attribute name="axNamePersonFirstName" type="http://axschema.org/namePerson/first" required="true"/>
-	            <openid-attribute name="axNamePersonLastName" type="http://axschema.org/namePerson/last" required="true"/>
-	        </attribute-exchange>
+<!-- 			<attribute-exchange> -->
+<!-- 	            <openid-attribute name="axContactEmail" type="http://axschema.org/contact/email" required="true"/> -->
+<!-- 	            <openid-attribute name="oiContactEmail" type="http://schema.openid.net/contact/email" required="true"/> -->
+<!-- 	            <openid-attribute name="axNamePersonFullname" type="http://axschema.org/namePerson" required="true"/> -->
+<!-- 	            <openid-attribute name="axNamePersonFriendlyName" type="http://axschema.org/namePerson/friendly" required="true"/> -->
+<!-- 	            <openid-attribute name="axNamePersonFirstName" type="http://axschema.org/namePerson/first" required="true"/> -->
+<!-- 	            <openid-attribute name="axNamePersonLastName" type="http://axschema.org/namePerson/last" required="true"/> -->
+<!-- 	        </attribute-exchange> -->
 		</openid-login>
 		<logout logout-url="/resources/j_spring_security_logout" invalidate-session="true"/>
 	</http>
