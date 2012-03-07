@@ -3,9 +3,6 @@
 
 package fi.opendemocracy.web;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 import fi.opendemocracy.web.ui.CategoryView;
 import fi.opendemocracy.web.ui.ExpertView;
 import fi.opendemocracy.web.ui.ODUserView;
@@ -13,6 +10,10 @@ import fi.opendemocracy.web.ui.PropositionOptionView;
 import fi.opendemocracy.web.ui.PropositionView;
 import fi.opendemocracy.web.ui.RepresentationView;
 import fi.opendemocracy.web.ui.VoteView;
+import java.lang.Class;
+import java.lang.String;
+import java.util.Map;
+import java.util.TreeMap;
 
 privileged aspect OpenDemocracyVotingEntityManagerView_Roo_VaadinEntityManagerView {
     

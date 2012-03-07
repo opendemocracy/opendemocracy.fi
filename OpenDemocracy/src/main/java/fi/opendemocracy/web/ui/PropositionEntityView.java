@@ -34,6 +34,7 @@ import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.HorizontalLayout;
@@ -161,6 +162,19 @@ public class PropositionEntityView extends CustomComponent implements
 			comment.setWidth("100%");
 			comments.put(o, comment);
 			optionPanel.addComponent(comment);
+
+			final VerticalLayout commentContainer = new VerticalLayout();
+			addComments(commentContainer, o);
+			Button commentButton = new Button("Show/Hide comments",
+					new Button.ClickListener() {
+						@Override
+						public void buttonClick(ClickEvent event) {
+							commentContainer.setVisible(!commentContainer.isVisible());
+						}
+					});
+			optionPanel.addComponent(commentButton);
+			commentContainer.setVisible(false);
+			optionPanel.addComponent(commentContainer);
 			scrollContent.addComponent(optionPanel);
 		}
 
@@ -247,7 +261,7 @@ public class PropositionEntityView extends CustomComponent implements
 		scrollContent.setSpacing(false);
 		scrollContainer.addComponent(scrollContent);
 		scrollContainer.addComponent(resultsContent);
-		scrollContainer.addComponent(getComments());
+		//scrollContainer.addComponent(getComments());
 		return scrollContainer;
 	}
 
@@ -257,18 +271,22 @@ public class PropositionEntityView extends CustomComponent implements
 			comments.addComponent(new Label("<p>Name: " + po.getName()
 					+ ", Description: " + po.getDescription() + "</p>",
 					Label.CONTENT_XHTML));
-			List<Vote> allVotes = Vote
-					.findVotesByPropositionAndPropositionOption(p, po)
-					.getResultList();
-			for (Vote v : allVotes) {
-				String s = v.getComment();
-				if (s != null && !s.isEmpty()) {
-					comments.addComponent(new Label("<p>" + v.getComment()
-							+ ", " + v.getTs() + "</p>", Label.CONTENT_XHTML));
-				}
-			}
+			addComments(comments, po);
 		}
 		return comments;
+	}
+	
+	private void addComments(ComponentContainer c, PropositionOption po) {
+		List<Vote> allVotes = Vote
+				.findVotesByPropositionAndPropositionOption(p, po)
+				.getResultList();
+		for (Vote v : allVotes) {
+			String s = v.getComment();
+			if (s != null && !s.isEmpty()) {
+				c.addComponent(new Label("<p>" + v.getComment()
+						+ ", " + v.getTs() + "</p>", Label.CONTENT_XHTML));
+			}
+		}
 	}
 
 	private InvientCharts createChart(String string, List<String> categories) {
