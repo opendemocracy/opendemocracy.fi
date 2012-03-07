@@ -33,6 +33,7 @@ import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CustomComponent;
@@ -165,13 +166,15 @@ public class PropositionEntityView extends CustomComponent implements
 
 			final VerticalLayout commentContainer = new VerticalLayout();
 			addComments(commentContainer, o);
-			Button commentButton = new Button("Show/Hide comments",
-					new Button.ClickListener() {
-						@Override
-						public void buttonClick(ClickEvent event) {
-							commentContainer.setVisible(!commentContainer.isVisible());
-						}
-					});
+			final Button commentButton = new Button("Show/Hide comments");
+			ClickListener listener = new Button.ClickListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					commentContainer.setVisible(!commentContainer.isVisible());
+					commentButton.setCaption(commentContainer.isVisible() ? "Hide comments" : "Show comments");
+				}
+			};
+			commentButton.addListener(listener);
 			optionPanel.addComponent(commentButton);
 			commentContainer.setVisible(false);
 			optionPanel.addComponent(commentContainer);
