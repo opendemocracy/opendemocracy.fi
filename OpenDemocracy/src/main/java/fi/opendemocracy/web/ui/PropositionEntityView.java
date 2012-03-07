@@ -283,12 +283,17 @@ public class PropositionEntityView extends CustomComponent implements
 		List<Vote> allVotes = Vote
 				.findVotesByPropositionAndPropositionOption(p, po)
 				.getResultList();
+		boolean noComments = true;
 		for (Vote v : allVotes) {
 			String s = v.getComment();
 			if (s != null && !s.isEmpty()) {
+				noComments &= false;
 				c.addComponent(new Label("<p>" + v.getComment()
 						+ ", " + v.getTs() + "</p>", Label.CONTENT_XHTML));
 			}
+		}
+		if (noComments) {
+			c.addComponent(new Label("<p>No comments</p>", Label.CONTENT_XHTML));
 		}
 	}
 
