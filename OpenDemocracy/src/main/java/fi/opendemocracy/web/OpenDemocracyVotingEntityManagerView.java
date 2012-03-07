@@ -1,8 +1,5 @@
 package fi.opendemocracy.web;
 
-import org.apache.commons.logging.Log;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.vaadin.navigator.Navigator;
 
 import com.vaadin.Application;
@@ -26,7 +23,6 @@ import com.vaadin.ui.themes.Reindeer;
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.UserRole;
 import fi.opendemocracy.web.ui.CategoryView;
-import fi.opendemocracy.web.ui.ODUserForm;
 import fi.opendemocracy.web.ui.ODUserView;
 import fi.opendemocracy.web.ui.PropositionView;
 
@@ -154,26 +150,30 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 	// add listeners
 	private void addListeners() {
 		btnCategories.addListener(new Button.ClickListener() {
+			@Override
 			public void buttonClick(ClickEvent event) {
 				navigator.navigateTo("category");
 			}
 		});
 		btnPropositions.addListener(new Button.ClickListener() {
+			@Override
 			public void buttonClick(ClickEvent event) {
 				navigator.navigateTo("proposition");
 			}
 		});
 		btnUser.addListener(new Button.ClickListener() {
+			@Override
 			public void buttonClick(ClickEvent event) {
 				Object user = getApplication().getUser();
 				if (user != null && user instanceof ODUser) {
-					navigator.navigateTo("user/edit/" + ((ODUser)user).getId());
+					navigator.navigateTo("user/edit/" + ((ODUser) user).getId());
 				} else {
 					System.err.println("Should not happen");
 				}
 			}
 		});
 		btnLogin.addListener(new Button.ClickListener() {
+			@Override
 			public void buttonClick(ClickEvent event) {
 				Embedded jsp = new Embedded();
 				jsp.setSizeFull();
@@ -185,6 +185,7 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 			}
 		});
 		btnLogout.addListener(new Button.ClickListener() {
+			@Override
 			public void buttonClick(ClickEvent event) {
 				getWindow().getApplication().close();
 			}
@@ -194,7 +195,7 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 	@Override
 	public void navigatorViewChange(TabNavigator.View previous,
 			TabNavigator.View current) {
-			//TODO view change handling
+		// TODO view change handling
 	}
 
 	@Override
@@ -204,23 +205,23 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 		Application application = getApplication();
 		if (application != null) {
 			application.addListener(new UserChangeListener() {
-				
+
 				@Override
 				public void applicationUserChanged(UserChangeEvent event) {
-					if (((OpenDemocracyVotingApplication) getWindow().getApplication())
-							.hasAnyRole(UserRole.ROLE_USER.name(),
-									UserRole.ROLE_ADMIN.name(),
-									UserRole.ROLE_VERIFIED_USER.name())) {
+					if (((OpenDemocracyVotingApplication) getWindow()
+							.getApplication()).hasAnyRole(
+							UserRole.ROLE_USER.name(),
+							UserRole.ROLE_ADMIN.name(),
+							UserRole.ROLE_VERIFIED_USER.name())) {
 						btnLogout.setVisible(true);
 						btnUser.setVisible(true);
 						btnLogin.setVisible(false);
 					}
 				}
 			});
-			if (((OpenDemocracyVotingApplication) application)
-					.hasAnyRole(UserRole.ROLE_USER.name(),
-							UserRole.ROLE_ADMIN.name(),
-							UserRole.ROLE_VERIFIED_USER.name())) {
+			if (((OpenDemocracyVotingApplication) application).hasAnyRole(
+					UserRole.ROLE_USER.name(), UserRole.ROLE_ADMIN.name(),
+					UserRole.ROLE_VERIFIED_USER.name())) {
 				btnLogout.setVisible(true);
 				btnUser.setVisible(true);
 				btnLogin.setVisible(false);
@@ -233,7 +234,7 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 			TabNavigator.View, UserChangeListener {
 		Label loginMsg;
 		String loginTxt = "<h1 class=\"v-label-h1\" style=\"text-align: center;\">Welcome to OpenDemocracy Alpha</h1> Select an option above to begin";
-		
+
 		public HomeView() {
 			setReadOnly(true);
 			setCaption(ThemeConstants.TAB_CAPTION_HOME);
@@ -241,25 +242,28 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 			setMargin(true);
 			setSizeFull();
 			addStyleName(Reindeer.LAYOUT_WHITE);
-			loginMsg = new Label(loginTxt,Label.CONTENT_XHTML);
+			loginMsg = new Label(loginTxt, Label.CONTENT_XHTML);
 			loginMsg.setSizeUndefined();
 			loginMsg.addStyleName(Reindeer.LABEL_SMALL);
 			addComponent(loginMsg);
 			setComponentAlignment(loginMsg, Alignment.MIDDLE_CENTER);
 			setReadOnly(true);
 		}
-		
+
 		// Unused interfaces
+		@Override
 		public void init(TabNavigator navigator, Application application) {
 		}
 
+		@Override
 		public void navigateTo(String requestedDataId) {
 		}
 
+		@Override
 		public String getWarningForNavigatingFrom() {
 			return null;
 		}
-		
+
 		@Override
 		public void attach() {
 			// TODO Auto-generated method stub
@@ -276,11 +280,10 @@ public class OpenDemocracyVotingEntityManagerView extends CustomComponent
 			Object user = event.getNewUser();
 			if (user != null && user instanceof ODUser) {
 				ODUser oduser = (ODUser) user;
-				loginMsg.setValue(loginTxt
-						+ "<br /><br />Logged in as: " + oduser.getOpenIdIdentifier()
-						+ "<br /><br />Mail: " + oduser.getEmailAddress()
-						+ "<br /><br />Username: " + oduser.getUsername()
-						);
+				loginMsg.setValue(loginTxt + "<br /><br />Logged in as: "
+						+ oduser.getOpenIdIdentifier() + "<br /><br />Mail: "
+						+ oduser.getEmailAddress() + "<br /><br />Username: "
+						+ oduser.getUsername());
 			} else {
 				loginMsg.setValue(loginTxt);
 			}

@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -77,6 +76,7 @@ public class ODUser implements UserDetails {
 
 	@Override
 	public String toString() {
-    	return (username == null || username.isEmpty()) ? getId().toString() : username;
+		return (username == null || username.isEmpty()) ? getId().toString()
+				: username;
 	}
 }

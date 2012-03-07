@@ -3,6 +3,16 @@
 
 package fi.opendemocracy.web.ui;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.vaadin.addon.customfield.ConvertingValidator;
+import org.vaadin.addon.customfield.PropertyConverter;
+
 import com.vaadin.addon.beanvalidation.BeanValidationValidator;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
@@ -13,19 +23,9 @@ import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.TextField;
+
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.UserRole;
-import java.lang.Class;
-import java.lang.Object;
-import java.lang.String;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import org.vaadin.addon.customfield.ConvertingValidator;
-import org.vaadin.addon.customfield.PropertyConverter;
 
 privileged aspect ODUserForm_Roo_VaadinVisuallyComposableEntityForm {
     

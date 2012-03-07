@@ -3,13 +3,6 @@
 
 package fi.opendemocracy.domain;
 
-import fi.opendemocracy.domain.ODUser;
-import fi.opendemocracy.domain.Proposition;
-import fi.opendemocracy.domain.PropositionDataOnDemand;
-import fi.opendemocracy.domain.PropositionOption;
-import fi.opendemocracy.domain.PropositionOptionDataOnDemand;
-import fi.opendemocracy.domain.Vote;
-import java.lang.String;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -19,8 +12,10 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

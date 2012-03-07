@@ -3,6 +3,18 @@
 
 package fi.opendemocracy.web.ui;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.vaadin.addon.customfield.ConvertingValidator;
+import org.vaadin.addon.customfield.PropertyConverter;
+import org.vaadin.addon.customfield.beanfield.BeanFieldPropertyConverter;
+import org.vaadin.addon.customfield.beanfield.BeanSetFieldPropertyConverter;
+
 import com.vaadin.addon.beanvalidation.BeanValidationValidator;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container;
@@ -13,25 +25,12 @@ import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.TextField;
+
 import fi.opendemocracy.domain.Category;
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.Proposition;
 import fi.opendemocracy.domain.PropositionOption;
 import fi.opendemocracy.web.EntityProviderUtil;
-import java.lang.Class;
-import java.lang.Long;
-import java.lang.Object;
-import java.lang.String;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import org.vaadin.addon.customfield.ConvertingValidator;
-import org.vaadin.addon.customfield.PropertyConverter;
-import org.vaadin.addon.customfield.beanfield.BeanFieldPropertyConverter;
-import org.vaadin.addon.customfield.beanfield.BeanSetFieldPropertyConverter;
 
 privileged aspect PropositionForm_Roo_VaadinVisuallyComposableEntityForm {
     

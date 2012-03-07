@@ -3,11 +3,6 @@
 
 package fi.opendemocracy.domain;
 
-import fi.opendemocracy.domain.Category;
-import fi.opendemocracy.domain.CategoryDataOnDemand;
-import fi.opendemocracy.domain.Expert;
-import fi.opendemocracy.domain.ODUser;
-import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,8 +11,10 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

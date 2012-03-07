@@ -3,10 +3,6 @@
 
 package fi.opendemocracy.domain;
 
-import fi.opendemocracy.domain.ODUser;
-import fi.opendemocracy.domain.Proposition;
-import fi.opendemocracy.domain.PropositionOption;
-import fi.opendemocracy.domain.Vote;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 

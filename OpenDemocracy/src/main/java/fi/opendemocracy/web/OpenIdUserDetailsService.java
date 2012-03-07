@@ -26,7 +26,8 @@ public class OpenIdUserDetailsService implements UserDetailsService {
 			user.setOpenIdIdentifier(id);
 			user.setUserRole(UserRole.ROLE_USER);
 			user.setDescription("New user");
-			OpenIDAuthenticationToken token = (OpenIDAuthenticationToken)SecurityContextHolder.getContext().getAuthentication();
+			OpenIDAuthenticationToken token = (OpenIDAuthenticationToken) SecurityContextHolder
+					.getContext().getAuthentication();
 			List<OpenIDAttribute> attributes = token.getAttributes();
 			for (OpenIDAttribute oIDA : attributes) {
 				if (oIDA.getName().equalsIgnoreCase("email")) {

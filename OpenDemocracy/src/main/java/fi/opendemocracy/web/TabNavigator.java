@@ -35,8 +35,7 @@ public class TabNavigator extends HorizontalLayout {
 
 	private HashMap<String, View> uriToView = new HashMap<String, View>();
 	private HashMap<View, String> ViewToUri = new HashMap<View, String>();
-	
-	
+
 	private HashMap<String, Component> uriToTab = new HashMap<String, Component>();
 	private HashMap<Component, String> tabToUri = new HashMap<Component, String>();
 	private HashMap<Component, View> tabToView = new HashMap<Component, View>();
@@ -100,17 +99,16 @@ public class TabNavigator extends HorizontalLayout {
 			public void selectedTabChange(SelectedTabChangeEvent event) {
 				Component tab = tabSheet.getSelectedTab();
 				String uri = getUri(tab.getClass());
-			
+
 				if (uri != null) {
 					navigateTo(uri);
-				}else if(tabToUri.containsKey(tab)){
+				} else if (tabToUri.containsKey(tab)) {
 					uri = tabToUri.get(tab);
 					uriFragmentUtil.setFragment(uri, false);
 				}
 			}
 		});
-		
-		
+
 		helpToggle.addListener(new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -128,7 +126,7 @@ public class TabNavigator extends HorizontalLayout {
 						.getWarningForNavigatingFrom();
 				if (warn != null && warn.length() > 0) {
 					confirmCloseTab(tabContent, warn);
-				}else{
+				} else {
 					View v = tabToView.get(tabContent);
 					tabToUri.remove(tabContent);
 					tabToView.remove(tabContent);
@@ -149,7 +147,7 @@ public class TabNavigator extends HorizontalLayout {
 				: newFragment.substring(i + 1);
 		if (uriToClass.containsKey(uri)) {
 			final View newView = getOrCreateView(uri);
-			moveTo(newView, requestedDataId, false);			
+			moveTo(newView, requestedDataId, false);
 		} else {
 			uriFragmentUtil.setFragment(currentFragment, false);
 		}
@@ -233,7 +231,7 @@ public class TabNavigator extends HorizontalLayout {
 			l.navigatorViewChange(previousView, currentView);
 		}
 	}
-	
+
 	private void moveToTab(Component c, String uri, boolean isView) {
 		Component child = uriToTab.get(uri);
 		Tab t = tabSheet.getTab((uri == null || child == null) ? c : child);
@@ -247,20 +245,20 @@ public class TabNavigator extends HorizontalLayout {
 			tabToView.put(t.getComponent(), (isView) ? (View) c : currentView);
 		}
 		tabSheet.setSelectedTab(t.getComponent());
-		
-//		Tab t = tabSheet.getTab(c);
-//		if(uriToTab.containsKey(uri)){
-//			t = tabSheet.getTab(uriToTab.get(uri));
-//			c = t.getComponent();
-//		}
-//		if (t == null) {
-//			t = tabSheet.addTab(c, c.getCaption(), c.getIcon());
-//			t.setClosable(!c.isReadOnly());
-//			tabToUri.put(t.getComponent(), uri);
-//			uriToTab.put(uri, t.getComponent());
-//			tabToView.put(t.getComponent(), (isView) ? (View) c : currentView);
-//		}
-//		tabSheet.setSelectedTab(c);
+
+		// Tab t = tabSheet.getTab(c);
+		// if(uriToTab.containsKey(uri)){
+		// t = tabSheet.getTab(uriToTab.get(uri));
+		// c = t.getComponent();
+		// }
+		// if (t == null) {
+		// t = tabSheet.addTab(c, c.getCaption(), c.getIcon());
+		// t.setClosable(!c.isReadOnly());
+		// tabToUri.put(t.getComponent(), uri);
+		// uriToTab.put(uri, t.getComponent());
+		// tabToView.put(t.getComponent(), (isView) ? (View) c : currentView);
+		// }
+		// tabSheet.setSelectedTab(c);
 	}
 
 	public void openChildTab(Component c, String uri) {

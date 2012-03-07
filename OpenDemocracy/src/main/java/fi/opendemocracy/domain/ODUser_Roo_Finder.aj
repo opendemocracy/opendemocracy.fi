@@ -3,8 +3,6 @@
 
 package fi.opendemocracy.domain;
 
-import fi.opendemocracy.domain.ODUser;
-import java.lang.String;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 

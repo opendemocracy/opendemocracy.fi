@@ -1,8 +1,9 @@
 package fi.opendemocracy.domain;
 
+import java.math.BigDecimal;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.math.BigDecimal;
 
 privileged aspect CategoryFinders {
 	//TODO: Check exception handling

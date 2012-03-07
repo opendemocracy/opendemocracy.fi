@@ -5,13 +5,12 @@ import java.util.Date;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.Slider.ValueOutOfBoundsException;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
 
 import fi.opendemocracy.domain.Expert;
 import fi.opendemocracy.domain.ODUser;
@@ -29,8 +28,8 @@ public class ModalTrustExpert extends Window {
 	private final VoteOptionSlider trust = new VoteOptionSlider("Trust");
 	private Label expertise;
 	private double zero = 0;
-	
-	public ModalTrustExpert(){
+
+	public ModalTrustExpert() {
 		setWidth("400px");
 		trustExpertForm = new VerticalLayout();
 		trustExpertForm.setMargin(true);
@@ -42,10 +41,10 @@ public class ModalTrustExpert extends Window {
 
 		trustExpertForm.addComponent(expertise);
 		trustExpertForm.addComponent(trust);
-		
+
 		addComponent(trustExpertForm);
 		setModal(true);
-		
+
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.addComponent(cancel);
 		buttons.addComponent(add);
@@ -54,10 +53,11 @@ public class ModalTrustExpert extends Window {
 		trustExpertForm.setComponentAlignment(buttons, Alignment.TOP_RIGHT);
 		addListeners();
 	}
-	
-	public void setExpert(Expert e){
+
+	public void setExpert(Expert e) {
 		sourceExpert = e;
-		setCaption(sourceExpert.getCategory().getName() + " > Experts > " + sourceExpert.getOdUser().getUsername());
+		setCaption(sourceExpert.getCategory().getName() + " > Experts > "
+				+ sourceExpert.getOdUser().getUsername());
 		trustExpertForm.removeComponent(expertise);
 		expertise = new Label(sourceExpert.getExpertise(), Label.CONTENT_XHTML);
 		trustExpertForm.addComponent(expertise, 0);
@@ -66,50 +66,53 @@ public class ModalTrustExpert extends Window {
 		} catch (ValueOutOfBoundsException e1) {
 		}
 	}
-	
+
 	private void assignTrust() {
 		Representation r = new Representation();
 		r.setExpert(sourceExpert);
 		r.setOdUser(currentUser);
-		r.setTrust(BigDecimal.valueOf((Double)trust.getValue()));
+		r.setTrust(BigDecimal.valueOf((Double) trust.getValue()));
 		r.setTs(new Date());
 		r.persist();
 		ModalTrustExpert.this.close();
 	}
-	
-	private void addListeners(){
+
+	private void addListeners() {
 		cancel.addListener(new Button.ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				ModalTrustExpert.this.close();
 			}
 		});
-		
+
 		add.addListener(new Button.ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				assignTrust();
 			}
 
-		});		
+		});
 	}
-	
+
 	@Override
 	public void attach() {
 		super.attach();
-		currentUser = ((OpenDemocracyVotingApplication)getApplication()).getLoggedInUser();
+		currentUser = ((OpenDemocracyVotingApplication) getApplication())
+				.getLoggedInUser();
 		if (currentUser == null) {
 			this.close();
 			return;
 		}
 
 		try {
-			Representation l = Representation.findRepresentationsByExpertAndOdUserLatest(sourceExpert, currentUser).getSingleResult();
+			Representation l = Representation
+					.findRepresentationsByExpertAndOdUserLatest(sourceExpert,
+							currentUser).getSingleResult();
 			trust.setValue(l.getTrust().doubleValue());
-        } catch (NullPointerException ex){
-        	
-        } catch (ValueOutOfBoundsException e) {
-			
+		} catch (NullPointerException ex) {
+
+		} catch (ValueOutOfBoundsException e) {
+
 		}
 	}
 }

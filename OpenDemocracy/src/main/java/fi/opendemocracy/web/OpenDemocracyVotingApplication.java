@@ -1,12 +1,10 @@
 package fi.opendemocracy.web;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.mongodb.DB;
 import com.vaadin.Application;
 import com.vaadin.terminal.gwt.server.HttpServletRequestListener;
 import com.vaadin.ui.Window;
@@ -25,12 +22,13 @@ import fi.opendemocracy.domain.ODUser;
 
 @Component(value = "applicationBean")
 @Scope("prototype")
-public class OpenDemocracyVotingApplication extends Application implements HttpServletRequestListener {
+public class OpenDemocracyVotingApplication extends Application implements
+		HttpServletRequestListener {
 
 	public WebApplicationContext appContext;
-    private HttpServletResponse response;
-    private HttpServletRequest request;
-	
+	private HttpServletResponse response;
+	private HttpServletRequest request;
+
 	@Override
 	public void init() {
 		Window window = createNewWindow();
@@ -93,14 +91,18 @@ public class OpenDemocracyVotingApplication extends Application implements HttpS
 		return false;
 	}
 
-	/** Notifies the user to log in or returns true
+	/**
+	 * Notifies the user to log in or returns true
+	 * 
 	 * @return
 	 */
 	public boolean isLoggedInNotify() {
 		return getLoggedInUser() != null;
 	}
 
-	/** Gets the logged in user or notifies to login and returns null
+	/**
+	 * Gets the logged in user or notifies to login and returns null
+	 * 
 	 * @return ODUser or null
 	 */
 	public ODUser getLoggedInUser() {
@@ -109,26 +111,24 @@ public class OpenDemocracyVotingApplication extends Application implements HttpS
 			getMainWindow().showNotification("You need to login");
 			return null;
 		}
-		return (ODUser)o;
+		return (ODUser) o;
 	}
 
 	public void setWebApplicationContext(WebApplicationContext appContext) {
 		this.appContext = appContext;
 	}
 
-    @Override
-    public void onRequestStart(HttpServletRequest request,
-                               HttpServletResponse response)
-    {
-        this.response = response;
-        this.request = request;
-    }
+	@Override
+	public void onRequestStart(HttpServletRequest request,
+			HttpServletResponse response) {
+		this.response = response;
+		this.request = request;
+	}
 
-    @Override
-    public void onRequestEnd(HttpServletRequest request,
-                             HttpServletResponse response)
-    {
-        this.response = null;
-        this.request = null;
-    }
+	@Override
+	public void onRequestEnd(HttpServletRequest request,
+			HttpServletResponse response) {
+		this.response = null;
+		this.request = null;
+	}
 }

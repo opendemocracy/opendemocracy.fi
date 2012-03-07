@@ -3,8 +3,6 @@
 
 package fi.opendemocracy.domain;
 
-import fi.opendemocracy.domain.UserRole;
-import java.lang.String;
 import java.util.Date;
 
 privileged aspect ODUser_Roo_JavaBean {

@@ -3,9 +3,6 @@
 
 package fi.opendemocracy.domain;
 
-import fi.opendemocracy.domain.Category;
-import fi.opendemocracy.domain.Expert;
-import fi.opendemocracy.domain.ODUser;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 

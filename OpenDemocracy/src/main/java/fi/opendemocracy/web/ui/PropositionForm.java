@@ -14,7 +14,6 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.spring.roo.addon.annotations.RooVaadinVisuallyComposableEntityForm;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.AbstractTextField.TextChangeEventMode;
-import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -76,26 +75,24 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 
 	/*- VaadinEditorProperties={"grid":"RegularGrid,20","showGrid":true,"snapToGrid":true,"snapToObject":true,"movingGuides":false,"snappingDistance":10} */
 
-	
-
 	/*- VaadinEditorProperties={"grid":"RegularGrid,20","showGrid":true,"snapToGrid":true,"snapToObject":true,"movingGuides":false,"snappingDistance":10} */
 
-	//Add option modal
+	// Add option modal
 	private VerticalLayout optionForm;
-	private Window wDialog; 
+	private Window wDialog;
 
-	//Container for temporary options
+	// Container for temporary options
 	private HashSet<PropositionOption> propositionOptions = new HashSet<PropositionOption>();
-	//Container for temporary categories
+	// Container for temporary categories
 	private HashSet<PropositionOption> propositionCategories = new HashSet<PropositionOption>();
-	
+
 	/*- VaadinEditorProperties={"grid":"RegularGrid,20","showGrid":true,"snapToGrid":true,"snapToObject":true,"movingGuides":false,"snappingDistance":10} */
 
 	// data item being edited
 	private Item item;
 
 	private Label loginMsg;
-	
+
 	public PropositionForm() {
 		setIcon(ThemeConstants.TAB_ICON_NEW_PROPOSITION);
 		buildMainLayout();
@@ -106,9 +103,9 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		// make saving the form the default action on Enter keypress
 		saveButton.setClickShortcut(KeyCode.ENTER);
 
-		
 		// TODO add user code here
 		addOptionButton.addListener(new Button.ClickListener() {
+			@Override
 			public void buttonClick(ClickEvent event) {
 				addNewOptionForm();
 			}
@@ -121,35 +118,33 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		super.attach();
 		loginMsg.setVisible(getApplication().getUser() == null);
 	}
-	
-	private void addNewCategoryForm(){
+
+	private void addNewCategoryForm() {
 		getWindow().addWindow(new ModalCategoryForm());
 	}
-	
-	
+
 	private void addNewOptionForm() {
 		final Window main = getWindow();
-		if(optionForm == null){
+		if (optionForm == null) {
 			optionForm = new VerticalLayout();
-			
-			
+
 			final TextField name = new TextField("Name");
 			name.setWidth("100%");
-			
+
 			final RichTextArea description = new RichTextArea("Description");
 			description.setWidth("100%");
-			
+
 			Label formTitle = new Label("<h2>New Option</h2>");
 			formTitle.setContentMode(Label.CONTENT_XHTML);
 			optionForm.addComponent(formTitle);
 			optionForm.addComponent(name);
 			optionForm.addComponent(description);
-			
+
 			wDialog = new Window("Add Option");
 			wDialog.setModal(true);
 			wDialog.setWidth("400px");
 			wDialog.addComponent(optionForm);
-			
+
 			Button cancel = new Button("Cancel", new Button.ClickListener() {
 				@Override
 				public void buttonClick(ClickEvent event) {
@@ -164,34 +159,37 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 					newOption.setName(name.getValue().toString());
 					newOption.setTs(new Date());
 					propositionOptions.add(newOption);
-					
+
 					final VerticalLayout optionContainer = new VerticalLayout();
 					optionContainer.setMargin(true);
 					optionContainer.setSpacing(false);
 					optionsLayout.addComponent(optionContainer);
 					HorizontalLayout titleContainer = new HorizontalLayout();
-					Label labelName = new Label("<h3>" + name.getValue().toString() + "</h3>");
+					Label labelName = new Label("<h3>"
+							+ name.getValue().toString() + "</h3>");
 					titleContainer.addComponent(labelName);
-					
+
 					labelName.setContentMode(Label.CONTENT_XHTML);
-					Label labelDescription = new Label(description.getValue().toString());
-					labelDescription.setContentMode(Label.CONTENT_XHTML);		
+					Label labelDescription = new Label(description.getValue()
+							.toString());
+					labelDescription.setContentMode(Label.CONTENT_XHTML);
 
-
-					Button removeOption = new Button("[X]", new Button.ClickListener() {
-						@Override
-						public void buttonClick(ClickEvent event) {
-							propositionOptions.remove(newOption);
-							optionsLayout.removeComponent(optionContainer);
-						}
-					});
+					Button removeOption = new Button("[X]",
+							new Button.ClickListener() {
+								@Override
+								public void buttonClick(ClickEvent event) {
+									propositionOptions.remove(newOption);
+									optionsLayout
+											.removeComponent(optionContainer);
+								}
+							});
 					removeOption.setStyleName("link");
-					
+
 					titleContainer.addComponent(removeOption);
-					
+
 					optionContainer.addComponent(titleContainer);
 					optionContainer.addComponent(labelDescription);
-					
+
 					name.setValue("");
 					description.setValue("");
 					main.removeWindow(wDialog);
@@ -206,8 +204,7 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		}
 		main.addWindow(wDialog);
 	}
-	
-	
+
 	@Override
 	public void addSaveActionListener(ClickListener listener) {
 		saveButton.addListener(listener);
@@ -220,7 +217,7 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 
 	@Override
 	public void addDeleteActionListener(ClickListener listener) {
-		
+
 	}
 
 	@Override
@@ -265,14 +262,15 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 			optionsLayout.removeAllComponents();
 		}
 	}
-    
-    public Proposition getEntityForItem(Item item) {
-        if (item instanceof EntityItem && ((EntityItem) item).getEntity() instanceof Proposition) {
-            return (Proposition) ((EntityItem) item).getEntity();
-        } else {
-            return null;
-        }
-    }
+
+	public Proposition getEntityForItem(Item item) {
+		if (item instanceof EntityItem
+				&& ((EntityItem) item).getEntity() instanceof Proposition) {
+			return (Proposition) ((EntityItem) item).getEntity();
+		} else {
+			return null;
+		}
+	}
 
 	@Override
 	public void setItemDataSource(Item item) {
@@ -305,15 +303,15 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		mainLayout.setWidth("100%");
 		mainLayout.setHeight("100%");
 		mainLayout.setMargin(false);
-		
+
 		// top-level component properties
 		setWidth("100.0%");
 		setHeight("100.0%");
-		
+
 		// scrollPanel
 		scrollPanel = buildScrollPanel();
 		mainLayout.addComponent(scrollPanel);
-		
+
 		return mainLayout;
 	}
 
@@ -324,18 +322,18 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		scrollPanel.setImmediate(false);
 		scrollPanel.setWidth("100.0%");
 		scrollPanel.setHeight("100.0%");
-		
+
 		// scrollContent
 		scrollContent = buildScrollContent();
 		scrollPanel.setContent(scrollContent);
-		
+
 		loginMsg = new Label();
 		loginMsg.setStyleName("errormessage");
 		loginMsg.setImmediate(false);
 		loginMsg.setValue("You need to be logged in to make propositions");
 		loginMsg.setVisible(false);
 		scrollContent.addComponent(loginMsg, 0);
-		
+
 		return scrollPanel;
 	}
 
@@ -348,16 +346,16 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		scrollContent.setHeight("-1px");
 		scrollContent.setMargin(true);
 		scrollContent.setSpacing(true);
-		
+
 		// title
 		Label title = new Label("<h1>New proposition</h1>");
 		title.setContentMode(Label.CONTENT_XHTML);
 		scrollContent.addComponent(title);
-		
+
 		// fieldLayout
 		fieldLayout = buildFieldLayout();
 		scrollContent.addComponent(fieldLayout);
-		
+
 		// errorMessageLabel
 		errorMessageLabel = new Label();
 		errorMessageLabel.setStyleName("errormessage");
@@ -366,11 +364,11 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		errorMessageLabel.setHeight("-1px");
 		errorMessageLabel.setValue("Label");
 		scrollContent.addComponent(errorMessageLabel);
-		
+
 		// buttonLayout
 		buttonLayout = buildButtonLayout();
 		scrollContent.addComponent(buttonLayout);
-		
+
 		return scrollContent;
 	}
 
@@ -383,7 +381,7 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		fieldLayout.setHeight("-1px");
 		fieldLayout.setMargin(false);
 		fieldLayout.setSpacing(true);
-		
+
 		// nameField
 		nameField = new TextField();
 		nameField.setCaption("Name");
@@ -391,7 +389,7 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		nameField.setWidth("100.0%");
 		nameField.setHeight("-1px");
 		fieldLayout.addComponent(nameField);
-		
+
 		// descriptionField
 		descriptionField = new RichTextArea();
 		descriptionField.setNullRepresentation("");
@@ -401,39 +399,41 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		descriptionField.setWidth("100.0%");
 		descriptionField.setHeight("-1px");
 		fieldLayout.addComponent(descriptionField);
-				
+
 		categoriesField = new TwinColSelect();
 		categoriesField.setImmediate(false);
 		categoriesField.setWidth("100.0%");
 		categoriesField.setHeight("-1px");
-		
+
 		// categoriesField
 		TextField filterField = new TextField("Categories");
 		filterField.setWidth("100.0%");
-        filterField.setTextChangeEventMode(TextChangeEventMode.LAZY);
-        filterField.setTextChangeTimeout(200);
-        filterField.addListener(new TextChangeListener() {
-            public void textChange(TextChangeEvent event) {
-            	JPAContainer<Category> c = (JPAContainer<Category>) categoriesField.getContainerDataSource();
-            	c.removeAllContainerFilters();
-            	c.addContainerFilter("name", event.getText(), true, false);
-            }
-        });
-		
+		filterField.setTextChangeEventMode(TextChangeEventMode.LAZY);
+		filterField.setTextChangeTimeout(200);
+		filterField.addListener(new TextChangeListener() {
+			@Override
+			public void textChange(TextChangeEvent event) {
+				JPAContainer<Category> c = (JPAContainer<Category>) categoriesField
+						.getContainerDataSource();
+				c.removeAllContainerFilters();
+				c.addContainerFilter("name", event.getText(), true, false);
+			}
+		});
+
 		fieldLayout.addComponent(filterField);
 		fieldLayout.addComponent(categoriesField);
-		
+
 		// optionsLayout
 		optionsLayout = new VerticalLayout();
 		optionsLayout.setImmediate(false);
 		optionsLayout.setWidth("100.0%");
 		optionsLayout.setHeight("-1px");
 		optionsLayout.setMargin(false);
-		
+
 		Label options = new Label("<h2>Options</h2>");
 		options.setContentMode(Label.CONTENT_XHTML);
 		optionsLayout.addComponent(options);
-		
+
 		fieldLayout.addComponent(optionsLayout);
 
 		// addOptionButton
@@ -442,8 +442,8 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		addOptionButton.setImmediate(true);
 		addOptionButton.setWidth("-1px");
 		addOptionButton.setHeight("-1px");
-		fieldLayout.addComponent(addOptionButton);		
-		
+		fieldLayout.addComponent(addOptionButton);
+
 		return fieldLayout;
 	}
 
@@ -456,7 +456,7 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		buttonLayout.setHeight("-1px");
 		buttonLayout.setMargin(false);
 		buttonLayout.setSpacing(true);
-		
+
 		// saveButton
 		saveButton = new Button();
 		saveButton.setStyleName("primary");
@@ -465,7 +465,7 @@ public class PropositionForm extends CustomComponent implements EntityEditor {
 		saveButton.setWidth("-1px");
 		saveButton.setHeight("-1px");
 		buttonLayout.addComponent(saveButton);
-		
+
 		return buttonLayout;
 	}
 

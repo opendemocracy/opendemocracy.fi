@@ -6,8 +6,6 @@ import java.util.HashMap;
 import com.vaadin.Application;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.spring.roo.addon.annotations.RooVaadinAbstractEntityView;
@@ -27,20 +25,24 @@ import com.vaadin.ui.themes.Reindeer;
 public abstract class AbstractEntityView<E> extends CustomComponent implements
 		TabNavigator.View {
 
-    private VerticalLayout mainLayout;
-    private Table table;
-    private EntityEditor form;
-    private VerticalLayout view;
-    protected TabNavigator navigator;
-    private boolean dirty = false;
+	private VerticalLayout mainLayout;
+	private Table table;
+	private EntityEditor form;
+	private VerticalLayout view;
+	protected TabNavigator navigator;
+	private boolean dirty = false;
 
-    /**
-     * Helper function to check that user is logged in, or notify that it is needed
-     * @return true if logged in
-     */
-    protected boolean log() {
-    	return ((OpenDemocracyVotingApplication) getApplication()).isLoggedInNotify();
-    }
+	/**
+	 * Helper function to check that user is logged in, or notify that it is
+	 * needed
+	 * 
+	 * @return true if logged in
+	 */
+	protected boolean log() {
+		return ((OpenDemocracyVotingApplication) getApplication())
+				.isLoggedInNotify();
+	}
+
 	/**
 	 * Constructor for an abstract entity view.
 	 * 
@@ -48,32 +50,33 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 	 * create the main parts of the view.
 	 */
 	public AbstractEntityView() {
-        // custom component size, must be set to allow inner layout take 100% size
-        setSizeFull();
+		// custom component size, must be set to allow inner layout take 100%
+		// size
+		setSizeFull();
 
-        mainLayout = new VerticalLayout();
-        mainLayout.addStyleName("blue-bottom");
-        mainLayout.setSizeFull();
-        setCompositionRoot(mainLayout);
+		mainLayout = new VerticalLayout();
+		mainLayout.addStyleName("blue-bottom");
+		mainLayout.setSizeFull();
+		setCompositionRoot(mainLayout);
 
-        // table settings, display a fixed number of rows
-        getTable().setSizeFull();
-        getTable().setImmediate(true);
-        getTable().setSelectable(true);
-        getTable().addStyleName(Reindeer.TABLE_BORDERLESS);
-        getTable().addStyleName(Reindeer.TABLE_STRONG);
+		// table settings, display a fixed number of rows
+		getTable().setSizeFull();
+		getTable().setImmediate(true);
+		getTable().setSelectable(true);
+		getTable().addStyleName(Reindeer.TABLE_BORDERLESS);
+		getTable().addStyleName(Reindeer.TABLE_STRONG);
 
-        mainLayout.addComponent(getTable());
+		mainLayout.addComponent(getTable());
 
-        // hide buttons if certain operations are not allowed
-        getForm().setSaveAllowed(isCreateAllowed() || isUpdateAllowed());
-        getForm().setDeleteAllowed(isDeleteAllowed());
+		// hide buttons if certain operations are not allowed
+		getForm().setSaveAllowed(isCreateAllowed() || isUpdateAllowed());
+		getForm().setDeleteAllowed(isDeleteAllowed());
 
-        // add listeners for the buttons
-        addListeners();
+		// add listeners for the buttons
+		addListeners();
 
-        // initially nothing on the form
-        setCurrentEntity(null);
+		// initially nothing on the form
+		setCurrentEntity(null);
 	}
 
 	// View interface and related
@@ -145,32 +148,35 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 	// other methods
 
 	public void createNewEntity() {
-        if (isCreateAllowed()) {
-            getTable().setValue(null);
-        	getForm().setCaption("New " + getEntityName());
-            setCurrentEntity(createEntityInstance());
-            //TODO Dependency injection instead of getForm()
-            navigator.openChildTab(getForm(), "new");
-        }
+		if (isCreateAllowed()) {
+			getTable().setValue(null);
+			getForm().setCaption("New " + getEntityName());
+			setCurrentEntity(createEntityInstance());
+			// TODO Dependency injection instead of getForm()
+			navigator.openChildTab(getForm(), "new");
+		}
 	}
 
-
-	public void setHelp(Component c){
+	public void setHelp(Component c) {
 		navigator.setHelp(c);
 	}
+
 	/**
 	 * Adds listeners for the various buttons on the form and for table
 	 * selection change.
 	 */
 	protected void addListeners() {
-		
-		//TODO: Click on selected tab to open
+
+		// TODO: Click on selected tab to open
 		getTable().addListener(new ItemClickListener() {
 			@Override
 			public void itemClick(ItemClickEvent event) {
 				Object value = event.getItemId();
-				if(getTable().getValue() == value && !event.isDoubleClick() && event.getButton() == ItemClickEvent.BUTTON_LEFT){
-					navigator.openChildTab(getView("view/" + value.toString()), "view/" + value.toString());
+				if (getTable().getValue() == value
+						&& !event.isDoubleClick()
+						&& event.getButton() == com.vaadin.event.MouseEvents.ClickEvent.BUTTON_LEFT) {
+					navigator.openChildTab(getView("view/" + value.toString()),
+							"view/" + value.toString());
 				}
 			}
 		});
@@ -200,6 +206,7 @@ public abstract class AbstractEntityView<E> extends CustomComponent implements
 			}
 		});
 	}
+
 	/**
 	 * Set the current entity to display on the form and to edit.
 	 * 

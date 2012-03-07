@@ -3,7 +3,6 @@
 
 package fi.opendemocracy.domain;
 
-import java.lang.String;
 
 privileged aspect PropositionOption_Roo_ToString {
     

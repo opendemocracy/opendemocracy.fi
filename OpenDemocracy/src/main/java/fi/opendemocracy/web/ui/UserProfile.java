@@ -12,7 +12,7 @@ import fi.opendemocracy.web.ThemeConstants;
 public class UserProfile extends CustomComponent {
 
 	private AbsoluteLayout mainLayout;
-	
+
 	private ODUser user;
 
 	private Panel scrollPanel;
@@ -24,10 +24,11 @@ public class UserProfile extends CustomComponent {
 		buildMainLayout();
 		setCompositionRoot(mainLayout);
 		String name = user.getUsername();
-		setCaption("User: " + (name == null || name.isEmpty() ? user.getId() : name));
+		setCaption("User: "
+				+ (name == null || name.isEmpty() ? user.getId() : name));
 		setIcon(ThemeConstants.TAB_ICON_USER);
 	}
-	
+
 	private AbsoluteLayout buildMainLayout() {
 		// common part: create layout
 		mainLayout = new AbsoluteLayout();
@@ -42,7 +43,6 @@ public class UserProfile extends CustomComponent {
 
 		return mainLayout;
 	}
-
 
 	private Panel buildScrollPanel() {
 		// common part: create layout

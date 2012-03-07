@@ -2,7 +2,6 @@ package fi.opendemocracy.domain;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.math.BigDecimal;
 
 privileged aspect ExpertFinders {
 	//TODO: Check exception handling

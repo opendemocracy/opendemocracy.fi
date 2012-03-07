@@ -3,9 +3,8 @@
 
 package fi.opendemocracy.domain;
 
-import fi.opendemocracy.domain.Category;
-import fi.opendemocracy.domain.Proposition;
 import java.util.Set;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
