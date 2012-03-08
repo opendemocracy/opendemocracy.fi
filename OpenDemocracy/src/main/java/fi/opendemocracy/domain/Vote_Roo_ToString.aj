@@ -3,6 +3,7 @@
 
 package fi.opendemocracy.domain;
 
+import java.lang.String;
 
 privileged aspect Vote_Roo_ToString {
     

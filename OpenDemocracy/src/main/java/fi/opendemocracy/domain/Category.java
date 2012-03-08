@@ -13,7 +13,6 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
-@RooToString
 @RooEntity(finders = { "getRepresentation" })
 public class Category {
 
@@ -26,4 +25,9 @@ public class Category {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
 	private Date ts;
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

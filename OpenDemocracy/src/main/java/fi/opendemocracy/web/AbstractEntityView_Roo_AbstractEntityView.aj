@@ -3,10 +3,9 @@
 
 package fi.opendemocracy.web;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Validator.InvalidValueException;
+import org.springframework.transaction.annotation.Transactional;
 
 privileged aspect AbstractEntityView_Roo_AbstractEntityView {
     

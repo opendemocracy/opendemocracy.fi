@@ -3,6 +3,7 @@
 
 package fi.opendemocracy.domain;
 
+import java.lang.String;
 import java.util.Date;
 
 privileged aspect Category_Roo_JavaBean {

@@ -3,8 +3,10 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.Expert;
+import fi.opendemocracy.domain.ODUser;
+import fi.opendemocracy.domain.Representation;
 import java.math.BigDecimal;
-
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 

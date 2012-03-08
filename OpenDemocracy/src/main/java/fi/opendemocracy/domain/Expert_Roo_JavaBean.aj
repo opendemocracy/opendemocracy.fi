@@ -3,6 +3,9 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.Category;
+import fi.opendemocracy.domain.ODUser;
+import java.lang.String;
 import java.util.Date;
 
 privileged aspect Expert_Roo_JavaBean {

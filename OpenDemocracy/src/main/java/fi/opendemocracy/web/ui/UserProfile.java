@@ -96,6 +96,7 @@ public class UserProfile extends CustomComponent {
 
 	private VerticalLayout buildScrollContent() {
 		scrollContent = new VerticalLayout();
+		scrollContent.setMargin(true);
 		String title = user.getFirstName() + " " + user.getLastName();
 		if(title.isEmpty() || title.equals("null null")){
 			title = (user.getUsername() == null) ? "User #" + user.getId().toString() : user.getUsername();
@@ -142,11 +143,11 @@ public class UserProfile extends CustomComponent {
 			final Table pTable = new Table();
 			final Label noPropositions = new Label("<i>User has not created any propositions in this category</i>", Label.CONTENT_XHTML);
 			pTable.setNullSelectionAllowed(false);
-			pTable.setSelectable(true);
+			pTable.setSelectable(false);
 			pTable.setCaption("Created propositions");
-			//pTable.setVisibleColumns(new Object[] {"ts", "name", "description"});
 			pTable.addStyleName(Reindeer.TABLE_STRONG);
 			pTable.setContainerDataSource(propositionContainer);
+			pTable.setVisibleColumns(new Object[] {"ts", "name", "description"});
 						
 			scrollContent.addComponent((propositionContainer.size() == 0) ? noPropositions : pTable);
 				
@@ -166,6 +167,7 @@ public class UserProfile extends CustomComponent {
 			vTable.setSelectable(true);
 			vTable.setContainerDataSource(voteContainer);
 			scrollContent.addComponent((voteContainer.size() == 0) ? noVotes : vTable);
+			vTable.setVisibleColumns(new Object[] {"ts", "name", "description"});
 		
 			vTable.addListener(new ItemClickListener() {
 				@Override
@@ -229,7 +231,8 @@ public class UserProfile extends CustomComponent {
 		VerticalLayout content = new VerticalLayout();
 		
 		w.addComponent(content);
-		
+
+		boolean votesExist = false;
 		if (user != null && user instanceof ODUser) {
 			TypedQuery<Vote> voteQuery = Vote.findVotesByOdUserAndPropositionLatest(e.getOdUser(), p);
 			currentVotes = voteQuery.getResultList();
@@ -237,9 +240,16 @@ public class UserProfile extends CustomComponent {
 		
 		if (currentVotes != null) {
 			for (Vote vote : currentVotes) {
-				content.addComponent(new Label(vote.getPropositionOption().getDescription()));
-				content.addComponent(new Label(vote.getSupport().toPlainString()));
+				votesExist |= true;
+				content.addComponent(new Label("<b>" + vote.getPropositionOption().getName() + "</b>", Label.CONTENT_XHTML));
+				content.addComponent(new Label(vote.getPropositionOption().getDescription(), Label.CONTENT_XHTML));
+				content.addComponent(new Label("<i>Expert voted:</i>" + vote.getSupport().toPlainString(), Label.CONTENT_XHTML));
 			}
+		}
+		
+		if (!votesExist) {
+
+			content.addComponent(new Label("<b>No votes</b>", Label.CONTENT_XHTML));
 		}
 		
 		getWindow().addWindow(w);

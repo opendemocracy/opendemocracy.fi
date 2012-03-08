@@ -3,6 +3,8 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.Expert;
+import fi.opendemocracy.domain.ODUser;
 import java.math.BigDecimal;
 import java.util.Date;
 

@@ -3,15 +3,17 @@
 
 package fi.opendemocracy.web.ui;
 
-import java.util.List;
-
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
-
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.web.EntityProviderUtil;
+import fi.opendemocracy.web.EntityTableColumnGenerator;
+import java.lang.Class;
+import java.lang.Object;
+import java.lang.String;
+import java.util.List;
 
 privileged aspect ODUserView_Roo_VaadinEntityView {
     
