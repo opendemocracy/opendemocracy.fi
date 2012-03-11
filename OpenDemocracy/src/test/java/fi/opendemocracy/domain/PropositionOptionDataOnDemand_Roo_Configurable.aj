@@ -3,6 +3,7 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.PropositionOptionDataOnDemand;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect PropositionOptionDataOnDemand_Roo_Configurable {

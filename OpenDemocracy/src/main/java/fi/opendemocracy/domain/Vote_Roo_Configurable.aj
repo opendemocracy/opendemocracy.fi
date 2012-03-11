@@ -3,6 +3,7 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.Vote;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect Vote_Roo_Configurable {

@@ -3,6 +3,7 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.CategoryIntegrationTest;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect CategoryIntegrationTest_Roo_Configurable {

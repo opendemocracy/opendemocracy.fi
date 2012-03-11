@@ -3,6 +3,7 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.ExpertIntegrationTest;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect ExpertIntegrationTest_Roo_Configurable {

@@ -3,19 +3,14 @@
 
 package fi.opendemocracy.domain;
 
-import java.lang.String;
+import fi.opendemocracy.domain.Representation;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 privileged aspect Representation_Roo_ToString {
     
     public String Representation.toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Expert: ").append(getExpert()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
-        sb.append("OdUser: ").append(getOdUser()).append(", ");
-        sb.append("Trust: ").append(getTrust()).append(", ");
-        sb.append("Ts: ").append(getTs()).append(", ");
-        sb.append("Version: ").append(getVersion());
-        return sb.toString();
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
     
 }

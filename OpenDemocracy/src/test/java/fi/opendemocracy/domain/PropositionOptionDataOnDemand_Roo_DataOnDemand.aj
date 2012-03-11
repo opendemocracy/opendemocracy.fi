@@ -4,7 +4,7 @@
 package fi.opendemocracy.domain;
 
 import fi.opendemocracy.domain.PropositionOption;
-import java.lang.String;
+import fi.opendemocracy.domain.PropositionOptionDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,16 +53,22 @@ privileged aspect PropositionOptionDataOnDemand_Roo_DataOnDemand {
     
     public PropositionOption PropositionOptionDataOnDemand.getSpecificPropositionOption(int index) {
         init();
-        if (index < 0) index = 0;
-        if (index > (data.size() - 1)) index = data.size() - 1;
+        if (index < 0) {
+            index = 0;
+        }
+        if (index > (data.size() - 1)) {
+            index = data.size() - 1;
+        }
         PropositionOption obj = data.get(index);
-        return PropositionOption.findPropositionOption(obj.getId());
+        Long id = obj.getId();
+        return PropositionOption.findPropositionOption(id);
     }
     
     public PropositionOption PropositionOptionDataOnDemand.getRandomPropositionOption() {
         init();
         PropositionOption obj = data.get(rnd.nextInt(data.size()));
-        return PropositionOption.findPropositionOption(obj.getId());
+        Long id = obj.getId();
+        return PropositionOption.findPropositionOption(id);
     }
     
     public boolean PropositionOptionDataOnDemand.modifyPropositionOption(PropositionOption obj) {
@@ -70,21 +76,25 @@ privileged aspect PropositionOptionDataOnDemand_Roo_DataOnDemand {
     }
     
     public void PropositionOptionDataOnDemand.init() {
-        data = PropositionOption.findPropositionOptionEntries(0, 10);
-        if (data == null) throw new IllegalStateException("Find entries implementation for 'PropositionOption' illegally returned null");
+        int from = 0;
+        int to = 10;
+        data = PropositionOption.findPropositionOptionEntries(from, to);
+        if (data == null) {
+            throw new IllegalStateException("Find entries implementation for 'PropositionOption' illegally returned null");
+        }
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<fi.opendemocracy.domain.PropositionOption>();
+        data = new ArrayList<PropositionOption>();
         for (int i = 0; i < 10; i++) {
             PropositionOption obj = getNewTransientPropositionOption(i);
             try {
                 obj.persist();
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
+                for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                    ConstraintViolation<?> cv = iter.next();
                     msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
                 }
                 throw new RuntimeException(msg.toString(), e);

@@ -3,6 +3,7 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.ODUser;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect ODUser_Roo_Configurable {

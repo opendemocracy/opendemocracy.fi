@@ -5,8 +5,8 @@ package fi.opendemocracy.domain;
 
 import fi.opendemocracy.domain.Category;
 import fi.opendemocracy.domain.ODUser;
+import fi.opendemocracy.domain.Proposition;
 import fi.opendemocracy.domain.PropositionOption;
-import java.lang.String;
 import java.util.Date;
 import java.util.Set;
 

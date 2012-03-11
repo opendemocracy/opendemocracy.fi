@@ -7,6 +7,7 @@ import fi.opendemocracy.domain.Expert;
 import fi.opendemocracy.domain.ExpertDataOnDemand;
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.Representation;
+import fi.opendemocracy.domain.RepresentationDataOnDemand;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -63,16 +64,22 @@ privileged aspect RepresentationDataOnDemand_Roo_DataOnDemand {
     
     public Representation RepresentationDataOnDemand.getSpecificRepresentation(int index) {
         init();
-        if (index < 0) index = 0;
-        if (index > (data.size() - 1)) index = data.size() - 1;
+        if (index < 0) {
+            index = 0;
+        }
+        if (index > (data.size() - 1)) {
+            index = data.size() - 1;
+        }
         Representation obj = data.get(index);
-        return Representation.findRepresentation(obj.getId());
+        Long id = obj.getId();
+        return Representation.findRepresentation(id);
     }
     
     public Representation RepresentationDataOnDemand.getRandomRepresentation() {
         init();
         Representation obj = data.get(rnd.nextInt(data.size()));
-        return Representation.findRepresentation(obj.getId());
+        Long id = obj.getId();
+        return Representation.findRepresentation(id);
     }
     
     public boolean RepresentationDataOnDemand.modifyRepresentation(Representation obj) {
@@ -80,21 +87,25 @@ privileged aspect RepresentationDataOnDemand_Roo_DataOnDemand {
     }
     
     public void RepresentationDataOnDemand.init() {
-        data = Representation.findRepresentationEntries(0, 10);
-        if (data == null) throw new IllegalStateException("Find entries implementation for 'Representation' illegally returned null");
+        int from = 0;
+        int to = 10;
+        data = Representation.findRepresentationEntries(from, to);
+        if (data == null) {
+            throw new IllegalStateException("Find entries implementation for 'Representation' illegally returned null");
+        }
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<fi.opendemocracy.domain.Representation>();
+        data = new ArrayList<Representation>();
         for (int i = 0; i < 10; i++) {
             Representation obj = getNewTransientRepresentation(i);
             try {
                 obj.persist();
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
+                for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                    ConstraintViolation<?> cv = iter.next();
                     msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
                 }
                 throw new RuntimeException(msg.toString(), e);

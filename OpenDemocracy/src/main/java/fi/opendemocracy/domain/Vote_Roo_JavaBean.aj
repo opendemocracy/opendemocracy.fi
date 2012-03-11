@@ -6,7 +6,7 @@ package fi.opendemocracy.domain;
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.Proposition;
 import fi.opendemocracy.domain.PropositionOption;
-import java.lang.String;
+import fi.opendemocracy.domain.Vote;
 import java.math.BigDecimal;
 import java.util.Date;
 

@@ -9,7 +9,7 @@ import fi.opendemocracy.domain.PropositionDataOnDemand;
 import fi.opendemocracy.domain.PropositionOption;
 import fi.opendemocracy.domain.PropositionOptionDataOnDemand;
 import fi.opendemocracy.domain.Vote;
-import java.lang.String;
+import fi.opendemocracy.domain.VoteDataOnDemand;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -81,16 +81,22 @@ privileged aspect VoteDataOnDemand_Roo_DataOnDemand {
     
     public Vote VoteDataOnDemand.getSpecificVote(int index) {
         init();
-        if (index < 0) index = 0;
-        if (index > (data.size() - 1)) index = data.size() - 1;
+        if (index < 0) {
+            index = 0;
+        }
+        if (index > (data.size() - 1)) {
+            index = data.size() - 1;
+        }
         Vote obj = data.get(index);
-        return Vote.findVote(obj.getId());
+        Long id = obj.getId();
+        return Vote.findVote(id);
     }
     
     public Vote VoteDataOnDemand.getRandomVote() {
         init();
         Vote obj = data.get(rnd.nextInt(data.size()));
-        return Vote.findVote(obj.getId());
+        Long id = obj.getId();
+        return Vote.findVote(id);
     }
     
     public boolean VoteDataOnDemand.modifyVote(Vote obj) {
@@ -98,21 +104,25 @@ privileged aspect VoteDataOnDemand_Roo_DataOnDemand {
     }
     
     public void VoteDataOnDemand.init() {
-        data = Vote.findVoteEntries(0, 10);
-        if (data == null) throw new IllegalStateException("Find entries implementation for 'Vote' illegally returned null");
+        int from = 0;
+        int to = 10;
+        data = Vote.findVoteEntries(from, to);
+        if (data == null) {
+            throw new IllegalStateException("Find entries implementation for 'Vote' illegally returned null");
+        }
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<fi.opendemocracy.domain.Vote>();
+        data = new ArrayList<Vote>();
         for (int i = 0; i < 10; i++) {
             Vote obj = getNewTransientVote(i);
             try {
                 obj.persist();
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
+                for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                    ConstraintViolation<?> cv = iter.next();
                     msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
                 }
                 throw new RuntimeException(msg.toString(), e);

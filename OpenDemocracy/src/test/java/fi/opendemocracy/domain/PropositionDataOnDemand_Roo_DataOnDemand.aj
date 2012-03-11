@@ -5,7 +5,7 @@ package fi.opendemocracy.domain;
 
 import fi.opendemocracy.domain.ODUser;
 import fi.opendemocracy.domain.Proposition;
-import java.lang.String;
+import fi.opendemocracy.domain.PropositionDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,16 +60,22 @@ privileged aspect PropositionDataOnDemand_Roo_DataOnDemand {
     
     public Proposition PropositionDataOnDemand.getSpecificProposition(int index) {
         init();
-        if (index < 0) index = 0;
-        if (index > (data.size() - 1)) index = data.size() - 1;
+        if (index < 0) {
+            index = 0;
+        }
+        if (index > (data.size() - 1)) {
+            index = data.size() - 1;
+        }
         Proposition obj = data.get(index);
-        return Proposition.findProposition(obj.getId());
+        Long id = obj.getId();
+        return Proposition.findProposition(id);
     }
     
     public Proposition PropositionDataOnDemand.getRandomProposition() {
         init();
         Proposition obj = data.get(rnd.nextInt(data.size()));
-        return Proposition.findProposition(obj.getId());
+        Long id = obj.getId();
+        return Proposition.findProposition(id);
     }
     
     public boolean PropositionDataOnDemand.modifyProposition(Proposition obj) {
@@ -77,21 +83,25 @@ privileged aspect PropositionDataOnDemand_Roo_DataOnDemand {
     }
     
     public void PropositionDataOnDemand.init() {
-        data = Proposition.findPropositionEntries(0, 10);
-        if (data == null) throw new IllegalStateException("Find entries implementation for 'Proposition' illegally returned null");
+        int from = 0;
+        int to = 10;
+        data = Proposition.findPropositionEntries(from, to);
+        if (data == null) {
+            throw new IllegalStateException("Find entries implementation for 'Proposition' illegally returned null");
+        }
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<fi.opendemocracy.domain.Proposition>();
+        data = new ArrayList<Proposition>();
         for (int i = 0; i < 10; i++) {
             Proposition obj = getNewTransientProposition(i);
             try {
                 obj.persist();
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
+                for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                    ConstraintViolation<?> cv = iter.next();
                     msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
                 }
                 throw new RuntimeException(msg.toString(), e);

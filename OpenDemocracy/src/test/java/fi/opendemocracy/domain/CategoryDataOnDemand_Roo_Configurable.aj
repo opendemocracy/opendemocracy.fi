@@ -3,6 +3,7 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.CategoryDataOnDemand;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect CategoryDataOnDemand_Roo_Configurable {

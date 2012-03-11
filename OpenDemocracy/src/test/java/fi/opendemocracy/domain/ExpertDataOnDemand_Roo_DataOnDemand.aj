@@ -6,8 +6,8 @@ package fi.opendemocracy.domain;
 import fi.opendemocracy.domain.Category;
 import fi.opendemocracy.domain.CategoryDataOnDemand;
 import fi.opendemocracy.domain.Expert;
+import fi.opendemocracy.domain.ExpertDataOnDemand;
 import fi.opendemocracy.domain.ODUser;
-import java.lang.String;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,16 +63,22 @@ privileged aspect ExpertDataOnDemand_Roo_DataOnDemand {
     
     public Expert ExpertDataOnDemand.getSpecificExpert(int index) {
         init();
-        if (index < 0) index = 0;
-        if (index > (data.size() - 1)) index = data.size() - 1;
+        if (index < 0) {
+            index = 0;
+        }
+        if (index > (data.size() - 1)) {
+            index = data.size() - 1;
+        }
         Expert obj = data.get(index);
-        return Expert.findExpert(obj.getId());
+        Long id = obj.getId();
+        return Expert.findExpert(id);
     }
     
     public Expert ExpertDataOnDemand.getRandomExpert() {
         init();
         Expert obj = data.get(rnd.nextInt(data.size()));
-        return Expert.findExpert(obj.getId());
+        Long id = obj.getId();
+        return Expert.findExpert(id);
     }
     
     public boolean ExpertDataOnDemand.modifyExpert(Expert obj) {
@@ -80,21 +86,25 @@ privileged aspect ExpertDataOnDemand_Roo_DataOnDemand {
     }
     
     public void ExpertDataOnDemand.init() {
-        data = Expert.findExpertEntries(0, 10);
-        if (data == null) throw new IllegalStateException("Find entries implementation for 'Expert' illegally returned null");
+        int from = 0;
+        int to = 10;
+        data = Expert.findExpertEntries(from, to);
+        if (data == null) {
+            throw new IllegalStateException("Find entries implementation for 'Expert' illegally returned null");
+        }
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<fi.opendemocracy.domain.Expert>();
+        data = new ArrayList<Expert>();
         for (int i = 0; i < 10; i++) {
             Expert obj = getNewTransientExpert(i);
             try {
                 obj.persist();
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
+                for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                    ConstraintViolation<?> cv = iter.next();
                     msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
                 }
                 throw new RuntimeException(msg.toString(), e);

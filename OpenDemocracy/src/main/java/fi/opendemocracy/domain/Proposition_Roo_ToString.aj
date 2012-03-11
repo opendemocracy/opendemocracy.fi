@@ -3,21 +3,14 @@
 
 package fi.opendemocracy.domain;
 
-import java.lang.String;
+import fi.opendemocracy.domain.Proposition;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 privileged aspect Proposition_Roo_ToString {
     
     public String Proposition.toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Author: ").append(getAuthor()).append(", ");
-        sb.append("Categories: ").append(getCategories() == null ? "null" : getCategories().size()).append(", ");
-        sb.append("Description: ").append(getDescription()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
-        sb.append("Name: ").append(getName()).append(", ");
-        sb.append("PropositionOptions: ").append(getPropositionOptions() == null ? "null" : getPropositionOptions().size()).append(", ");
-        sb.append("Ts: ").append(getTs()).append(", ");
-        sb.append("Version: ").append(getVersion());
-        return sb.toString();
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
     
 }

@@ -4,7 +4,7 @@
 package fi.opendemocracy.domain;
 
 import fi.opendemocracy.domain.Category;
-import java.lang.String;
+import fi.opendemocracy.domain.CategoryDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,16 +53,22 @@ privileged aspect CategoryDataOnDemand_Roo_DataOnDemand {
     
     public Category CategoryDataOnDemand.getSpecificCategory(int index) {
         init();
-        if (index < 0) index = 0;
-        if (index > (data.size() - 1)) index = data.size() - 1;
+        if (index < 0) {
+            index = 0;
+        }
+        if (index > (data.size() - 1)) {
+            index = data.size() - 1;
+        }
         Category obj = data.get(index);
-        return Category.findCategory(obj.getId());
+        Long id = obj.getId();
+        return Category.findCategory(id);
     }
     
     public Category CategoryDataOnDemand.getRandomCategory() {
         init();
         Category obj = data.get(rnd.nextInt(data.size()));
-        return Category.findCategory(obj.getId());
+        Long id = obj.getId();
+        return Category.findCategory(id);
     }
     
     public boolean CategoryDataOnDemand.modifyCategory(Category obj) {
@@ -70,21 +76,25 @@ privileged aspect CategoryDataOnDemand_Roo_DataOnDemand {
     }
     
     public void CategoryDataOnDemand.init() {
-        data = Category.findCategoryEntries(0, 10);
-        if (data == null) throw new IllegalStateException("Find entries implementation for 'Category' illegally returned null");
+        int from = 0;
+        int to = 10;
+        data = Category.findCategoryEntries(from, to);
+        if (data == null) {
+            throw new IllegalStateException("Find entries implementation for 'Category' illegally returned null");
+        }
         if (!data.isEmpty()) {
             return;
         }
         
-        data = new ArrayList<fi.opendemocracy.domain.Category>();
+        data = new ArrayList<Category>();
         for (int i = 0; i < 10; i++) {
             Category obj = getNewTransientCategory(i);
             try {
                 obj.persist();
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> it = e.getConstraintViolations().iterator(); it.hasNext();) {
-                    ConstraintViolation<?> cv = it.next();
+                for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
+                    ConstraintViolation<?> cv = iter.next();
                     msg.append("[").append(cv.getConstraintDescriptor()).append(":").append(cv.getMessage()).append("=").append(cv.getInvalidValue()).append("]");
                 }
                 throw new RuntimeException(msg.toString(), e);

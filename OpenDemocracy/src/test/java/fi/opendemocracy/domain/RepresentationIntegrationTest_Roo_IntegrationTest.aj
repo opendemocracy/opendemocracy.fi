@@ -3,7 +3,11 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.Representation;
 import fi.opendemocracy.domain.RepresentationDataOnDemand;
+import fi.opendemocracy.domain.RepresentationIntegrationTest;
+import java.util.List;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +19,7 @@ privileged aspect RepresentationIntegrationTest_Roo_IntegrationTest {
     
     declare @type: RepresentationIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: RepresentationIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext.xml");
+    declare @type: RepresentationIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
     
     declare @type: RepresentationIntegrationTest: @Transactional;
     
@@ -24,92 +28,94 @@ privileged aspect RepresentationIntegrationTest_Roo_IntegrationTest {
     
     @Test
     public void RepresentationIntegrationTest.testCountRepresentations() {
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", dod.getRandomRepresentation());
-        long count = fi.opendemocracy.domain.Representation.countRepresentations();
-        org.junit.Assert.assertTrue("Counter for 'Representation' incorrectly reported there were no entries", count > 0);
+        Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", dod.getRandomRepresentation());
+        long count = Representation.countRepresentations();
+        Assert.assertTrue("Counter for 'Representation' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
     public void RepresentationIntegrationTest.testFindRepresentation() {
-        fi.opendemocracy.domain.Representation obj = dod.getRandomRepresentation();
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", obj);
-        java.lang.Long id = obj.getId();
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to provide an identifier", id);
-        obj = fi.opendemocracy.domain.Representation.findRepresentation(id);
-        org.junit.Assert.assertNotNull("Find method for 'Representation' illegally returned null for id '" + id + "'", obj);
-        org.junit.Assert.assertEquals("Find method for 'Representation' returned the incorrect identifier", id, obj.getId());
+        Representation obj = dod.getRandomRepresentation();
+        Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", obj);
+        Long id = obj.getId();
+        Assert.assertNotNull("Data on demand for 'Representation' failed to provide an identifier", id);
+        obj = Representation.findRepresentation(id);
+        Assert.assertNotNull("Find method for 'Representation' illegally returned null for id '" + id + "'", obj);
+        Assert.assertEquals("Find method for 'Representation' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
     public void RepresentationIntegrationTest.testFindAllRepresentations() {
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", dod.getRandomRepresentation());
-        long count = fi.opendemocracy.domain.Representation.countRepresentations();
-        org.junit.Assert.assertTrue("Too expensive to perform a find all test for 'Representation', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        java.util.List<fi.opendemocracy.domain.Representation> result = fi.opendemocracy.domain.Representation.findAllRepresentations();
-        org.junit.Assert.assertNotNull("Find all method for 'Representation' illegally returned null", result);
-        org.junit.Assert.assertTrue("Find all method for 'Representation' failed to return any data", result.size() > 0);
+        Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", dod.getRandomRepresentation());
+        long count = Representation.countRepresentations();
+        Assert.assertTrue("Too expensive to perform a find all test for 'Representation', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
+        List<Representation> result = Representation.findAllRepresentations();
+        Assert.assertNotNull("Find all method for 'Representation' illegally returned null", result);
+        Assert.assertTrue("Find all method for 'Representation' failed to return any data", result.size() > 0);
     }
     
     @Test
     public void RepresentationIntegrationTest.testFindRepresentationEntries() {
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", dod.getRandomRepresentation());
-        long count = fi.opendemocracy.domain.Representation.countRepresentations();
+        Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", dod.getRandomRepresentation());
+        long count = Representation.countRepresentations();
         if (count > 20) count = 20;
-        java.util.List<fi.opendemocracy.domain.Representation> result = fi.opendemocracy.domain.Representation.findRepresentationEntries(0, (int) count);
-        org.junit.Assert.assertNotNull("Find entries method for 'Representation' illegally returned null", result);
-        org.junit.Assert.assertEquals("Find entries method for 'Representation' returned an incorrect number of entries", count, result.size());
+        int firstResult = 0;
+        int maxResults = (int) count;
+        List<Representation> result = Representation.findRepresentationEntries(firstResult, maxResults);
+        Assert.assertNotNull("Find entries method for 'Representation' illegally returned null", result);
+        Assert.assertEquals("Find entries method for 'Representation' returned an incorrect number of entries", count, result.size());
     }
     
     @Test
     public void RepresentationIntegrationTest.testFlush() {
-        fi.opendemocracy.domain.Representation obj = dod.getRandomRepresentation();
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", obj);
-        java.lang.Long id = obj.getId();
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to provide an identifier", id);
-        obj = fi.opendemocracy.domain.Representation.findRepresentation(id);
-        org.junit.Assert.assertNotNull("Find method for 'Representation' illegally returned null for id '" + id + "'", obj);
+        Representation obj = dod.getRandomRepresentation();
+        Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", obj);
+        Long id = obj.getId();
+        Assert.assertNotNull("Data on demand for 'Representation' failed to provide an identifier", id);
+        obj = Representation.findRepresentation(id);
+        Assert.assertNotNull("Find method for 'Representation' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyRepresentation(obj);
-        java.lang.Integer currentVersion = obj.getVersion();
+        Integer currentVersion = obj.getVersion();
         obj.flush();
-        org.junit.Assert.assertTrue("Version for 'Representation' failed to increment on flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
+        Assert.assertTrue("Version for 'Representation' failed to increment on flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void RepresentationIntegrationTest.testMerge() {
-        fi.opendemocracy.domain.Representation obj = dod.getRandomRepresentation();
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", obj);
-        java.lang.Long id = obj.getId();
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to provide an identifier", id);
-        obj = fi.opendemocracy.domain.Representation.findRepresentation(id);
+    public void RepresentationIntegrationTest.testMergeUpdate() {
+        Representation obj = dod.getRandomRepresentation();
+        Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", obj);
+        Long id = obj.getId();
+        Assert.assertNotNull("Data on demand for 'Representation' failed to provide an identifier", id);
+        obj = Representation.findRepresentation(id);
         boolean modified =  dod.modifyRepresentation(obj);
-        java.lang.Integer currentVersion = obj.getVersion();
-        fi.opendemocracy.domain.Representation merged =  obj.merge();
+        Integer currentVersion = obj.getVersion();
+        Representation merged = obj.merge();
         obj.flush();
-        org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
-        org.junit.Assert.assertTrue("Version for 'Representation' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
+        Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
+        Assert.assertTrue("Version for 'Representation' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
     public void RepresentationIntegrationTest.testPersist() {
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", dod.getRandomRepresentation());
-        fi.opendemocracy.domain.Representation obj = dod.getNewTransientRepresentation(Integer.MAX_VALUE);
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to provide a new transient entity", obj);
-        org.junit.Assert.assertNull("Expected 'Representation' identifier to be null", obj.getId());
+        Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", dod.getRandomRepresentation());
+        Representation obj = dod.getNewTransientRepresentation(Integer.MAX_VALUE);
+        Assert.assertNotNull("Data on demand for 'Representation' failed to provide a new transient entity", obj);
+        Assert.assertNull("Expected 'Representation' identifier to be null", obj.getId());
         obj.persist();
         obj.flush();
-        org.junit.Assert.assertNotNull("Expected 'Representation' identifier to no longer be null", obj.getId());
+        Assert.assertNotNull("Expected 'Representation' identifier to no longer be null", obj.getId());
     }
     
     @Test
     public void RepresentationIntegrationTest.testRemove() {
-        fi.opendemocracy.domain.Representation obj = dod.getRandomRepresentation();
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", obj);
-        java.lang.Long id = obj.getId();
-        org.junit.Assert.assertNotNull("Data on demand for 'Representation' failed to provide an identifier", id);
-        obj = fi.opendemocracy.domain.Representation.findRepresentation(id);
+        Representation obj = dod.getRandomRepresentation();
+        Assert.assertNotNull("Data on demand for 'Representation' failed to initialize correctly", obj);
+        Long id = obj.getId();
+        Assert.assertNotNull("Data on demand for 'Representation' failed to provide an identifier", id);
+        obj = Representation.findRepresentation(id);
         obj.remove();
         obj.flush();
-        org.junit.Assert.assertNull("Failed to remove 'Representation' with identifier '" + id + "'", fi.opendemocracy.domain.Representation.findRepresentation(id));
+        Assert.assertNull("Failed to remove 'Representation' with identifier '" + id + "'", Representation.findRepresentation(id));
     }
     
 }

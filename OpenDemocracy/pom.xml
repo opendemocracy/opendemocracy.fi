@@ -306,7 +306,7 @@
     <dependency>
             <groupId>com.vaadin.addon</groupId>
             <artifactId>jpacontainer-addon-agpl-3.0</artifactId>
-            <version>2.0.0</version>
+            <version>1.2.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>javax.persistence</groupId>

@@ -3,7 +3,11 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.Expert;
 import fi.opendemocracy.domain.ExpertDataOnDemand;
+import fi.opendemocracy.domain.ExpertIntegrationTest;
+import java.util.List;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +19,7 @@ privileged aspect ExpertIntegrationTest_Roo_IntegrationTest {
     
     declare @type: ExpertIntegrationTest: @RunWith(SpringJUnit4ClassRunner.class);
     
-    declare @type: ExpertIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext.xml");
+    declare @type: ExpertIntegrationTest: @ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext*.xml");
     
     declare @type: ExpertIntegrationTest: @Transactional;
     
@@ -24,92 +28,94 @@ privileged aspect ExpertIntegrationTest_Roo_IntegrationTest {
     
     @Test
     public void ExpertIntegrationTest.testCountExperts() {
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", dod.getRandomExpert());
-        long count = fi.opendemocracy.domain.Expert.countExperts();
-        org.junit.Assert.assertTrue("Counter for 'Expert' incorrectly reported there were no entries", count > 0);
+        Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", dod.getRandomExpert());
+        long count = Expert.countExperts();
+        Assert.assertTrue("Counter for 'Expert' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
     public void ExpertIntegrationTest.testFindExpert() {
-        fi.opendemocracy.domain.Expert obj = dod.getRandomExpert();
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", obj);
-        java.lang.Long id = obj.getId();
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to provide an identifier", id);
-        obj = fi.opendemocracy.domain.Expert.findExpert(id);
-        org.junit.Assert.assertNotNull("Find method for 'Expert' illegally returned null for id '" + id + "'", obj);
-        org.junit.Assert.assertEquals("Find method for 'Expert' returned the incorrect identifier", id, obj.getId());
+        Expert obj = dod.getRandomExpert();
+        Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", obj);
+        Long id = obj.getId();
+        Assert.assertNotNull("Data on demand for 'Expert' failed to provide an identifier", id);
+        obj = Expert.findExpert(id);
+        Assert.assertNotNull("Find method for 'Expert' illegally returned null for id '" + id + "'", obj);
+        Assert.assertEquals("Find method for 'Expert' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
     public void ExpertIntegrationTest.testFindAllExperts() {
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", dod.getRandomExpert());
-        long count = fi.opendemocracy.domain.Expert.countExperts();
-        org.junit.Assert.assertTrue("Too expensive to perform a find all test for 'Expert', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        java.util.List<fi.opendemocracy.domain.Expert> result = fi.opendemocracy.domain.Expert.findAllExperts();
-        org.junit.Assert.assertNotNull("Find all method for 'Expert' illegally returned null", result);
-        org.junit.Assert.assertTrue("Find all method for 'Expert' failed to return any data", result.size() > 0);
+        Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", dod.getRandomExpert());
+        long count = Expert.countExperts();
+        Assert.assertTrue("Too expensive to perform a find all test for 'Expert', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
+        List<Expert> result = Expert.findAllExperts();
+        Assert.assertNotNull("Find all method for 'Expert' illegally returned null", result);
+        Assert.assertTrue("Find all method for 'Expert' failed to return any data", result.size() > 0);
     }
     
     @Test
     public void ExpertIntegrationTest.testFindExpertEntries() {
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", dod.getRandomExpert());
-        long count = fi.opendemocracy.domain.Expert.countExperts();
+        Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", dod.getRandomExpert());
+        long count = Expert.countExperts();
         if (count > 20) count = 20;
-        java.util.List<fi.opendemocracy.domain.Expert> result = fi.opendemocracy.domain.Expert.findExpertEntries(0, (int) count);
-        org.junit.Assert.assertNotNull("Find entries method for 'Expert' illegally returned null", result);
-        org.junit.Assert.assertEquals("Find entries method for 'Expert' returned an incorrect number of entries", count, result.size());
+        int firstResult = 0;
+        int maxResults = (int) count;
+        List<Expert> result = Expert.findExpertEntries(firstResult, maxResults);
+        Assert.assertNotNull("Find entries method for 'Expert' illegally returned null", result);
+        Assert.assertEquals("Find entries method for 'Expert' returned an incorrect number of entries", count, result.size());
     }
     
     @Test
     public void ExpertIntegrationTest.testFlush() {
-        fi.opendemocracy.domain.Expert obj = dod.getRandomExpert();
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", obj);
-        java.lang.Long id = obj.getId();
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to provide an identifier", id);
-        obj = fi.opendemocracy.domain.Expert.findExpert(id);
-        org.junit.Assert.assertNotNull("Find method for 'Expert' illegally returned null for id '" + id + "'", obj);
+        Expert obj = dod.getRandomExpert();
+        Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", obj);
+        Long id = obj.getId();
+        Assert.assertNotNull("Data on demand for 'Expert' failed to provide an identifier", id);
+        obj = Expert.findExpert(id);
+        Assert.assertNotNull("Find method for 'Expert' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyExpert(obj);
-        java.lang.Integer currentVersion = obj.getVersion();
+        Integer currentVersion = obj.getVersion();
         obj.flush();
-        org.junit.Assert.assertTrue("Version for 'Expert' failed to increment on flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
+        Assert.assertTrue("Version for 'Expert' failed to increment on flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void ExpertIntegrationTest.testMerge() {
-        fi.opendemocracy.domain.Expert obj = dod.getRandomExpert();
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", obj);
-        java.lang.Long id = obj.getId();
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to provide an identifier", id);
-        obj = fi.opendemocracy.domain.Expert.findExpert(id);
+    public void ExpertIntegrationTest.testMergeUpdate() {
+        Expert obj = dod.getRandomExpert();
+        Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", obj);
+        Long id = obj.getId();
+        Assert.assertNotNull("Data on demand for 'Expert' failed to provide an identifier", id);
+        obj = Expert.findExpert(id);
         boolean modified =  dod.modifyExpert(obj);
-        java.lang.Integer currentVersion = obj.getVersion();
-        fi.opendemocracy.domain.Expert merged =  obj.merge();
+        Integer currentVersion = obj.getVersion();
+        Expert merged = obj.merge();
         obj.flush();
-        org.junit.Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
-        org.junit.Assert.assertTrue("Version for 'Expert' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
+        Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
+        Assert.assertTrue("Version for 'Expert' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
     public void ExpertIntegrationTest.testPersist() {
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", dod.getRandomExpert());
-        fi.opendemocracy.domain.Expert obj = dod.getNewTransientExpert(Integer.MAX_VALUE);
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to provide a new transient entity", obj);
-        org.junit.Assert.assertNull("Expected 'Expert' identifier to be null", obj.getId());
+        Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", dod.getRandomExpert());
+        Expert obj = dod.getNewTransientExpert(Integer.MAX_VALUE);
+        Assert.assertNotNull("Data on demand for 'Expert' failed to provide a new transient entity", obj);
+        Assert.assertNull("Expected 'Expert' identifier to be null", obj.getId());
         obj.persist();
         obj.flush();
-        org.junit.Assert.assertNotNull("Expected 'Expert' identifier to no longer be null", obj.getId());
+        Assert.assertNotNull("Expected 'Expert' identifier to no longer be null", obj.getId());
     }
     
     @Test
     public void ExpertIntegrationTest.testRemove() {
-        fi.opendemocracy.domain.Expert obj = dod.getRandomExpert();
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", obj);
-        java.lang.Long id = obj.getId();
-        org.junit.Assert.assertNotNull("Data on demand for 'Expert' failed to provide an identifier", id);
-        obj = fi.opendemocracy.domain.Expert.findExpert(id);
+        Expert obj = dod.getRandomExpert();
+        Assert.assertNotNull("Data on demand for 'Expert' failed to initialize correctly", obj);
+        Long id = obj.getId();
+        Assert.assertNotNull("Data on demand for 'Expert' failed to provide an identifier", id);
+        obj = Expert.findExpert(id);
         obj.remove();
         obj.flush();
-        org.junit.Assert.assertNull("Failed to remove 'Expert' with identifier '" + id + "'", fi.opendemocracy.domain.Expert.findExpert(id));
+        Assert.assertNull("Failed to remove 'Expert' with identifier '" + id + "'", Expert.findExpert(id));
     }
     
 }

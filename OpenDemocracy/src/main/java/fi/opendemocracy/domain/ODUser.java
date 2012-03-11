@@ -11,14 +11,14 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @RooJavaBean
-@RooEntity(finders = { "findODUsersByOpenIdIdentifier" })
+@RooJpaActiveRecord(finders = { "findODUsersByOpenIdIdentifier" })
 public class ODUser implements UserDetails {
 
 	@NotNull

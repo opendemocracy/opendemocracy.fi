@@ -3,6 +3,7 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.Proposition;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect Proposition_Roo_Configurable {

@@ -79,7 +79,7 @@ public class OpenDemocracyVotingApplication extends Application implements
 		if (user != null && user instanceof ODUser) {
 			setUser(user);
 		}
-		Collection<GrantedAuthority> authorities = authentication
+		Collection<? extends GrantedAuthority> authorities = authentication
 				.getAuthorities();
 		for (GrantedAuthority authority : authorities) {
 			for (String role : roles) {

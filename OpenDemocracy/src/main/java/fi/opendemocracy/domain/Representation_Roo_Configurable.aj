@@ -3,6 +3,7 @@
 
 package fi.opendemocracy.domain;
 
+import fi.opendemocracy.domain.Representation;
 import org.springframework.beans.factory.annotation.Configurable;
 
 privileged aspect Representation_Roo_Configurable {

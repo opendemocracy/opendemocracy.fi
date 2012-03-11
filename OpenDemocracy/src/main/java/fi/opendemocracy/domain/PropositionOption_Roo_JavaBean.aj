@@ -3,7 +3,7 @@
 
 package fi.opendemocracy.domain;
 
-import java.lang.String;
+import fi.opendemocracy.domain.PropositionOption;
 import java.util.Date;
 
 privileged aspect PropositionOption_Roo_JavaBean {

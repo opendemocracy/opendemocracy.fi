@@ -9,13 +9,13 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooEntity(finders = { "findRepresentationsByExpertAndTrustGreaterThan",
+@RooJpaActiveRecord(finders = { "findRepresentationsByExpertAndTrustGreaterThan",
 		"findRepresentationsByOdUserAndTrustGreaterThan" })
 public class Representation {
 
