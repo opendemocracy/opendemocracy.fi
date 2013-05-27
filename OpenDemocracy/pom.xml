@@ -7,10 +7,10 @@
     <version>0.1.0.BUILD-SNAPSHOT</version>
     <name>OpenDemocracy</name>
     <properties>
-        <roo.version>1.2.1.RELEASE</roo.version>
+        <roo.version>1.2.3.RELEASE</roo.version>
         <spring.version>3.1.1.RELEASE</spring.version>
-        <aspectj.version>1.6.12</aspectj.version>
-        <slf4j.version>1.6.4</slf4j.version>
+        <aspectj.version>1.7.2.RELEASE</aspectj.version>
+        <slf4j.version>1.7.5</slf4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <repositories>
@@ -29,11 +29,11 @@
             <name>Spring Roo Repository</name>
             <url>http://spring-roo-repository.springsource.org/release</url>
         </repository>
-    <repository>
-            <id>EclipseLink Repo</id>
-            <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
-            <name>EclipseLink Repo</name>
-        </repository>
+		<repository>
+			<id>oss.sonatype.org</id>
+			<name>OSS Sonatype Staging</name>
+			<url>https://oss.sonatype.org/content/groups/staging</url>
+		</repository>
         <repository>
             <id>JBoss Repo</id>
             <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
@@ -71,13 +71,13 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
+            <version>1.2.17</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -113,7 +113,7 @@
         <dependency>
             <groupId>net.sf.flexjson</groupId>
             <artifactId>flexjson</artifactId>
-            <version>2.1</version>
+            <version>3.0</version>
         </dependency>
         <!-- ROO dependencies -->
         <dependency>
@@ -168,25 +168,24 @@
     <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.18</version>
+            <version>5.1.25</version>
             <classifier/>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>eclipselink</artifactId>
-            <version>2.3.0</version>
-            <classifier/>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>javax.persistence</artifactId>
-            <version>2.1.0.v201201251030</version>
-            <classifier/>
-        </dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<version>2.5.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.persistence</groupId>
+					<artifactId>commonj.sdo</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>4.1.0.Final</version>
+            <version>5.0.1.Final</version>
             <classifier/>
             <exclusions>
                 <exclusion>
@@ -202,13 +201,13 @@
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
-            <version>1.0.0.GA</version>
+            <version>1.1.0.Final</version>
             <classifier/>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>
-            <version>2.2.2</version>
+            <version>3.0</version>
             <classifier/>
         </dependency>
         <dependency>
@@ -275,7 +274,7 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>com.vaadin.spring.roo.annotations</artifactId>
-            <version>1.0.1</version>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.vaadin.addons</groupId>
@@ -347,7 +346,7 @@
     <dependency>
     	<groupId>org.openid4java</groupId>
     	<artifactId>openid4java</artifactId>
-    	<version>0.9.5</version>
+    	<version>0.9.8</version>
     </dependency>
     <dependency>
             <groupId>org.vaadin.addons</groupId>
@@ -412,7 +411,7 @@
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-core</artifactId>
-			<version>1.1</version>
+			<version>1.3</version>
 		</dependency>
 		<dependency>
 			<groupId>aopalliance</groupId>
@@ -427,7 +426,7 @@
 		<dependency>
 			<groupId>org.cloudfoundry</groupId>
 			<artifactId>cloudfoundry-runtime</artifactId>
-			<version>0.8.1</version>
+			<version>0.8.2</version>
 		</dependency>
     <dependency>
             <groupId>com.vaadin.addon</groupId>
